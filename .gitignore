@@ -20,7 +20,7 @@
 .exercises*
 .ex-*
 .summary*
-.tutorial*
+.paper*
 private
 sync.sh
 diff.sh
