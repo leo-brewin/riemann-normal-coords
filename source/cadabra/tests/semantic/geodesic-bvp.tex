@@ -1,0 +1,65 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+\section*{\jobname}
+
+\CdbSetup{action=hide}
+
+\begin{cadabra}
+   import shared
+
+   import cdblib
+
+   term00A = cdblib.get ('check000','expected/geodesic-bvp.json')
+   term01A = cdblib.get ('check001','expected/geodesic-bvp.json')
+   term02A = cdblib.get ('check002','expected/geodesic-bvp.json')
+   term03A = cdblib.get ('check003','expected/geodesic-bvp.json')
+   term04A = cdblib.get ('check004','expected/geodesic-bvp.json')
+   term05A = cdblib.get ('check005','expected/geodesic-bvp.json')
+   term06A = cdblib.get ('check005','expected/geodesic-bvp.json')
+   term07A = cdblib.get ('check005','expected/geodesic-bvp.json')
+   term08A = cdblib.get ('check005','expected/geodesic-bvp.json')
+   term09A = cdblib.get ('check005','expected/geodesic-bvp.json')
+   term10A = cdblib.get ('check005','expected/geodesic-bvp.json')
+   term00B = cdblib.get ('check000','output/geodesic-bvp.json')
+   term01B = cdblib.get ('check001','output/geodesic-bvp.json')
+   term02B = cdblib.get ('check002','output/geodesic-bvp.json')
+   term03B = cdblib.get ('check003','output/geodesic-bvp.json')
+   term04B = cdblib.get ('check004','output/geodesic-bvp.json')
+   term05B = cdblib.get ('check005','output/geodesic-bvp.json')
+   term06B = cdblib.get ('check005','output/geodesic-bvp.json')
+   term07B = cdblib.get ('check005','output/geodesic-bvp.json')
+   term08B = cdblib.get ('check005','output/geodesic-bvp.json')
+   term09B = cdblib.get ('check005','output/geodesic-bvp.json')
+   term10B = cdblib.get ('check005','output/geodesic-bvp.json')
+
+   diff000 = shared.check (term00A,term00B)   # cdb (diff000,diff000)
+   diff001 = shared.check (term01A,term01B)   # cdb (diff001,diff001)
+   diff002 = shared.check (term02A,term02B)   # cdb (diff002,diff002)
+   diff003 = shared.check (term03A,term03B)   # cdb (diff003,diff003)
+   diff004 = shared.check (term04A,term04B)   # cdb (diff004,diff004)
+   diff005 = shared.check (term05A,term05B)   # cdb (diff005,diff005)
+   diff006 = shared.check (term06A,term06B)   # cdb (diff006,diff006)
+   diff007 = shared.check (term07A,term07B)   # cdb (diff007,diff007)
+   diff008 = shared.check (term08A,term08B)   # cdb (diff008,diff008)
+   diff009 = shared.check (term09A,term09B)   # cdb (diff009,diff009)
+   diff010 = shared.check (term10A,term10B)   # cdb (diff010,diff010)
+
+\end{cadabra}
+
+\begin{dgroup*}
+   \Dmath*{ \cdb*{diff000} }
+   \Dmath*{ \cdb*{diff001} }
+   \Dmath*{ \cdb*{diff002} }
+   \Dmath*{ \cdb*{diff003} }
+   \Dmath*{ \cdb*{diff004} }
+   \Dmath*{ \cdb*{diff005} }
+   \Dmath*{ \cdb*{diff006} }
+   \Dmath*{ \cdb*{diff007} }
+   \Dmath*{ \cdb*{diff008} }
+   \Dmath*{ \cdb*{diff009} }
+   \Dmath*{ \cdb*{diff010} }
+\end{dgroup*}
+
+\end{document}

@@ -1,0 +1,12 @@
+{
+  "g^ab": "g^{a b} +  1/3 x^{c} x^{d} g^{a e} g^{b f} R_{c e d f} +  1/6 x^{c} x^{d} x^{e} g^{a f} g^{b g} \\nabla_{c}(R_{d f e g}) +  1/60 x^{c} x^{d} x^{e} x^{f} (4g^{a g} g^{b h} g^{i j} R_{c g d i} R_{e h f j} + 3g^{a g} g^{b h} \\nabla_{c d}(R_{e g f h})) +  1/90 x^{c} x^{d} x^{e} x^{f} x^{g} (3g^{a h} g^{b i} g^{j k} R_{c h d j} \\nabla_{e}(R_{f i g k}) + 3g^{a h} g^{b i} g^{j k} R_{c i d j} \\nabla_{e}(R_{f h g k}) + g^{a h} g^{b i} \\nabla_{c d e}(R_{f h g i}))",
+  "g^ab_3": "g^{a b} -  1/3 x^{c} x^{d} R^{a}_{c d}^{b}",
+  "g^ab_4": "g^{a b} -  1/3 x^{c} x^{d} R^{a}_{c d}^{b} -  1/6 x^{c} x^{d} x^{e} \\partial_{c}(R^{a}_{d e}^{b})",
+  "g^ab_5": "g^{a b} -  1/3 x^{c} x^{d} R^{a}_{c d}^{b} -  1/6 x^{c} x^{d} x^{e} \\partial_{c}(R^{a}_{d e}^{b}) +  1/360 x^{c} x^{d} x^{e} x^{f} (7R^{a}_{c d g} R^{g}_{e f}^{b} + 10R^{a}_{c d g} R^{b}_{e f}^{g}-9g^{b g} \\partial_{c d}(R^{a}_{e f g}) + 7R^{b}_{c d g} R^{g}_{e f}^{a}-9g^{a g} \\partial_{c d}(R^{b}_{e f g}))",
+  "g^ab_6": "g^{a b} -  1/3 x^{c} x^{d} R^{a}_{c d}^{b} -  1/6 x^{c} x^{d} x^{e} \\partial_{c}(R^{a}_{d e}^{b}) +  1/360 x^{c} x^{d} x^{e} x^{f} (7R^{a}_{c d g} R^{g}_{e f}^{b} + 10R^{a}_{c d g} R^{b}_{e f}^{g}-9g^{b g} \\partial_{c d}(R^{a}_{e f g}) + 7R^{b}_{c d g} R^{g}_{e f}^{a}-9g^{a g} \\partial_{c d}(R^{b}_{e f g})) +  1/360 x^{c} x^{d} x^{e} x^{f} x^{g} (3R^{a}_{c d h} \\partial_{e}(R^{h}_{f g}^{b}) + 4\\partial_{c}(R^{a}_{d e h}) R^{h}_{f g}^{b} + 5\\partial_{c}(R^{b}_{d e h}) R^{a}_{f g}^{h} + 5\\partial_{c}(R^{a}_{d e h}) R^{b}_{f g}^{h}-2g^{b h} \\partial_{c d e}(R^{a}_{f g h}) + 3R^{b}_{c d h} \\partial_{e}(R^{h}_{f g}^{a}) + 4\\partial_{c}(R^{b}_{d e h}) R^{h}_{f g}^{a}-2g^{a h} \\partial_{c d e}(R^{b}_{f g h}))",
+  "g^ab_scaled0": "g^{a b}",
+  "g^ab_scaled2": "x^{c} x^{d} g^{a e} g^{b f} R_{c e d f}",
+  "g^ab_scaled3": "x^{c} x^{d} x^{e} g^{a f} g^{b g} \\nabla_{c}(R_{d f e g})",
+  "g^ab_scaled4": "x^{c} x^{d} x^{e} x^{f} (4g^{a g} g^{b h} g^{i j} R_{c g d i} R_{e h f j} + 3g^{a g} g^{b h} \\nabla_{c d}(R_{e g f h}))",
+  "g^ab_scaled5": "x^{c} x^{d} x^{e} x^{f} x^{g} (3g^{a h} g^{b i} g^{j k} R_{c h d j} \\nabla_{e}(R_{f i g k}) + 3g^{a h} g^{b i} g^{j k} R_{c i d j} \\nabla_{e}(R_{f h g k}) + g^{a h} g^{b i} \\nabla_{c d e}(R_{f h g i}))"
+}

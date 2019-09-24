@@ -1,0 +1,546 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+% =================================================================================================
+% create checkpoint file
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   import cdblib
+   checkpoint_file = 'tests/semantic/output/geodesic-lsq.json'
+   cdblib.create (checkpoint_file)
+   checkpoint = []
+\end{cadabra}
+\egroup
+
+% =================================================================================================
+\section*{Geodesic arc-length}
+
+Give a pair of points $P$ and $Q$ the geodesic arc-length can be computed using
+\begin{align}
+   L_{PQ} = \int_P^Q\>\left(g_{ab}(x)\frac{dx^a}{ds}\frac{dx^b}{ds}\right)^{1/2}\>ds
+\end{align}
+Since the path is a geodesic the integrand is constant and thus
+\begin{align}
+   L^2_{PQ} = \left.g_{ab}(x)\frac{dx^a}{ds}\frac{dx^b}{ds}\right\vert_{P}
+\end{align}
+where $s$ is a re-scaled parameter (0 at $P$ and 1 at $Q$). The point $P$ has
+RNC coordinates $x^{a}$ while the point $Q$ has coordinates $x^{a} + Dx^{a}$.
+
+The vector $dx^a/ds$ at $P$ is given by the solution of the geodesic boundary value
+problem. This was found in the previous code ({\tts geodesic-bvp}). That is
+\begin{align}
+   \left.\frac{dx^b}{ds}\right\vert_{P} = y^{a}
+\end{align}
+and thus
+\begin{align}
+   \label{eq:lsq}
+   L^2_{PQ} = g_{ab}(x) y^{a} y^{b}
+\end{align}
+
+It is possible to directly evaluate the right hand side of (\ref{eq:lsq}) using the results from
+the {\tts geodesic-bvp} and {\tts metric} codes. The result would need to be truncated (to an
+order consistent with the results form those codes). But doing so would be computationaly
+expensive as at least half of the terms will be thrown away. A better approach is compute just
+the terms that will survive the truncation. This is done by expanding $g_{ab}(x)$ and $y^{a}$ as
+a truncated series in the curvatures and its derivatives.
+
+The $g_{ab}(x)$ and $y^{a}$ are written in a (truncated) formal power series in the curvature and
+its derivatives
+\begin{align}
+   y^{a} &= \ny{0}^a + \ny{2}^a + \ny{3}^a + \ny{4}^a + \ny{5}^a + \BigO{\eps^6}\\
+   g_{a b}(x) &=   \ngab{0}_{a b}
+                 + \ngab{2}_{a b}
+                 + \ngab{3}_{a b}
+                 + \ngab{4}_{a b}
+                 + \ngab{5}_{a b}
+                 + \BigO{\eps^6}
+\end{align}
+Note that this use of $\ny{i}$ differs from that used in {\tts geodesic-bvp}. Here the
+index above $y^{a}$ denotes a particular term in the curvature expansion while in
+{\tts geodesic-bvp} the index denoted the iteration number (in the fixed point scheme
+used to solve the BVP for $y^{a}$).
+
+% \clarepage
+
+% =================================================================================================
+\section*{Stage 1}
+The formal curvature expansions are substituted into equation (\ref{eq:lsq}), expanded and
+truncated to retain terms of order $\BigO{\eps^5}$ or less. The expansion to 4th order terms is
+as follows.
+
+\begin{dgroup*}
+   \begin{dmath*} L^2_{PQ} = \cdb{lsq4.002} \end{dmath*}
+\end{dgroup*}
+
+\input{rnc2rnc.cdbtex}
+\input{metric.cdbtex}
+
+From {\tts geodesic-bvp} (actually from {\tts rnc2rnc which reformatted the results nicely}) we have
+% \begin{align*}
+%      y^{a} = \ny{0}^{a} + \ny{2}^{a} + \ny{3}^{a} + \ny{4}^{a} + \BigO{\eps^5}
+% \end{align*}
+
+\begin{dgroup*}
+   \begin{dmath*} \ny{0}^{a} = \cdb{term0.102} \end{dmath*}
+   \begin{dmath*} \ny{2}^{a} = \cdb{term2.102} \end{dmath*}
+   \begin{dmath*} \ny{3}^{a} = \cdb{term3.102} \end{dmath*}
+   \begin{dmath*} \ny{4}^{a} = \cdb{term4.102} \end{dmath*}
+\end{dgroup*}
+
+and from {\tts metric} we have
+
+% \begin{align*}
+%      g_{a b}(x) =
+%      \ngab{0}_{a b}
+%    + \ngab{2}_{a b}
+%    + \ngab{3}_{a b}
+%    + \ngab{4}_{a b}
+%    + \BigO{\eps^6}
+% \end{align*}
+\begin{dgroup*}
+   \begin{dmath*}     \ngab{0}_{a b} = \cdb{scaled0.601} \end{dmath*}
+   \begin{dmath*}   3 \ngab{2}_{a b} = \cdb{scaled2.601} \end{dmath*}
+   \begin{dmath*}   6 \ngab{3}_{a b} = \cdb{scaled3.601} \end{dmath*}
+   \begin{dmath*} 180 \ngab{4}_{a b} = \cdb{scaled4.601} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+\section*{Stage 2}
+The results from the {\tts geodesic-bvp} and {\tts metric} codes are read to provide
+values for the $\ny{n}^{a}$ and $\ngab{m}_{ab}$. These are substituted into the result from
+Stage 1, et volia, the final answer. To 4th-order terms the result is given by
+
+\Dmath*{ L^2_{PQ} = \cdb{lsq5.301} + \BigO{\eps^5}}
+
+\clearpage
+
+% =================================================================================================
+\section*{Shared properties}
+
+\begin{cadabra}
+   {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+   D{#}::Derivative.
+   \nabla{#}::Derivative.
+   \partial{#}::PartialDerivative.
+
+   g_{a b}::Metric.
+   g^{a b}::InverseMetric.
+   g_{a}^{b}::KroneckerDelta.
+   g^{a}_{b}::KroneckerDelta.
+   \delta^{a}_{b}::KroneckerDelta.
+   \delta_{a}^{b}::KroneckerDelta.
+
+   R_{a b c d}::RiemannTensor.
+   R^{a}_{b c d}::RiemannTensor.
+   R_{a b c}^{d}::RiemannTensor.
+
+   \Gamma^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+   \Gamma^{a}_{b c d}::TableauSymmetry(shape={3}, indices={1,2,3}).
+   \Gamma^{a}_{b c d e}::TableauSymmetry(shape={4}, indices={1,2,3,4}).
+   \Gamma^{a}_{b c d e f}::TableauSymmetry(shape={5}, indices={1,2,3,4,5}).
+
+   x^{a}::Depends(D{#}).
+
+   g_{a b}::Depends(\partial{#}).
+   R_{a b c d}::Depends(\partial{#}).
+   R^{a}_{b c d}::Depends(\partial{#}).
+   \Gamma^{a}_{b c}::Depends(\partial{#}).
+
+   R_{a b c d}::Depends(\nabla{#}).
+   R^{a}_{b c d}::Depends(\nabla{#}).
+
+   g0{#}::LaTeXForm ("\ngab{0}").
+   g2{#}::LaTeXForm ("\ngab{2}").
+   g3{#}::LaTeXForm ("\ngab{3}").
+   g4{#}::LaTeXForm ("\ngab{4}").
+   g5{#}::LaTeXForm ("\ngab{5}").
+
+   y0{#}::LaTeXForm ("\ny{0}").
+   y2{#}::LaTeXForm ("\ny{2}").
+   y3{#}::LaTeXForm ("\ny{3}").
+   y4{#}::LaTeXForm ("\ny{4}").
+   y5{#}::LaTeXForm ("\ny{5}").
+
+\end{cadabra}
+
+\clearpage
+
+% =================================================================================================
+\section*{Stage 1: The formal expansion}
+
+\begin{cadabra}
+   g0_{a b}::Symmetric.
+   g2_{a b}::Symmetric.
+   g3_{a b}::Symmetric.
+   g4_{a b}::Symmetric.
+   g5_{a b}::Symmetric.
+
+   g0_{a b}::Weight(label=num,value=0).
+   g2_{a b}::Weight(label=num,value=2).
+   g3_{a b}::Weight(label=num,value=3).
+   g4_{a b}::Weight(label=num,value=4).
+   g5_{a b}::Weight(label=num,value=5).
+
+   y0^{a}::Weight(label=num,value=0).
+   y2^{a}::Weight(label=num,value=2).
+   y3^{a}::Weight(label=num,value=3).
+   y4^{a}::Weight(label=num,value=4).
+   y5^{a}::Weight(label=num,value=5).
+
+   # note: keeping numbering as is (out of order) to ensure R appears before \nabla R etc.
+   def product_sort (obj):
+       substitute (obj,$ A^{a}                            -> A001^{a}               $)
+       substitute (obj,$ x^{a}                            -> A002^{a}               $)
+       substitute (obj,$ Dx^{a}                           -> A003^{a}               $)
+       substitute (obj,$ g_{a b}                          -> A004_{a b}             $)
+       substitute (obj,$ g^{a b}                          -> A005^{a b}             $)
+       substitute (obj,$ \nabla_{e f g h}{R_{a b c d}}    -> A010_{a b c d e f g h} $)
+       substitute (obj,$ \nabla_{e f g}{R_{a b c d}}      -> A009_{a b c d e f g}   $)
+       substitute (obj,$ \nabla_{e f}{R_{a b c d}}        -> A008_{a b c d e f}     $)
+       substitute (obj,$ \nabla_{e}{R_{a b c d}}          -> A007_{a b c d e}       $)
+       substitute (obj,$ R_{a b c d}                      -> A006_{a b c d}         $)
+       sort_product   (obj)
+       rename_dummies (obj)
+       substitute (obj,$ A001^{a}                  -> A^{a}                         $)
+       substitute (obj,$ A002^{a}                  -> x^{a}                         $)
+       substitute (obj,$ A003^{a}                  -> Dx^{a}                        $)
+       substitute (obj,$ A004_{a b}                -> g_{a b}                       $)
+       substitute (obj,$ A005^{a b}                -> g^{a b}                       $)
+       substitute (obj,$ A006_{a b c d}            -> R_{a b c d}                   $)
+       substitute (obj,$ A007_{a b c d e}          -> \nabla_{e}{R_{a b c d}}       $)
+       substitute (obj,$ A008_{a b c d e f}        -> \nabla_{e f}{R_{a b c d}}     $)
+       substitute (obj,$ A009_{a b c d e f g}      -> \nabla_{e f g}{R_{a b c d}}   $)
+       substitute (obj,$ A010_{a b c d e f g h}    -> \nabla_{e f g h}{R_{a b c d}} $)
+
+       return obj
+
+   def truncate (obj,n):
+       ans = Ex(0)
+
+       for i in range (0,n+1):
+          foo := @(obj).
+          bah = Ex("num = " + str(i))
+          keep_weight (foo, bah)
+          ans = ans + foo
+
+       return ans
+
+   # expansions wrt the curvature
+
+   defgab := g_{a b} -> g0_{a b} + g2_{a b} + g3_{a b} + g4_{a b} + g5_{a b}.
+   defy   := y^{a}   -> y0^{a} + y2^{a} + y3^{a} + y4^{a} + y5^{a}.
+
+   lsq    := g_{a b} y^{a} y^{b}.
+
+   substitute (lsq,defgab)
+   substitute (lsq,defy)
+   distribute (lsq)
+
+   def tidy (obj):
+       foo := @(obj).
+       sort_product    (foo)
+       rename_dummies  (foo)
+       canonicalise    (foo)
+       return foo
+
+   lsq0 = tidy ( truncate (lsq,0) )  # cdb (lsq0.002,lsq0)
+   lsq2 = tidy ( truncate (lsq,2) )  # cdb (lsq2.002,lsq2)
+   lsq3 = tidy ( truncate (lsq,3) )  # cdb (lsq3.002,lsq3)
+   lsq4 = tidy ( truncate (lsq,4) )  # cdb (lsq4.002,lsq4)
+   lsq5 = tidy ( truncate (lsq,5) )  # cdb (lsq5.002,lsq5)
+
+   d20 := @(lsq2) - @(lsq0).         # cdb (d20.001,d20)   # check, should contain only O(2) terms
+   d32 := @(lsq3) - @(lsq2).         # cdb (d32.001,d32)   # check, should contain only O(3) terms
+   d43 := @(lsq4) - @(lsq3).         # cdb (d43.001,d43)   # check, should contain only O(4) terms
+   d54 := @(lsq5) - @(lsq4).         # cdb (d54.001,d54)   # check, should contain only O(5) terms
+
+   d5 := @(lsq5) - @(lsq).           # cdb (d5.001,d5)
+   d5  = tidy (d5)                   # cdb (d5.002,d5)  # all higher order terms, should see no O(5) terms
+
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{lsq0.002} \end{dmath*}
+   \begin{dmath*} \cdb*{lsq2.002} \end{dmath*}
+   \begin{dmath*} \cdb*{lsq3.002} \end{dmath*}
+   \begin{dmath*} \cdb*{lsq4.002} \end{dmath*}
+   \begin{dmath*} \cdb*{lsq5.002} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{d20.001} \end{dmath*}
+   \begin{dmath*} \cdb*{d32.001} \end{dmath*}
+   \begin{dmath*} \cdb*{d43.001} \end{dmath*}
+   \begin{dmath*} \cdb*{d54.001} \end{dmath*}
+   \begin{dmath*} \cdb*{d5.002} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Stage 2: Substution of $\ny{n}^{a}$ and $\ngab{m}_{ab}$}
+
+\begin{cadabra}
+   import cdblib
+
+   g0ab = cdblib.get('g_ab_0','metric.json')
+   g2ab = cdblib.get('g_ab_2','metric.json')
+   g3ab = cdblib.get('g_ab_3','metric.json')
+   g4ab = cdblib.get('g_ab_4','metric.json')
+   g5ab = cdblib.get('g_ab_5','metric.json')
+
+   defg0ab := g0_{a b} -> @(g0ab).
+   defg2ab := g2_{a b} -> @(g2ab).
+   defg3ab := g3_{a b} -> @(g3ab).
+   defg4ab := g4_{a b} -> @(g4ab).
+   defg5ab := g5_{a b} -> @(g5ab).
+
+   y0a = cdblib.get('y50','geodesic-bvp.json')
+   y2a = cdblib.get('y52','geodesic-bvp.json')
+   y3a = cdblib.get('y53','geodesic-bvp.json')
+   y4a = cdblib.get('y54','geodesic-bvp.json')
+   y5a = cdblib.get('y55','geodesic-bvp.json')
+
+   defy0a := y0^{a} -> @(y0a).
+   defy2a := y2^{a} -> @(y2a).
+   defy3a := y3^{a} -> @(y3a).
+   defy4a := y4^{a} -> @(y4a).
+   defy5a := y5^{a} -> @(y5a).
+
+   def substitute_gab_ya (obj):
+
+      foo := @(obj).
+
+      substitute (foo,defg0ab)
+      substitute (foo,defg2ab)
+      substitute (foo,defg3ab)
+      substitute (foo,defg4ab)
+      substitute (foo,defg5ab)
+
+      substitute (foo,defy0a)
+      substitute (foo,defy2a)
+      substitute (foo,defy3a)
+      substitute (foo,defy4a)
+      substitute (foo,defy5a)
+
+      distribute     (foo)
+      sort_product   (foo)
+      rename_dummies (foo)
+      canonicalise   (foo)
+
+      substitute     (foo,$g_{a b} g^{c b} -> \delta^{c}_{a}$)
+      eliminate_kronecker (foo)
+      foo = product_sort  (foo)
+      rename_dummies      (foo)
+      canonicalise        (foo)
+
+      return foo
+
+   def get_Rterm (obj,n):
+
+   # I would like to assign different weights to \nabla_{a}, \nabla_{a b}, \nabla_{a b c} etc. but no matter
+   # what I do it appears that Cadabra assigns the same weight to all of these regardless of the number of subscripts.
+   # It seems that the weight is assigned to the symbol \nabla alone. So I'm forced to use the following substitution trick.
+
+       Q_{a b c d}::Weight(label=numR,value=2).
+       Q_{a b c d e}::Weight(label=numR,value=3).
+       Q_{a b c d e f}::Weight(label=numR,value=4).
+       Q_{a b c d e f g}::Weight(label=numR,value=5).
+
+       tmp := @(obj).
+
+       distribute (tmp)
+
+       substitute (tmp, $\nabla_{e f g}{R_{a b c d}} -> Q_{a b c d e f g}$)
+       substitute (tmp, $\nabla_{e f}{R_{a b c d}} -> Q_{a b c d e f}$)
+       substitute (tmp, $\nabla_{e}{R_{a b c d}} -> Q_{a b c d e}$)
+       substitute (tmp, $R_{a b c d} -> Q_{a b c d}$)
+
+       foo := @(tmp).
+       bah = Ex("numR = " + str(n))
+       keep_weight (foo, bah)
+
+       substitute (foo, $Q_{a b c d e f g} -> \nabla_{e f g}{R_{a b c d}}$)
+       substitute (foo, $Q_{a b c d e f} -> \nabla_{e f}{R_{a b c d}}$)
+       substitute (foo, $Q_{a b c d e} -> \nabla_{e}{R_{a b c d}}$)
+       substitute (foo, $Q_{a b c d} -> R_{a b c d}$)
+
+       return foo
+
+   lsq2 = substitute_gab_ya (lsq2)  # cdb (lsq2.101,lsq2)
+   lsq3 = substitute_gab_ya (lsq3)  # cdb (lsq3.101,lsq3)
+   lsq4 = substitute_gab_ya (lsq4)  # cdb (lsq4.101,lsq4)
+   lsq5 = substitute_gab_ya (lsq5)  # cdb (lsq5.101,lsq5)
+
+   lsq50 = get_Rterm (lsq5,0)
+   lsq52 = get_Rterm (lsq5,2)
+   lsq53 = get_Rterm (lsq5,3)
+   lsq54 = get_Rterm (lsq5,4)
+   lsq55 = get_Rterm (lsq5,5)
+
+   cdblib.create ('geodesic-lsq.json')
+
+   cdblib.put ('lsq2',lsq2,'geodesic-lsq.json')
+   cdblib.put ('lsq3',lsq3,'geodesic-lsq.json')
+   cdblib.put ('lsq4',lsq4,'geodesic-lsq.json')
+   cdblib.put ('lsq5',lsq5,'geodesic-lsq.json')
+
+   cdblib.put ('lsq50',lsq50,'geodesic-lsq.json')
+   cdblib.put ('lsq52',lsq52,'geodesic-lsq.json')
+   cdblib.put ('lsq53',lsq53,'geodesic-lsq.json')
+   cdblib.put ('lsq54',lsq54,'geodesic-lsq.json')
+   cdblib.put ('lsq55',lsq55,'geodesic-lsq.json')
+
+\end{cadabra}
+
+\clearpage
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{lsq2.101} \end{dmath*}
+   \begin{dmath*} \cdb*{lsq3.101} \end{dmath*}
+   \begin{dmath*} \cdb*{lsq4.101} \end{dmath*}
+   \begin{dmath*} \cdb*{lsq5.101} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+% the remaining code is just for pretty printing
+
+\clearpage
+
+% =================================================================================================
+\section*{Stage 3: Reformatting}
+
+\begin{cadabra}
+   def reformat (obj,scale):
+      foo  = Ex(str(scale))
+      bah := @(foo) @(obj).
+      distribute     (bah)
+      bah = product_sort (bah)
+      rename_dummies (bah)
+      canonicalise   (bah)
+      substitute     (bah,$Dx^{b}->zzz^{b}$)
+      factor_out     (bah,$x^{a?},zzz^{b?}$)
+      substitute     (bah,$zzz^{b}->Dx^{b}$)
+      ans := @(bah) / @(foo).
+      return ans
+
+   def rescale (obj,scale):
+      foo  = Ex(str(scale))
+      bah := @(foo) @(obj).
+      distribute  (bah)
+      substitute  (bah,$Dx^{b}->zzz^{b}$)
+      factor_out  (bah,$x^{a?},zzz^{b?}$)
+      substitute  (bah,$zzz^{b}->Dx^{b}$)
+      return bah
+
+   Rterm0 := @(lsq50).
+   Rterm2 := @(lsq52).
+   Rterm3 := @(lsq53).
+   Rterm4 := @(lsq54).
+   Rterm5 := @(lsq55).
+
+   Rterm0 = reformat (Rterm0,   1)    # cdb(Rterm0.301,Rterm0) # LCB: returns Dx before g, not what I want
+   Rterm2 = reformat (Rterm2,   3)    # cdb(Rterm2.301,Rterm2)
+   Rterm3 = reformat (Rterm3,  12)    # cdb(Rterm3.301,Rterm3)
+   Rterm4 = reformat (Rterm4, 360)    # cdb(Rterm4.301,Rterm4)
+   Rterm5 = reformat (Rterm5,1080)    # cdb(Rterm5.301,Rterm5)
+
+   Rterm0 := g_{a b} Dx^{a} Dx^{b}.   # LCB: fixes the order of terms, g before Dx,
+
+   lsq3 := @(Rterm0) + @(Rterm2).                                      # cdb (lsq4.301,lsq3)
+   lsq4 := @(Rterm0) + @(Rterm2) + @(Rterm3).                          # cdb (lsq4.301,lsq4)
+   lsq5 := @(Rterm0) + @(Rterm2) + @(Rterm3) + @(Rterm4).              # cdb (lsq5.301,lsq5)
+   lsq6 := @(Rterm0) + @(Rterm2) + @(Rterm3) + @(Rterm4) + @(Rterm5).  # cdb (lsq5.301,lsq6)
+
+   lsq  := @(lsq6).                   # cdb (lsq.301,lsq)
+
+   scaled0 = rescale (Rterm0,    1)   # cdb (scaled0.301,scaled0) # LCB: returns Dx before g, not what I want
+   scaled2 = rescale (Rterm2,    3)   # cdb (scaled2.301,scaled2)
+   scaled3 = rescale (Rterm3,   12)   # cdb (scaled3.301,scaled3)
+   scaled4 = rescale (Rterm4,  360)   # cdb (scaled4.301,scaled4)
+   scaled5 = rescale (Rterm5, 1080)   # cdb (scaled5.301,scaled5)
+
+   scaled0 := g_{a b} Dx^{a} Dx^{b}.  # cdb (scaled0.301,scaled0) # LCB: fixes the order of terms, g before Dx, good
+
+\end{cadabra}
+
+\clearpage
+
+% =================================================================================================
+\section*{Geodesic arc-length}
+
+\begin{dgroup*}[spread=5pt]
+   % LCB: which of these is correct?
+   % \begin{dmath*} \left(\Delta s\right)^2 = \cdb{lsq.301} + \BigO{\eps^6,Dx^6} \end{dmath*}
+   % \begin{dmath*} \left(\Delta s\right)^2 = \cdb{lsq.301} + \BigO{\eps^6,Dx^7} \end{dmath*}
+   \begin{dmath*} \left(\Delta s\right)^2 = \cdb{lsq.301} + \BigO{\eps^6} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Geodesic arc-length curvature expansion}
+
+\begin{align*}
+   % LCB: which of these is correct?
+   % \left(\Delta s\right)^2 = \nD{0} + \nD{2} + \nD{3} + \nD{4} + \nD{5} + \BigO{\eps^6,Dx^6}
+   % \left(\Delta s\right)^2 = \nD{0} + \nD{2} + \nD{3} + \nD{4} + \nD{5} + \BigO{\eps^6,Dx^7}
+   \left(\Delta s\right)^2 = \nD{0} + \nD{2} + \nD{3} + \nD{4} + \nD{5} + \BigO{\eps^6}
+\end{align*}
+
+\begin{dgroup*}[spread=5pt]
+   \begin{dmath*}      \nD{0} = \cdb{scaled0.301} \end{dmath*}
+   \begin{dmath*}    3 \nD{2} = \cdb{scaled2.301} \end{dmath*}
+   \begin{dmath*}   12 \nD{3} = \cdb{scaled3.301} \end{dmath*}
+   \begin{dmath*}  360 \nD{4} = \cdb{scaled4.301} \end{dmath*}
+   \begin{dmath*} 1080 \nD{5} = \cdb{scaled5.301} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+% export selected objects, these will later be imported into a library
+% these are the objects that will appear in the paper
+
+\begin{cadabra}
+   cdblib.create ('geodesic-lsq.export')
+
+   # 3rd to 6th order lsq
+   cdblib.put ('lsq3',lsq3,'geodesic-lsq.export')
+   cdblib.put ('lsq4',lsq4,'geodesic-lsq.export')
+   cdblib.put ('lsq5',lsq5,'geodesic-lsq.export')
+   cdblib.put ('lsq6',lsq6,'geodesic-lsq.export')
+
+   # 6th order lsq terms, scaled
+   cdblib.put ('lsq60',scaled0,'geodesic-lsq.export')
+   cdblib.put ('lsq62',scaled2,'geodesic-lsq.export')
+   cdblib.put ('lsq63',scaled3,'geodesic-lsq.export')
+   cdblib.put ('lsq64',scaled4,'geodesic-lsq.export')
+   cdblib.put ('lsq65',scaled5,'geodesic-lsq.export')
+
+   checkpoint.append (lsq4)
+
+   checkpoint.append (scaled0)
+   checkpoint.append (scaled2)
+   checkpoint.append (scaled3)
+   checkpoint.append (scaled4)
+   checkpoint.append (scaled5)
+\end{cadabra}
+
+% =================================================================================================
+% export checkpoints in json format
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   for i in range( len(checkpoint) ):
+      cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+\end{cadabra}
+\egroup
+
+\end{document}

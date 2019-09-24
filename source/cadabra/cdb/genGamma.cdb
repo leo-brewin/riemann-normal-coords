@@ -1,0 +1,499 @@
+import cdblib
+checkpoint_file = 'tests/semantic/output/genGamma.json'
+cdblib.create (checkpoint_file)
+checkpoint = []
+
+{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,c1,c2,c3,c4,c5,w#}::Indices(position=independent).
+
+D{#}::Derivative.
+\nabla{#}::Derivative.
+\partial{#}::PartialDerivative.
+
+g_{a b}::Metric.
+g^{a b}::InverseMetric.
+g_{a}^{b}::KroneckerDelta.
+g^{a}_{b}::KroneckerDelta.
+\delta^{a}_{b}::KroneckerDelta.
+\delta_{a}^{b}::KroneckerDelta.
+
+R_{a b c d}::RiemannTensor.
+R^{a}_{b c d}::RiemannTensor.
+R_{a b c}^{d}::RiemannTensor.
+
+\Gamma^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+
+x^{a}::Depends(D{#}).
+
+g_{a b}::Depends(\partial{#}).
+R_{a b c d}::Depends(\partial{#}).
+R^{a}_{b c d}::Depends(\partial{#}).
+\Gamma^{a}_{b c}::Depends(\partial{#}).
+
+R_{a b c d}::Depends(\nabla{#}).
+R^{a}_{b c d}::Depends(\nabla{#}).
+
+import cdblib
+
+term0 = cdblib.get ('GammaRterm0','connection.json')
+term1 = cdblib.get ('GammaRterm2','connection.json')
+term2 = cdblib.get ('GammaRterm3','connection.json')
+term3 = cdblib.get ('GammaRterm4','connection.json')
+term4 = cdblib.get ('GammaRterm5','connection.json')
+
+# LCB: these terms were not computed in connection.tex so set them to zero
+#      maybe in the future I will compute down to term6.
+
+term5 := 0.
+term6 := 0.
+
+# genGmn : m = eps order of Rabcd terms
+#          n = number of c indices
+
+# --------------------------------------------------------------------------
+# rules for building the genGmn
+
+# note: after applying each rule, must symmetrise over (b c1 c2 ... cn d)
+
+# n = 0
+
+genG20 := genG2^{a}_{b d}.
+genG30 := genG3^{a}_{b d}.
+genG40 := genG4^{a}_{b d}.
+genG50 := genG5^{a}_{b d}.
+
+defG20 := genG2^{d}_{a b} -> @(term1).
+defG30 := genG3^{d}_{a b} -> @(term2).
+defG40 := genG4^{d}_{a b} -> @(term3).
+defG50 := genG5^{d}_{a b} -> @(term4).
+
+# LCB: rncGamma in connection.json limited to "term4" (ie. to 4th order in x)
+#      so can only compute genG3*, genG4* and genG5* (at this stage)
+#      but it doesn't hurt to provide the definitions for genG6*, genG7* etc. we just won't use them (at this atage)
+
+defG60 := genG6^{d}_{a b} -> @(term5).
+defG70 := genG7^{d}_{a b} -> @(term6).
+
+# n = 1
+
+defG31 := genG3^{a}_{b c1 d} -> D_{d}{genG3^{a}_{b c1}}.
+
+defG41 := genG4^{a}_{b c1 d} -> D_{d}{genG4^{a}_{b c1}}
+                                - 2 genG2^{a}_{p c1} genG2^{p}_{b d}.
+
+defG51 := genG5^{a}_{b c1 d} -> D_{d}{genG5^{a}_{b c1}}
+                                - 2 genG3^{a}_{p c1} genG2^{p}_{b d}
+                                - 2 genG2^{a}_{p c1} genG3^{p}_{b d}.
+
+defG61 := genG6^{a}_{b c1 d} -> D_{d}{genG6^{a}_{b c1}}
+                                - 2 genG4^{a}_{p c1} genG2^{p}_{b d}
+                                - 2 genG3^{a}_{p c1} genG3^{p}_{b d}
+                                - 2 genG3^{a}_{p c1} genG4^{p}_{b d}.
+
+defG71 := genG7^{a}_{b c1 d} -> D_{d}{genG7^{a}_{b c1}}
+                                - 2 genG5^{a}_{p c1} genG2^{p}_{b d}
+                                - 2 genG4^{a}_{p c1} genG3^{p}_{b d}
+                                - 2 genG3^{a}_{p c1} genG4^{p}_{b d}
+                                - 2 genG2^{a}_{p c1} genG5^{p}_{b d}.
+
+# n = 2
+
+defG42 := genG4^{a}_{b c1 c2 d} -> D_{d}{genG4^{a}_{b c1 c2}}.
+
+defG52 := genG5^{a}_{b c1 c2 d} -> D_{d}{genG5^{a}_{b c1 c2}}
+                                   - 3 genG3^{a}_{p c1 c2} genG2^{p}_{b d}.
+
+defG62 := genG6^{a}_{b c1 c2 d} -> D_{d}{genG6^{a}_{b c1 c2}}
+                                   - 3 genG4^{a}_{p c1 c2} genG2^{p}_{b d}
+                                   - 3 genG3^{a}_{p c1 c2} genG3^{p}_{b d}.
+
+defG72 := genG7^{a}_{b c1 c2 d} -> D_{d}{genG7^{a}_{b c1 c2}}
+                                   - 3 genG5^{a}_{p c1 c2} genG2^{p}_{b d}
+                                   - 3 genG4^{a}_{p c1 c2} genG3^{p}_{b d}
+                                   - 3 genG3^{a}_{p c1 c2} genG4^{p}_{b d}.
+
+# n = 3
+
+defG53 := genG5^{a}_{b c1 c2 c3 d} -> D_{d}{genG5^{a}_{b c1 c2 c3}}.
+
+defG63 := genG6^{a}_{b c1 c2 c3 d} -> D_{d}{genG6^{a}_{b c1 c2 c3}}
+                                      - 4 genG3^{a}_{p c1 c2 c3} genG3^{p}_{b d}.
+
+defG73 := genG7^{a}_{b c1 c2 c3 d} -> D_{d}{genG7^{a}_{b c1 c2 c3}}
+                                      - 4 genG4^{a}_{p c1 c2 c3} genG3^{p}_{b d}
+                                      - 4 genG3^{a}_{p c1 c2 c3} genG4^{p}_{b d}.
+
+# n = 4
+
+defG64 := genG6^{a}_{b c1 c2 c3 c4 d} -> D_{d}{genG6^{a}_{b c1 c2 c3 c4}}.
+
+defG74 := genG7^{a}_{b c1 c2 c3 c4 d} -> D_{d}{genG7^{a}_{b c1 c2 c3 c4}}
+                                         - 5 genG5^{a}_{p c1 c2 c3 c4} genG2^{p}_{b d}.
+
+# n = 5
+
+defG75 := genG7^{a}_{b c1 c2 c3 c4 c5 d} -> D_{d}{genG7^{a}_{b c1 c2 c3 c4 c5}}.
+
+# --------------------------------------------------------------------------
+# build the genGmn
+
+# ==========================================================================
+# n = 1
+
+genG31 := genG3^{a}_{b c1 d}.
+genG41 := genG4^{a}_{b c1 d}.
+genG51 := genG5^{a}_{b c1 d}.
+# genG61 := genG6^{a}_{b c1 d}.
+# genG71 := genG7^{a}_{b c1 d}.
+
+# --------------------------------------------------------------------------
+substitute     (genG20,defG20)
+substitute     (genG30,defG30)
+substitute     (genG40,defG40)
+substitute     (genG50,defG50)
+
+# --------------------------------------------------------------------------
+substitute     (genG31,defG31)
+substitute     (genG31,defG30)
+
+distribute     (genG31)
+unwrap         (genG31)
+product_rule   (genG31)
+distribute     (genG31)
+substitute     (genG31,$D_{a}{x^b}->\delta_{a}^{b}$)
+eliminate_kronecker (genG31)
+sym            (genG31,$_{b}, _{c1}, _{d}$)
+sort_product   (genG31)
+rename_dummies (genG31)
+canonicalise   (genG31)
+
+# --------------------------------------------------------------------------
+substitute     (genG41,defG41)
+substitute     (genG41,defG40)
+substitute     (genG41,defG20,repeat=True)
+
+distribute     (genG41)
+unwrap         (genG41)
+product_rule   (genG41)
+distribute     (genG41)
+substitute     (genG41,$D_{a}{x^b}->\delta_{a}^{b}$)
+eliminate_kronecker (genG41)
+sym            (genG41,$_{b}, _{c1}, _{d}$)
+sort_product   (genG41)
+rename_dummies (genG41)
+canonicalise   (genG41)
+
+# --------------------------------------------------------------------------
+substitute     (genG51,defG51)
+substitute     (genG51,defG50)
+substitute     (genG51,defG30,repeat=True)
+substitute     (genG51,defG20,repeat=True)
+
+distribute     (genG51)
+unwrap         (genG51)
+product_rule   (genG51)
+distribute     (genG51)
+substitute     (genG51,$D_{a}{x^b}->\delta_{a}^{b}$)
+eliminate_kronecker (genG51)
+sym            (genG51,$_{b}, _{c1}, _{d}$)
+sort_product   (genG51)
+rename_dummies (genG51)
+canonicalise   (genG51)
+
+# update the rules
+
+defG31 := genG3^{a}_{b c1 d} -> @(genG31).
+defG41 := genG4^{a}_{b c1 d} -> @(genG41).
+defG51 := genG5^{a}_{b c1 d} -> @(genG51).
+
+# ==========================================================================
+# n = 2
+
+genG42 := genG4^{a}_{b c1 c2 d}.
+genG52 := genG5^{a}_{b c1 c2 d}.
+# genG62 := genG6^{a}_{b c1 c2 d}.
+# genG72 := genG7^{a}_{b c1 c2 d}.
+
+# --------------------------------------------------------------------------
+substitute     (genG42,defG42)
+substitute     (genG42,defG41)
+
+distribute     (genG42)
+unwrap         (genG42)
+product_rule   (genG42)
+distribute     (genG42)
+substitute     (genG42,$D_{a}{x^b}->\delta_{a}^{b}$)
+eliminate_kronecker (genG42)
+sym            (genG42,$_{b}, _{c1}, _{c2}, _{d}$)
+sort_product   (genG42)
+rename_dummies (genG42)
+canonicalise   (genG42)
+
+# --------------------------------------------------------------------------
+substitute     (genG52,defG52)
+substitute     (genG52,defG51)
+substitute     (genG52,defG31,repeat=True)
+substitute     (genG52,defG20,repeat=True)
+
+distribute     (genG52)
+unwrap         (genG52)
+product_rule   (genG52)
+distribute     (genG52)
+substitute     (genG52,$D_{a}{x^b}->\delta_{a}^{b}$)
+eliminate_kronecker (genG52)
+sym            (genG52,$_{b}, _{c1}, _{c2}, _{d}$)
+sort_product   (genG52)
+rename_dummies (genG52)
+canonicalise   (genG52)
+
+# update the rules
+
+defG42 := genG4^{a}_{b c1 c2 d} -> @(genG42).
+defG52 := genG5^{a}_{b c1 c2 d} -> @(genG52).
+
+# ==========================================================================
+# n = 3
+
+genG53 := genG5^{a}_{b c1 c2 c3 d}.
+# genG63 := genG6^{a}_{b c1 c2 c3 d}.
+# genG73 := genG7^{a}_{b c1 c2 c3 d}.
+
+# --------------------------------------------------------------------------
+substitute     (genG53,defG53)
+substitute     (genG53,defG52)
+
+distribute     (genG53)
+unwrap         (genG53)
+product_rule   (genG53)
+distribute     (genG53)
+substitute     (genG53,$D_{a}{x^b}->\delta_{a}^{b}$)
+eliminate_kronecker (genG53)
+sym            (genG53,$_{b}, _{c1}, _{c2}, _{c3}, _{d}$)
+sort_product   (genG53)
+rename_dummies (genG53)
+canonicalise   (genG53)
+
+# update the rules
+
+defG53 := genG5^{a}_{b c1 c2 c3 d} -> @(genG53).
+
+
+# note: keeping numbering as is (out of order) to ensure R appears before \nabla R etc.
+def product_sort (obj):
+    substitute (obj,$ A^{a}                            -> A001^{a}               $)
+    substitute (obj,$ x^{a}                            -> A002^{a}               $)
+    substitute (obj,$ g^{a b}                          -> A003^{a b}             $)
+    substitute (obj,$ \nabla_{e f g h}{R_{a b c d}}    -> A008_{a b c d e f g h} $)
+    substitute (obj,$ \nabla_{e f g}{R_{a b c d}}      -> A007_{a b c d e f g}   $)
+    substitute (obj,$ \nabla_{e f}{R_{a b c d}}        -> A006_{a b c d e f}     $)
+    substitute (obj,$ \nabla_{e}{R_{a b c d}}          -> A005_{a b c d e}       $)
+    substitute (obj,$ R_{a b c d}                      -> A004_{a b c d}         $)
+    sort_product   (obj)
+    rename_dummies (obj)
+    substitute (obj,$ A001^{a}                  -> A^{a}                         $)
+    substitute (obj,$ A002^{a}                  -> x^{a}                         $)
+    substitute (obj,$ A003^{a b}                -> g^{a b}                       $)
+    substitute (obj,$ A004_{a b c d}            -> R_{a b c d}                   $)
+    substitute (obj,$ A005_{a b c d e}          -> \nabla_{e}{R_{a b c d}}       $)
+    substitute (obj,$ A006_{a b c d e f}        -> \nabla_{e f}{R_{a b c d}}     $)
+    substitute (obj,$ A007_{a b c d e f g}      -> \nabla_{e f g}{R_{a b c d}}   $)
+    substitute (obj,$ A008_{a b c d e f g h}    -> \nabla_{e f g h}{R_{a b c d}} $)
+
+    return obj
+
+# --------------------------------------------------------------------------
+symG20 := @(genG20) A^{b} A^{d}.
+
+distribute            (symG20)
+symG20 = product_sort (symG20)
+rename_dummies        (symG20)
+canonicalise          (symG20)
+
+# --------------------------------------------------------------------------
+symG30 := @(genG30) A^{b} A^{d}.
+
+distribute            (symG30)
+symG30 = product_sort (symG30)
+rename_dummies        (symG30)
+canonicalise          (symG30)
+
+# --------------------------------------------------------------------------
+symG40 := @(genG40) A^{b} A^{d}.
+
+distribute            (symG40)
+symG40 = product_sort (symG40)
+rename_dummies        (symG40)
+canonicalise          (symG40)
+
+# --------------------------------------------------------------------------
+symG50 := @(genG50) A^{b} A^{d}.
+
+distribute            (symG50)
+symG50 = product_sort (symG50)
+rename_dummies        (symG50)
+canonicalise          (symG50)
+
+# --------------------------------------------------------------------------
+symG31 := @(genG31) A^{b} A^{c1} A^{d}.
+
+distribute            (symG31)
+symG31 = product_sort (symG31)
+rename_dummies        (symG31)
+canonicalise          (symG31)
+
+# --------------------------------------------------------------------------
+symG41 := @(genG41) A^{b} A^{c1} A^{d}.
+
+distribute            (symG41)
+symG41 = product_sort (symG41)
+rename_dummies        (symG41)
+canonicalise          (symG41)
+
+# --------------------------------------------------------------------------
+symG51 := @(genG51) A^{b} A^{c1} A^{d}.
+
+distribute            (symG51)
+symG51 = product_sort (symG51)
+rename_dummies        (symG51)
+canonicalise          (symG51)
+
+# --------------------------------------------------------------------------
+symG42 := @(genG42) A^{b} A^{c1} A^{c2} A^{d}.
+
+distribute            (symG42)
+symG42 = product_sort (symG42)
+rename_dummies        (symG42)
+canonicalise          (symG42)
+
+# --------------------------------------------------------------------------
+symG52 := @(genG52) A^{b} A^{c1} A^{c2} A^{d}.
+
+distribute            (symG52)
+symG52 = product_sort (symG52)
+rename_dummies        (symG52)
+canonicalise          (symG52)
+
+# --------------------------------------------------------------------------
+symG53 := @(genG53) A^{b} A^{c1} A^{c2} A^{c3} A^{d}.
+
+distribute            (symG53)
+symG53 = product_sort (symG53)
+rename_dummies        (symG53)
+canonicalise          (symG53)
+
+
+def reformat (obj,scale):
+    foo  = Ex(str(scale))
+    bah := @(foo) @(obj).
+    distribute (bah)
+    factor_out (bah,$A^{a?},x^{b?}$)
+    ans := @(bah) / @(foo).
+    return ans
+
+fooG20 = reformat (symG20,3)
+fooG30 = reformat (symG30,12)
+fooG40 = reformat (symG40,360)
+fooG50 = reformat (symG50,180)
+
+fooG31 = reformat (symG31,2)
+fooG41 = reformat (symG41,120)
+fooG51 = reformat (symG51,180)
+
+fooG42 = reformat (symG42,15)
+fooG52 = reformat (symG52,90)
+
+fooG53 = reformat (symG53,3)
+
+genGamma0 := @(fooG20) + @(fooG30) + @(fooG40) + @(fooG50).
+genGamma1 := @(fooG31) + @(fooG41) + @(fooG51).
+genGamma2 := @(fooG42) + @(fooG52).
+genGamma3 := @(fooG53).
+
+cdblib.create ('genGamma.json')
+
+cdblib.put ('genGamma0',genGamma0,'genGamma.json')
+cdblib.put ('genGamma1',genGamma1,'genGamma.json')
+cdblib.put ('genGamma2',genGamma2,'genGamma.json')
+cdblib.put ('genGamma3',genGamma3,'genGamma.json')
+
+cdblib.put ('genGamma01',fooG20,'genGamma.json')
+cdblib.put ('genGamma02',fooG30,'genGamma.json')
+cdblib.put ('genGamma03',fooG40,'genGamma.json')
+cdblib.put ('genGamma04',fooG50,'genGamma.json')
+
+cdblib.put ('genGamma11',fooG31,'genGamma.json')
+cdblib.put ('genGamma12',fooG41,'genGamma.json')
+cdblib.put ('genGamma13',fooG51,'genGamma.json')
+
+cdblib.put ('genGamma21',fooG42,'genGamma.json')
+cdblib.put ('genGamma22',fooG52,'genGamma.json')
+
+cdblib.put ('genGamma31',fooG53,'genGamma.json')
+
+
+scaledGamma0 := 360 @(genGamma0).
+scaledGamma1 := 360 @(genGamma1).
+scaledGamma2 :=  90 @(genGamma2).
+scaledGamma3 :=   3 @(genGamma3).
+
+
+tmp0 := @(fooG20) + @(fooG30).
+tmp1 := @(fooG31).
+
+alt0 := @(genGamma0).
+alt1 := @(genGamma1).
+alt2 := @(genGamma2).
+alt3 := @(genGamma3).
+
+alt0scaled := @(scaledGamma0).
+alt1scaled := @(scaledGamma1).
+alt2scaled := @(scaledGamma2).
+alt3scaled := @(scaledGamma3).
+
+substitute (tmp0, $A^{a}->1$)
+substitute (tmp1, $A^{a}->1$)
+
+substitute (alt0, $A^{a}->1$)
+substitute (alt1, $A^{a}->1$)
+substitute (alt2, $A^{a}->1$)
+substitute (alt3, $A^{a}->1$)
+
+substitute (alt0scaled, $A^{a}->1$)
+substitute (alt1scaled, $A^{a}->1$)
+substitute (alt2scaled, $A^{a}->1$)
+substitute (alt3scaled, $A^{a}->1$)
+
+cdblib.create ('genGamma.export')
+
+# 4th order gen gamma
+cdblib.put ('gen_gamma_0_4th',tmp0,'genGamma.export')
+cdblib.put ('gen_gamma_1_4th',tmp1,'genGamma.export')
+
+# 6th order gen gamma
+cdblib.put ('gen_gamma_0',alt0,'genGamma.export')
+cdblib.put ('gen_gamma_1',alt1,'genGamma.export')
+cdblib.put ('gen_gamma_2',alt2,'genGamma.export')
+cdblib.put ('gen_gamma_3',alt3,'genGamma.export')
+
+# 6th order gen gamma scaled
+cdblib.put ('gen_gamma_0_scaled',alt0scaled,'genGamma.export')
+cdblib.put ('gen_gamma_1_scaled',alt1scaled,'genGamma.export')
+cdblib.put ('gen_gamma_2_scaled',alt2scaled,'genGamma.export')
+cdblib.put ('gen_gamma_3_scaled',alt3scaled,'genGamma.export')
+
+checkpoint.append (tmp0)
+checkpoint.append (tmp1)
+
+checkpoint.append (alt0)
+checkpoint.append (alt1)
+checkpoint.append (alt2)
+checkpoint.append (alt3)
+
+checkpoint.append (alt0scaled)
+checkpoint.append (alt1scaled)
+checkpoint.append (alt2scaled)
+checkpoint.append (alt3scaled)
+
+
+for i in range( len(checkpoint) ):
+   cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+

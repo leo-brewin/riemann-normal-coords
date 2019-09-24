@@ -1,0 +1,422 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+% =================================================================================================
+% create checkpoint file
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   import cdblib
+   checkpoint_file = 'tests/semantic/output/connection.json'
+   cdblib.create (checkpoint_file)
+   checkpoint = []
+\end{cadabra}
+\egroup
+
+% =================================================================================================
+\section*{The connection}
+
+Here we use the output from {\tt metric.tex} and {\tt metric-inv.tex} to compute the metric connection
+$\Gamma^{d}_{ab}$. We use the standard metric compatible connection
+\begin{align}
+   \label{eqn:Gamma}
+   \Gamma^{d}_{ab} = \frac{1}{2} g^{dc}\left( g_{cb,a} + g_{ac,b} - g_{ab,c} \right)
+\end{align}
+
+Since {\tt metric.tex} and {\tt metric-inv.tex} generate truncated expressions for $g_{ab}$ and
+$g^{ab}$ a similar truncation must be applied to this computation of $\Gamma^{d}_{ab}$. The naive
+choice is to truncate $\Gamma^{d}_{ab}$ \emph{after} it has been fully evaluated on the truncated
+expersions for $g_{ab}$ and $g^{ab}$. This will work but it wastes time and memory (big time).
+
+A better approach is to truncate $\Gamma^{d}_{ab}$ during its construction. That is, we take
+careful note of how the terms in the finite series for $g_{ab}$ and $g^{ab}$ combine to produce
+the terms of a particular order in the expansion of $\Gamma^{d}_{ab}$.
+
+Suppose $g_{ab}$ and $g^{ab}$ are known to say fourth order. We can write each of these as follows
+\begin{align}
+   g_{ab} &= \ngab{0}_{ab} + \ngab{1}_{ab} + \ngab{2}_{ab} + \ngab{3}_{ab} + \ngab{4}_{ab}\\
+   g^{ab} &= \ngab{0}^{ab} + \ngab{1}^{ab} + \ngab{2}^{ab} + \ngab{3}^{ab} + \ngab{4}^{ab}
+\end{align}
+where $\ngab{n}$ denotes a term of order $\BigO{\eps^n}$. A similar expansion applies for $\Gamma^{d}_{ab}$, that is
+\begin{align}
+   \Gamma^{d}_{ab} = \nGamma{0}^{d}_{ab}
+                   + \nGamma{1}^{d}_{ab}
+                   + \nGamma{2}^{d}_{ab}
+                   + \nGamma{3}^{d}_{ab}
+                   + \nGamma{4}^{d}_{ab}
+\end{align}
+After substituting these formal expansions into the equation \eqref{eqn:Gamma} and then matching
+corresponing terms we obtain
+\begin{align}
+   \nGamma{n}^{d}_{ab}
+   =
+   \frac{1}{2} \sum_{i=0}^{i=n} \ngab{i}^{dc}\left( \ngab{n-i}_{cb,a} + \ngab{n-i}_{ac,b} - \ngab{n-i}_{ab,c} \right)
+\end{align}
+
+We use this equation to compute the successive terms in $\Gamma^{d}_{ab}$.
+
+\clearpage
+
+\begin{cadabra}
+   {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+   D{#}::Derivative.
+   \nabla{#}::Derivative.
+   \partial{#}::PartialDerivative.
+
+   g_{a b}::Metric.
+   g^{a b}::InverseMetric.
+   g_{a}^{b}::KroneckerDelta.
+   g^{a}_{b}::KroneckerDelta.
+   \delta^{a}_{b}::KroneckerDelta.
+   \delta_{a}^{b}::KroneckerDelta.
+
+   R_{a b c d}::RiemannTensor.
+   R^{a}_{b c d}::RiemannTensor.
+
+   x^{a}::Depends(D{#}).
+
+   R_{a b c d}::Depends(\nabla{#}).
+   R^{a}_{b c d}::Depends(\nabla{#}).
+
+   import cdblib
+
+   gab = cdblib.get ('g_ab','metric.json')      # cdb(gab.000,gab)
+   iab = cdblib.get ('g^ab','metric-inv.json')  # cdb(iab.000,iab)
+
+   defgab := g_{a b} -> @(gab).
+   defiab := g^{a b} -> @(iab).
+
+   dgab := D_{a}{g_{c b}} + D_{b}{g_{a c}} - D_{c}{g_{a b}}.  # cdb(dgab.001,dgab)
+
+   substitute   (dgab,defgab)
+
+   distribute   (dgab)              # cdb(dgab.002,dgab)
+   unwrap       (dgab)              # cdb(dgab.003,dgab)
+   product_rule (dgab)              # cdb(dgab.004,dgab)
+   distribute   (dgab)              # cdb(dgab.005,dgab)
+   substitute   (dgab,$D_{a}{x^{b}}->\delta^{b}_{a}$,repeat=True)  # cdb(dgab.006,dgab)
+   eliminate_kronecker (dgab)       # cdb(dgab.007,dgab)
+   sort_product   (dgab)            # cdb(dgab.008,dgab)
+   rename_dummies (dgab)            # cdb(dgab.009,dgab)
+   canonicalise   (dgab)            # cdb(dgab.010,dgab)
+
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{gab.000} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{dgab.001} \end{dmath*}
+   \begin{dmath*} \cdb*{dgab.002} \end{dmath*}
+   % \begin{dmath*} \cdb*{dgab.003} \end{dmath*} % too big for pdfLaTeX
+   % \begin{dmath*} \cdb*{dgab.004} \end{dmath*}
+   % \begin{dmath*} \cdb*{dgab.005} \end{dmath*}
+   % \begin{dmath*} \cdb*{dgab.006} \end{dmath*}
+   % \begin{dmath*} \cdb*{dgab.007} \end{dmath*}
+   % \begin{dmath*} \cdb*{dgab.008} \end{dmath*}
+   % \begin{dmath*} \cdb*{dgab.009} \end{dmath*}
+   \begin{dmath*} \cdb*{dgab.010} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{cadabra}
+   # Note:
+   # Computing Gamma directly by (1/2) iab dgab and *then* truncating to lower order
+   # is not optimal. We only want the leading oder terms (to 4th order in x). But the direct
+   # calculation would compute *all* terms before the truncation. This does work but it
+   # is slower than the following code.
+   #
+   # The better approach (as adopted in this code) is to extract all of the terms of iab
+   # and dgab then construct the leading order terms of Gamma (to fifth order) term by term.
+
+   def get_Rterm (obj,n):
+
+   # I would like to assign different weights to \nabla_{a}, \nabla_{a b}, \nabla_{a b c} etc. but no matter
+   # what I do it appears that Cadabra assigns the same weight to all of these regardless of the number of subscripts.
+   # It seems that the weight is assigned to the symbol \nabla alone. So I'm forced to use the following substitution trick.
+
+       Q_{a b c d}::Weight(label=numR,value=2).
+       Q_{a b c d e}::Weight(label=numR,value=3).
+       Q_{a b c d e f}::Weight(label=numR,value=4).
+       Q_{a b c d e f g}::Weight(label=numR,value=5).
+
+       tmp := @(obj).
+
+       distribute (tmp)
+
+       substitute (tmp, $\nabla_{e f g}{R_{a b c d}} -> Q_{a b c d e f g}$)
+       substitute (tmp, $\nabla_{e f}{R_{a b c d}} -> Q_{a b c d e f}$)
+       substitute (tmp, $\nabla_{e}{R_{a b c d}} -> Q_{a b c d e}$)
+       substitute (tmp, $R_{a b c d} -> Q_{a b c d}$)
+
+       foo := @(tmp).
+       bah = Ex("numR = " + str(n))
+       keep_weight (foo, bah)
+
+       substitute (foo, $Q_{a b c d e f g} -> \nabla_{e f g}{R_{a b c d}}$)
+       substitute (foo, $Q_{a b c d e f} -> \nabla_{e f}{R_{a b c d}}$)
+       substitute (foo, $Q_{a b c d e} -> \nabla_{e}{R_{a b c d}}$)
+       substitute (foo, $Q_{a b c d} -> R_{a b c d}$)
+
+       return foo
+
+   # terms of the curvature expansion of dg_{ab}
+
+   dgab00 = get_Rterm (dgab,0)   # cdb(dgab00.105,dgab00)  # zero
+   dgab01 = get_Rterm (dgab,1)   # cdb(dgab01.105,dgab01)  # zero
+   dgab02 = get_Rterm (dgab,2)   # cdb(dgab02.105,dgab02)
+   dgab03 = get_Rterm (dgab,3)   # cdb(dgab03.105,dgab03)
+   dgab04 = get_Rterm (dgab,4)   # cdb(dgab04.105,dgab04)
+   dgab05 = get_Rterm (dgab,5)   # cdb(dgab05.105,dgab05)
+
+   # Convert free indices on iab from ^{a b} to ^{d c}
+   # This ensures we can later build products like @(iab) @(dgab) knowing that the indices are correctly ordered.
+   # Without this step we would be using free indices ^{a b} and _{a b c}. Thus the product @(iab) @(dgab) would
+   # have just one free index _{c}. This is clearly wrong.
+
+   tmp := @(iab) \delta_{a}^{d} \delta_{b}^{c}.
+
+   distribute     (tmp)
+   eliminate_kronecker (tmp)
+   sort_product   (tmp)
+   rename_dummies (tmp)
+   canonicalise   (tmp)
+
+   idc := @(tmp).
+
+   # terms of the curvature expansion of g^{ab}
+
+   idc00 = get_Rterm (idc,0)   # cdb(idc00.105,idc00)
+   idc01 = get_Rterm (idc,1)   # cdb(idc01.105,idc01)  # zero
+   idc02 = get_Rterm (idc,2)   # cdb(idc02.105,idc02)
+   idc03 = get_Rterm (idc,3)   # cdb(idc03.105,idc03)
+   idc04 = get_Rterm (idc,4)   # cdb(idc04.105,idc04)
+   idc05 = get_Rterm (idc,5)   # cdb(idc05.105,idc05)
+
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{dgab00.105} \end{dmath*}
+   \begin{dmath*} \cdb*{dgab01.105} \end{dmath*}
+   \begin{dmath*} \cdb*{dgab02.105} \end{dmath*}
+   \begin{dmath*} \cdb*{dgab03.105} \end{dmath*}
+   \begin{dmath*} \cdb*{dgab04.105} \end{dmath*}
+   \begin{dmath*} \cdb*{dgab05.105} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{idc00.105} \end{dmath*}
+   \begin{dmath*} \cdb*{idc01.105} \end{dmath*}
+   \begin{dmath*} \cdb*{idc02.105} \end{dmath*}
+   \begin{dmath*} \cdb*{idc03.105} \end{dmath*}
+   \begin{dmath*} \cdb*{idc04.105} \end{dmath*}
+   \begin{dmath*} \cdb*{idc05.105} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{cadabra}
+   # idc  = g^{d c}
+   # dgab = D_{a}{g_{c b}} + D_{b}{g_{a c}} - D_{c}{g_{a b}}
+
+   # terms of the curvature expansion of \Gamma^{d}_{a b}
+
+   # term0 := (1/2)  @(idc00) @(dgab00).
+   # term1 := (1/2) (@(idc01) @(dgab00) + @(idc00) @(dgab01)).
+   # term2 := (1/2) (@(idc02) @(dgab00) + @(idc01) @(dgab01) + @(idc00) @(dgab02)).
+   # term3 := (1/2) (@(idc03) @(dgab00) + @(idc02) @(dgab01) + @(idc01) @(dgab02) + @(idc00) @(dgab03)).
+   # term4 := (1/2) (@(idc04) @(dgab00) + @(idc03) @(dgab01) + @(idc02) @(dgab02) + @(idc01) @(dgab03) + @(idc00) @(dgab04)).
+   # term5 := (1/2) (@(idc05) @(dgab00) + @(idc04) @(dgab01) + @(idc03) @(dgab02) + @(idc02) @(dgab03) + @(idc01) @(dgab04) + @(idc00) @(dgab05)).
+
+   # simplidied version of the above after noting dgab00 = dgab01 = 0
+
+   term0 := 0.
+   term1 := 0.
+   term2 := (1/2) (@(idc00) @(dgab02)).
+   term3 := (1/2) (@(idc01) @(dgab02) + @(idc00) @(dgab03)).
+   term4 := (1/2) (@(idc02) @(dgab02) + @(idc01) @(dgab03) + @(idc00) @(dgab04)).
+   term5 := (1/2) (@(idc03) @(dgab02) + @(idc02) @(dgab03) + @(idc01) @(dgab04) + @(idc00) @(dgab05)).
+
+   def tidy_terms (obj):
+       substitute     (obj,$x^{a}->AA^{a}$,repeat=True)  # will force AA to the left of all terms
+       distribute     (obj)
+       sort_product   (obj)
+       rename_dummies (obj)
+       canonicalise   (obj)
+       substitute     (obj,$AA^{a}->x^{a}$,repeat=True)  # replace AA with x
+       factor_out     (obj,$x^{a?}$)
+
+       return obj
+
+   term0 = tidy_terms (term0)   # cdb(term0.201,term0)  # zero
+   term1 = tidy_terms (term1)   # cdb(term1.201,term1)  # zero
+   term2 = tidy_terms (term2)   # cdb(term2.201,term2)
+   term3 = tidy_terms (term3)   # cdb(term3.201,term3)
+   term4 = tidy_terms (term4)   # cdb(term4.201,term4)
+   term5 = tidy_terms (term5)   # cdb(term5.201,term5)
+
+   Gamma := @(term0) + @(term1) + @(term2) + @(term3) + @(term4) + @(term5). # cdb(Gamma.200,Gamma)
+
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{term0.201} \end{dmath*}
+   \begin{dmath*} \cdb*{term1.201} \end{dmath*}
+   \begin{dmath*} \cdb*{term2.201} \end{dmath*}
+   \begin{dmath*} \cdb*{term3.201} \end{dmath*}
+   \begin{dmath*} \cdb*{term4.201} \end{dmath*}
+   \begin{dmath*} \cdb*{term5.201} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{Gamma.200} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{cadabra}
+   cdblib.create ('connection.json')
+
+   cdblib.put ('Gamma',Gamma,'connection.json')
+
+   cdblib.put ('GammaRterm0',term0,'connection.json')
+   cdblib.put ('GammaRterm1',term1,'connection.json')
+   cdblib.put ('GammaRterm2',term2,'connection.json')
+   cdblib.put ('GammaRterm3',term3,'connection.json')
+   cdblib.put ('GammaRterm4',term4,'connection.json')
+   cdblib.put ('GammaRterm5',term5,'connection.json')
+
+   checkpoint.append (term0)
+   checkpoint.append (term1)
+   checkpoint.append (term2)
+   checkpoint.append (term3)
+   checkpoint.append (term4)
+   checkpoint.append (term5)
+
+\end{cadabra}
+
+% =================================================================================================
+% the remaining code is just for pretty printing
+
+\clearpage
+
+\begin{cadabra}
+   # note: keeping numbering as is (out of order) to ensure R appears before \nabla R etc.
+   def product_sort (obj):
+       substitute (obj,$ A^{a}                            -> A001^{a}               $)
+       substitute (obj,$ x^{a}                            -> A002^{a}               $)
+       substitute (obj,$ g^{a b}                          -> A003^{a b}             $)
+       substitute (obj,$ \nabla_{e f g h}{R_{a b c d}}    -> A008_{a b c d e f g h} $)
+       substitute (obj,$ \nabla_{e f g}{R_{a b c d}}      -> A007_{a b c d e f g}   $)
+       substitute (obj,$ \nabla_{e f}{R_{a b c d}}        -> A006_{a b c d e f}     $)
+       substitute (obj,$ \nabla_{e}{R_{a b c d}}          -> A005_{a b c d e}       $)
+       substitute (obj,$ R_{a b c d}                      -> A004_{a b c d}         $)
+       sort_product   (obj)
+       rename_dummies (obj)
+       substitute (obj,$ A001^{a}                  -> A^{a}                         $)
+       substitute (obj,$ A002^{a}                  -> x^{a}                         $)
+       substitute (obj,$ A003^{a b}                -> g^{a b}                       $)
+       substitute (obj,$ A008_{a b c d e f g h}    -> \nabla_{e f g h}{R_{a b c d}} $)
+       substitute (obj,$ A007_{a b c d e f g}      -> \nabla_{e f g}{R_{a b c d}}   $)
+       substitute (obj,$ A006_{a b c d e f}        -> \nabla_{e f}{R_{a b c d}}     $)
+       substitute (obj,$ A005_{a b c d e}          -> \nabla_{e}{R_{a b c d}}       $)
+       substitute (obj,$ A004_{a b c d}            -> R_{a b c d}                   $)
+
+       return obj
+
+   def reformat (obj,scale):
+      foo  = Ex(str(scale))
+      bah := @(foo) @(obj).
+      distribute     (bah)
+      bah = product_sort (bah)
+      rename_dummies (bah)
+      canonicalise   (bah)
+      factor_out     (bah,$A^{a?},x^{b?}$)
+      ans := @(bah) / @(foo).
+      return ans
+
+   def rescale (obj,scale):
+      foo  = Ex(str(scale))
+      bah := @(foo) @(obj).
+      distribute  (bah)
+      factor_out  (bah,$A^{a?},x^{b?}$)
+      return bah
+
+   Rterm2 := @(term2) A^{a} A^{b}.
+   Rterm3 := @(term3) A^{a} A^{b}.
+   Rterm4 := @(term4) A^{a} A^{b}.
+   Rterm5 := @(term5) A^{a} A^{b}.
+
+   Rterm2 = reformat (Rterm2,  3)    # cdb(Rterm2.301,Rterm2)
+   Rterm3 = reformat (Rterm3, 12)    # cdb(Rterm3.301,Rterm3)
+   Rterm4 = reformat (Rterm4,360)    # cdb(Rterm4.301,Rterm4)
+   Rterm5 = reformat (Rterm5,180)    # cdb(Rterm5.301,Rterm5)
+
+   Gamma  := @(Rterm2) + @(Rterm3) + @(Rterm4) + @(Rterm5).  # cdb (Gamma.301,Gamma)
+   Scaled := 360 @(Gamma).                                   # cdb (Scaled.301,Scaled)
+
+   scaled2 = rescale (Rterm2,   3)   # cdb (scaled2.301,scaled2)
+   scaled3 = rescale (Rterm3,  12)   # cdb (scaled3.301,scaled3)
+   scaled4 = rescale (Rterm4, 360)   # cdb (scaled4.301,scaled4)
+   scaled5 = rescale (Rterm5, 180)   # cdb (scaled5.301,scaled5)
+\end{cadabra}
+
+\clearpage
+
+% =================================================================================================
+\section*{The connection in Riemann normal coordinates}
+
+\begin{dgroup*}
+   \begin{dmath*} A^a A^b \Gamma^{d}_{a b} = \cdb{Gamma.301} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} 360 A^a A^b \Gamma^{d}_{a b} = \cdb{Scaled.301} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Curvature expansion of the connection}
+
+\begin{align*}
+     A^a A^b \Gamma^{d}_{a b} =
+     A^a A^b \nGamma{2}^{d}{}_{a b}
+   + A^a A^b \nGamma{3}^{d}{}_{a b}
+   + A^a A^b \nGamma{4}^{d}{}_{a b}
+   + A^a A^b \nGamma{5}^{d}{}_{a b}+\BigO{\eps^6}
+\end{align*}
+\begin{dgroup*}
+   \begin{dmath*}   3 A^a A^b \nGamma{2}^{d}_{a b} = \cdb{scaled2.301} \end{dmath*}
+   \begin{dmath*}  12 A^a A^b \nGamma{3}^{d}_{a b} = \cdb{scaled3.301} \end{dmath*}
+   \begin{dmath*} 360 A^a A^b \nGamma{4}^{d}_{a b} = \cdb{scaled4.301} \end{dmath*}
+   \begin{dmath*} 180 A^a A^b \nGamma{5}^{d}_{a b} = \cdb{scaled5.301} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+% export checkpoints in json format
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   for i in range( len(checkpoint) ):
+      cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+\end{cadabra}
+\egroup
+
+\end{document}

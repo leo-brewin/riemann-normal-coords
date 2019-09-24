@@ -1,0 +1,144 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+This code verifies that successive $\ny{n}^{a}$ introduce a new leading power of $\eps$ while leaving the lower
+order terms unchanged. That is
+\begin{align}
+   \ny{n+1}^a - \ny{n}^a = \BigO{\eps^{n+1}}
+\end{align}
+
+\clearpage
+
+\begin{cadabra}
+   {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+   \nabla{#}::Derivative.
+
+   g_{a b}::Metric.
+   g^{a b}::InverseMetric.
+   g_{a}^{b}::KroneckerDelta.
+   g^{a}_{b}::KroneckerDelta.
+   \delta^{a}_{b}::KroneckerDelta.
+   \delta_{a}^{b}::KroneckerDelta.
+
+   R_{a b c d}::RiemannTensor.
+   R^{a}_{b c d}::RiemannTensor.
+
+   R_{a b c d}::Depends(\nabla{#}).
+   R^{a}_{b c d}::Depends(\nabla{#}).
+
+   # Dx{#}::LaTeXForm{"{\Dx}"}.  # LCB: currently causes a bug, it kills ::KeepWeight for Dx
+
+\end{cadabra}
+
+\clearpage
+
+\begin{cadabra}
+   # note: keeping numbering as is (out of order) to ensure R appears before \nabla R etc.
+   def product_sort (obj):
+       substitute (obj,$ A^{a}                            -> A001^{a}               $)
+       substitute (obj,$ x^{a}                            -> A002^{a}               $)
+       substitute (obj,$ g^{a b}                          -> A003^{a b}             $)
+       substitute (obj,$ \nabla_{e f g h}{R_{a b c d}}    -> A008_{a b c d e f g h} $)
+       substitute (obj,$ \nabla_{e f g}{R_{a b c d}}      -> A007_{a b c d e f g}   $)
+       substitute (obj,$ \nabla_{e f}{R_{a b c d}}        -> A006_{a b c d e f}     $)
+       substitute (obj,$ \nabla_{e}{R_{a b c d}}          -> A005_{a b c d e}       $)
+       substitute (obj,$ R_{a b c d}                      -> A004_{a b c d}         $)
+       sort_product   (obj)
+       rename_dummies (obj)
+       substitute (obj,$ A001^{a}                  -> A^{a}                         $)
+       substitute (obj,$ A002^{a}                  -> x^{a}                         $)
+       substitute (obj,$ A003^{a b}                -> g^{a b}                       $)
+       substitute (obj,$ A004_{a b c d}            -> R_{a b c d}                   $)
+       substitute (obj,$ A005_{a b c d e}          -> \nabla_{e}{R_{a b c d}}       $)
+       substitute (obj,$ A006_{a b c d e f}        -> \nabla_{e f}{R_{a b c d}}     $)
+       substitute (obj,$ A007_{a b c d e f g}      -> \nabla_{e f g}{R_{a b c d}}   $)
+       substitute (obj,$ A008_{a b c d e f g h}    -> \nabla_{e f g h}{R_{a b c d}} $)
+
+       return obj
+
+   # now check that y(n+1) - y(n) = Order \eps^{n+1}
+
+   import cdblib
+
+   y2 = cdblib.get ('y2','../geodesic-bvp.json')
+   y3 = cdblib.get ('y3','../geodesic-bvp.json')
+   y4 = cdblib.get ('y4','../geodesic-bvp.json')
+   y5 = cdblib.get ('y5','../geodesic-bvp.json')
+
+   diff32 := @(y3) - @(y2).
+   diff43 := @(y4) - @(y3).
+   diff54 := @(y5) - @(y4).
+
+   diff32 = product_sort (diff32)
+   rename_dummies        (diff32)
+   canonicalise          (diff32)         # cdb (diff32.001,diff32)
+
+   diff43 = product_sort (diff43)
+   rename_dummies        (diff43)
+   canonicalise          (diff43)         # cdb (diff43.001,diff43)
+
+   diff54 = product_sort (diff54)
+   rename_dummies        (diff54)
+   canonicalise          (diff54)         # cdb (diff54.001,diff54)
+
+   def truncateR (obj,n):
+
+   # I would like to assign different weights to \nabla_{a}, \nabla_{a b}, \nabla_{a b c} etc. but no matter
+   # what I do it appears that Cadabra assigns the same weight to all of these regardless of the number of subscripts.
+   # It seems that the weight is assigned to the symbol \nabla alone. So I'm forced to use the following substitution trick.
+
+       Q_{a b c d}::Weight(label=numR,value=2).
+       Q_{a b c d e}::Weight(label=numR,value=3).
+       Q_{a b c d e f}::Weight(label=numR,value=4).
+       Q_{a b c d e f g}::Weight(label=numR,value=5).
+
+       tmp := @(obj).
+
+       substitute (tmp, $\nabla_{e f g}{R_{a b c d}} -> Q_{a b c d e f g}$)
+       substitute (tmp, $\nabla_{e f}{R_{a b c d}} -> Q_{a b c d e f}$)
+       substitute (tmp, $\nabla_{e}{R_{a b c d}} -> Q_{a b c d e}$)
+       substitute (tmp, $R_{a b c d} -> Q_{a b c d}$)
+
+       ans = Ex(0)
+
+       for i in range (0,n+1):
+          foo := @(tmp).
+          bah = Ex("numR = " + str(i))
+          keep_weight (foo, bah)
+          ans = ans + foo
+
+       substitute (ans, $Q_{a b c d e f g} -> \nabla_{e f g}{R_{a b c d}}$)
+       substitute (ans, $Q_{a b c d e f} -> \nabla_{e f}{R_{a b c d}}$)
+       substitute (ans, $Q_{a b c d e} -> \nabla_{e}{R_{a b c d}}$)
+       substitute (ans, $Q_{a b c d} -> R_{a b c d}$)
+
+       return ans
+
+   diff32 = truncateR (diff32,2)        # cdb (diff32.002,diff32)
+   diff43 = truncateR (diff43,3)        # cdb (diff43.002,diff43)
+   diff54 = truncateR (diff54,4)        # cdb (diff54.002,diff54)
+
+\end{cadabra}
+
+\clearpage
+
+% =================================================================================================
+\section*{Verify order of $\ny{n}^{a}$}
+
+If things have gone to plan then we should see that $\ny{n+1}^a - \ny{n}^a = \BigO{\eps^{n+1}}$. And we do. Good show.
+
+\begin{dgroup*}
+   \begin{dmath*} \ny{3}^{a} - \ny{2}^{a} = \cdb{diff32.001} \end{dmath*}
+   \begin{dmath*} \ny{4}^{a} - \ny{3}^{a} = \cdb{diff43.001} \end{dmath*}
+   % \begin{dmath*} \ny{5}^{a} - \ny{4}^{a} = \cdb{diff54.001} \end{dmath*}  % too long
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \nT{2}\left(\ny{3}^{a} - \ny{2}^{a}\right) = \cdb{diff32.002} \end{dmath*}
+   \begin{dmath*} \nT{3}\left(\ny{4}^{a} - \ny{3}^{a}\right) = \cdb{diff43.002} \end{dmath*}
+   \begin{dmath*} \nT{4}\left(\ny{5}^{a} - \ny{4}^{a}\right) = \cdb{diff54.002} \end{dmath*}
+\end{dgroup*}
+
+\end{document}

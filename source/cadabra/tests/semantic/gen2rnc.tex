@@ -1,0 +1,42 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+\section*{\jobname}
+
+\CdbSetup{action=hide}
+
+\begin{cadabra}
+   import shared
+
+   import cdblib
+
+   term00A = cdblib.get ('check000','expected/gen2rnc.json')
+   term01A = cdblib.get ('check001','expected/gen2rnc.json')
+   term02A = cdblib.get ('check002','expected/gen2rnc.json')
+   term03A = cdblib.get ('check003','expected/gen2rnc.json')
+   term04A = cdblib.get ('check004','expected/gen2rnc.json')
+
+   term00B = cdblib.get ('check000','output/gen2rnc.json')
+   term01B = cdblib.get ('check001','output/gen2rnc.json')
+   term02B = cdblib.get ('check002','output/gen2rnc.json')
+   term03B = cdblib.get ('check003','output/gen2rnc.json')
+   term04B = cdblib.get ('check004','output/gen2rnc.json')
+
+   diff000 = shared.check (term00A,term00B)   # cdb (diff000,diff000)
+   diff001 = shared.check (term01A,term01B)   # cdb (diff001,diff001)
+   diff002 = shared.check (term02A,term02B)   # cdb (diff002,diff002)
+   diff003 = shared.check (term03A,term03B)   # cdb (diff003,diff003)
+   diff004 = shared.check (term04A,term04B)   # cdb (diff004,diff004)
+
+\end{cadabra}
+
+\begin{dgroup*}
+   \Dmath*{ \cdb*{diff000} }
+   \Dmath*{ \cdb*{diff001} }
+   \Dmath*{ \cdb*{diff002} }
+   \Dmath*{ \cdb*{diff003} }
+   \Dmath*{ \cdb*{diff004} }
+\end{dgroup*}
+
+\end{document}

@@ -1,0 +1,9 @@
+{
+  "g^ab": "g^{a b} +  1/3 x^{c} x^{d} R_{c e d f} g^{a e} g^{b f} +  1/6 x^{c} x^{d} x^{e} \\nabla_{c}(R_{d f e g}) g^{a f} g^{b g} +  1/15 x^{c} x^{d} x^{e} x^{f} R_{c g d h} R_{e i f j} g^{a g} g^{b i} g^{h j} +  1/20 x^{c} x^{d} x^{e} x^{f} \\nabla_{c d}(R_{e g f h}) g^{a g} g^{b h} +  1/30 x^{c} x^{d} x^{e} x^{f} x^{g} R_{c h d i} \\nabla_{e}(R_{f j g k}) g^{a h} g^{b j} g^{i k} +  1/30 x^{c} x^{d} x^{e} x^{f} x^{g} R_{c h d i} \\nabla_{e}(R_{f j g k}) g^{a j} g^{b h} g^{i k} +  1/90 x^{c} x^{d} x^{e} x^{f} x^{g} \\nabla_{c d e}(R_{f h g i}) g^{a h} g^{b i}",
+  "g^ab_0": "g^{a b}",
+  "g^ab_1": "0",
+  "g^ab_2": " 1/3 x^{c} x^{d} R_{c e d f} g^{a e} g^{b f}",
+  "g^ab_3": " 1/6 x^{c} x^{d} x^{e} \\nabla_{c}(R_{d f e g}) g^{a f} g^{b g}",
+  "g^ab_4": " 1/15 x^{c} x^{d} x^{e} x^{f} R_{c g d h} R_{e i f j} g^{a g} g^{b i} g^{h j} +  1/20 x^{c} x^{d} x^{e} x^{f} \\nabla_{c d}(R_{e g f h}) g^{a g} g^{b h}",
+  "g^ab_5": " 1/30 x^{c} x^{d} x^{e} x^{f} x^{g} R_{c h d i} \\nabla_{e}(R_{f j g k}) g^{a h} g^{b j} g^{i k} +  1/30 x^{c} x^{d} x^{e} x^{f} x^{g} R_{c h d i} \\nabla_{e}(R_{f j g k}) g^{a j} g^{b h} g^{i k} +  1/90 x^{c} x^{d} x^{e} x^{f} x^{g} \\nabla_{c d e}(R_{f h g i}) g^{a h} g^{b i}"
+}

@@ -1,0 +1,465 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{cdblatex}
+% \usepackage{amsmath}% part of cdblatex
+% \usepackage{amssymb}% ditto
+% \usepackage{breqn}%   ditto
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{summary}
+\usepackage{config}
+
+\geometry{a4paper,landscape,margin=2cm}
+% \geometry{a4paper,portrait,margin=2cm}
+\hypersetup{colorlinks=true}% use false for journals and paper
+\numberwithin{equation}{section}% requires amsmath
+
+\begin{document}
+
+% =================================================================================================
+\section*{Notes}
+
+The convention for the curvature used in these notes conforms to that of Misner-Thorne-Wheeler
+(MTW, eq. 11.12) , namely
+\begin{align*}
+   V^{a}{}_{;bc} - V^{a}{}_{;cb} = - R^{a}{}_{dbc} V^{d}
+\end{align*}
+
+Also, note the following shorthand for mixed covariant derivatives
+\begin{align*}
+   \nabla_a\left(\nabla_b\right) &= \nabla_{ab}\\
+   \nabla_a\left(\nabla_b\left(\nabla_c\right)\right) &= \nabla_{abc}\\
+   \nabla_a\left(\nabla_b\left(\nabla_c\left(\nabla_d\right)\right)\right) &= \nabla_{abcd}
+\end{align*}
+and so on.
+
+In terms of $\nabla$ the above MTW definition of $R^{a}{}_{bcd}$ can written as
+\begin{align*}
+   \left(\nabla_{cb}-\nabla_{bc}\right) V^{a} = - R^{a}{}_{dbc} V^{d}
+\end{align*}
+
+% -------------------------------------------------------------------------------------------------
+\subsection*{Symmetrisation}
+\input{dGamma.cdbtex}
+
+In the following pages there will be frequent constructions of the form
+\begin{dgroup*}
+   \begin{dmath*}  3 A^b A^c\Gamma^a{}_{d(b,c)} = \cdb{scaled1.002} \end{dmath*}
+   \begin{dmath*}  6 A^b A^c A^e \Gamma^a{}_{d(b,ce)} = \cdb{scaled2.002} \end{dmath*}
+   \begin{dmath*} 15 A^b A^c A^e A^f \Gamma^a{}_{d(b,cef)} = \cdb{scaled3.002} \end{dmath*}
+\end{dgroup*}
+The vector $A^{a}$ has no special meaning. Its purpose is to indicate that the
+associciated tensor is symmetric over a selection of its indices. If the $A^{a}$ were not included
+then the right hand side would either need to be spelt out in full or some other device would
+be needed to denote the symmetries. The symmetrisation brackets are included on the left hand
+side though they are redundant (in the presence of the $A{a}$).
+
+\clearpage
+
+% =================================================================================================
+\section*{The metric in RNC}
+\input{metric.cdbtex}
+
+\begin{dgroup*}
+   \begin{dmath*} g_{a b}(x) = \cdb{Metric.601}+\BigO{\eps^6} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+\section*{Curvature expansion of the metric}
+\begin{align*}
+     g_{a b}(x) =
+     \ngab{0}_{a b}
+   + \ngab{2}_{a b}
+   + \ngab{3}_{a b}
+   + \ngab{4}_{a b}
+   + \ngab{5}_{a b}+\BigO{\eps^6}
+\end{align*}
+\begin{dgroup*}
+   \begin{dmath*}     \ngab{0}_{a b} = \cdb{scaled0.601} \end{dmath*}
+   \begin{dmath*}   3 \ngab{2}_{a b} = \cdb{scaled2.601} \end{dmath*}
+   \begin{dmath*}   6 \ngab{3}_{a b} = \cdb{scaled3.601} \end{dmath*}
+   \begin{dmath*} 180 \ngab{4}_{a b} = \cdb{scaled4.601} \end{dmath*}
+   \begin{dmath*}  90 \ngab{5}_{a b} = \cdb{scaled5.601} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{The inverse metric in RNC}
+\input{metric-inv.cdbtex}
+
+\begin{dgroup*}
+   \begin{dmath*} g^{a b}(x) = \cdb{Metric.601}+\BigO{\eps^6} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+\section*{Curvature expansion of the inverse metric}
+\begin{align*}
+     g^{a b}(x) =
+     \ngab{0}^{a b}
+   + \ngab{2}^{a b}
+   + \ngab{3}^{a b}
+   + \ngab{4}^{a b}
+   + \ngab{5}^{a b}+\BigO{\eps^6}
+\end{align*}
+\begin{dgroup*}
+   \begin{dmath*}    \ngab{0}^{a b} = \cdb{scaled0.601} \end{dmath*}
+   \begin{dmath*}  3 \ngab{2}^{a b} = \cdb{scaled2.601} \end{dmath*}
+   \begin{dmath*}  6 \ngab{3}^{a b} = \cdb{scaled3.601} \end{dmath*}
+   \begin{dmath*} 60 \ngab{4}^{a b} = \cdb{scaled4.601} \end{dmath*}
+   \begin{dmath*} 90 \ngab{5}^{a b} = \cdb{scaled5.601} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{The metric determinant in RNC}
+\input{detg2.cdbtex}
+
+\begin{dgroup*}
+   \begin{dmath*} -\det g(x) = \cdb{Ndetg.701}+\BigO{\eps^5} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+\section*{The metric Jacobian in RNC}
+
+\begin{dgroup*}
+   \begin{dmath*} \sqrt{-\det g(x)} = \cdb{sqrtNdetg.801}+\BigO{\eps^5} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+\section*{The log of detg in RNC}
+
+\begin{dgroup*}
+   \begin{dmath*} \log{-\det g(x)\vert} = \cdb{logNdetg.901}+\BigO{\eps^5} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{The connection in RNC}
+\input{connection.cdbtex}
+
+\begin{dgroup*}
+   \begin{dmath*} A^a A^b \Gamma^{d}_{a b} = \cdb{Gamma.301} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} 360 A^a A^b \Gamma^{d}_{a b} = \cdb{Scaled.301} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Curvature expansion of the connection}
+\begin{align*}
+     A^a A^b \Gamma^{d}_{a b} =
+     A^a A^b \nGamma{2}^{d}{}_{a b}
+   + A^a A^b \nGamma{3}^{d}{}_{a b}
+   + A^a A^b \nGamma{4}^{d}{}_{a b}
+   + A^a A^b \nGamma{5}^{d}{}_{a b}+\BigO{\eps^6}
+\end{align*}
+\begin{dgroup*}
+   \begin{dmath*}   3 A^a A^b \nGamma{2}^{d}_{a b} = \cdb{scaled2.301} \end{dmath*}
+   \begin{dmath*}  12 A^a A^b \nGamma{3}^{d}_{a b} = \cdb{scaled3.301} \end{dmath*}
+   \begin{dmath*} 360 A^a A^b \nGamma{4}^{d}_{a b} = \cdb{scaled4.301} \end{dmath*}
+   \begin{dmath*} 180 A^a A^b \nGamma{5}^{d}_{a b} = \cdb{scaled5.301} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Symmetrised partial derivatives of the connection}
+\input{dGamma.cdbtex}
+
+\begin{dgroup*}
+   \begin{dmath*}   3 A^b A^c\Gamma^a{}_{d(b,c)} = \cdb{scaled1.002} \end{dmath*}
+   \begin{dmath*}   6 A^b A^c A^e \Gamma^a{}_{d(b,ce)} = \cdb{scaled2.002} \end{dmath*}
+   \begin{dmath*}  15 A^b A^c A^e A^f \Gamma^a{}_{d(b,cef)} = \cdb{scaled3.002} \end{dmath*}
+   \begin{dmath*}   9 A^b A^c A^e A^f A^g \Gamma^a{}_{d(b,cefg)} = \cdb{scaled4.002} \end{dmath*}
+   \begin{dmath*} 252 A^b A^c A^e A^f A^g A^h\Gamma^a{}_{d(b,cefgh)} = \cdb{scaled5.002} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Symmetrised partial derivatives of $R^a{}_{bcd}$}
+\input{dRabcd.cdbtex}
+
+\begin{dgroup*}
+   \begin{dmath*}    A^c A^d A^e R^a{}_{cdb,e} = \cdb{scaled1.601} \end{dmath*}
+   \begin{dmath*}    A^c A^d A^e A^{f} R^a{}_{cdb,ef} = \cdb{scaled2.601} \end{dmath*}
+   \begin{dmath*} -2 A^c A^d A^e A^{f} A^{g} R^a{}_{cdb,efg} = \cdb{scaled3.601} \end{dmath*}
+   \begin{dmath*} -5 A^c A^d A^e A^{f} A^{g} A^{h} R^a{}_{cdb,efgh} = \cdb{scaled4.601} \end{dmath*}
+   \begin{dmath*} -3 A^c A^d A^e A^{f} A^{g} A^{h} A^{i}R^a{}_{cdb,efghi} = \cdb{scaled5.601} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{The generalised connection in RNC}
+\input{genGamma.cdbtex}
+
+\begin{dgroup*}
+   \begin{dmath*} A^b A^c \Gamma^{a}_{b c} = \cdb{genGamma0.000} \end{dmath*}
+   \begin{dmath*} A^b A^c A^d \Gamma^{a}_{b c d} = \cdb{genGamma1.000} \end{dmath*}
+   \begin{dmath*} A^b A^c A^d A^e \Gamma^{a}_{b c d e} = \cdb{genGamma2.000} \end{dmath*}
+   \begin{dmath*} A^b A^c A^d A^e A^f \Gamma^{a}_{b c d e f} = \cdb{genGamma3.000} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{The generalised connection in RNC}
+
+This is the same as the previous page but with a small change in the format to avoid fractions.
+
+\begin{dgroup*}
+   \begin{dmath*} 360 A^b A^c \Gamma^{a}_{b c} = \cdb{scaledGamma0.001} \end{dmath*}
+   \begin{dmath*} 360 A^b A^c A^d \Gamma^{a}_{b c d} = \cdb{scaledGamma1.001} \end{dmath*}
+   \begin{dmath*}  90 A^b A^c A^d A^e \Gamma^{a}_{b c d e} = \cdb{scaledGamma2.001} \end{dmath*}
+   \begin{dmath*}   3 A^b A^c A^d A^e A^f \Gamma^{a}_{b c d e f} = \cdb{scaledGamma3.001} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Convert from generic (x) to local RNC coords (y)}
+\input{gen2rnc.cdbtex}
+
+\begin{align*}
+   y^a = \ny{0}^{a} + \ny{1}^{a} + \ny{2}^{a} + \ny{3}^{a} + \ny{4}^{a}
+\end{align*}
+
+\begin{dgroup*}
+   \begin{dmath*}     \ny{0}^{a} = \cdb{scaled1.002} \end{dmath*}
+   \begin{dmath*}   2 \ny{1}^{a} = \cdb{scaled2.002} \end{dmath*}
+   \begin{dmath*}   6 \ny{2}^{a} = \cdb{scaled3.002} \end{dmath*}
+   \begin{dmath*}  24 \ny{3}^{a} = \cdb{scaled4.002} \end{dmath*}
+   \begin{dmath*} 360 \ny{4}^{a} = \cdb{scaled5.002} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{The geodesic ivp}
+\input{geodesic-ivp.cdbtex}
+
+\begin{align*}
+   x^{d}(s) = x^{d}
+            + s {\dot{x}^d}
+            + \frac{s^2}{2!} {\dot{x}^a} {\dot{x}^b} A^{d}_{ab}
+            + \frac{s^3}{3!} {\dot{x}^a} {\dot{x}^b} {\dot{x}^c} A^{d}_{abc}
+            + \frac{s^4}{4!} {\dot{x}^a} {\dot{x}^b} {\dot{x}^c} {\dot{x}^d} A^{d}_{abce}
+            + \frac{s^5}{5!} {\dot{x}^a} {\dot{x}^b} {\dot{x}^c} {\dot{x}^d} {\dot{x}^e} A^{d}_{abcef}
+            + \dotsb
+\end{align*}
+\begin{dgroup*}
+   \begin{dmath*} 360 A^{d}_{ab} = \cdb{sterm2.002} \end{dmath*}
+   \begin{dmath*} 360 A^{d}_{abc} = \cdb{sterm3.002} \end{dmath*}
+   \begin{dmath*}  90 A^{d}_{abce} = \cdb{sterm4.002} \end{dmath*}
+   \begin{dmath*}   3 A^{d}_{abcef} = \cdb{sterm5.002} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Geodesic boundary value problem to terms linear in $R$}
+\input{geodesic-bvp.cdbtex}
+
+\begin{dgroup*}
+   \begin{dmath*} x^{a}(s) = \cdb{bvp.601} + \BigO{s^3,\eps^3} \end{dmath*}
+\end{dgroup*}
+
+\begin{align*}
+   x^{a}(s) &= x^{a} + s Dx^{a}
+                     + (s-s^2) x^{a}_2
+                     + \BigO{s^3,\eps^3}
+\end{align*}
+
+\begin{dgroup*}
+   \begin{dmath*} x^{a}_2 = \nx{2}^{a}_2 + \BigO{\eps^3} \end{dmath*}
+   \begin{dmath*} -3 \nx{2}^{a}_2 = \cdb{Rterm22.102} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Geodesic boundary value problem to terms linear in $\nabla R$}
+
+\begin{dgroup*}
+   \begin{dmath*} x^{a}(s) = \cdb{bvp.602} + \BigO{s^4,\eps^4} \end{dmath*}
+\end{dgroup*}
+
+\begin{align*}
+   x^{a}(s) &= x^{a} + s Dx^{a}
+                     + (s-s^2) x^{a}_2
+                     + (s-s^3) x^{a}_3
+                     + \BigO{s^4,\eps^4}
+\end{align*}
+
+\begin{dgroup*}
+   \begin{dmath*} x^{a}_2 = \nx{2}^{a}_2 + \nx{3}^{a}_2 + \BigO{\eps^4} \end{dmath*}
+   \begin{dmath*}   -3 \nx{2}^{a}_2 = \cdb{Rterm22.102} \end{dmath*}
+   \begin{dmath*}  -24 \nx{3}^{a}_2 = \cdb{Rterm23.102} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} x^{a}_3 = \nx{3}^{a}_3 + \BigO{\eps^4} \end{dmath*}
+   \begin{dmath*}   -12 \nx{3}^{a}_3 = \cdb{Rterm33.102} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+\section*{Geodesic boundary value problem to terms linear in $\nabla^2 R$}
+
+\begin{dgroup*}
+   \begin{dmath*} x^{a}(s) = \cdb{bvp.603} + \BigO{s^5,\eps^5} \end{dmath*}
+\end{dgroup*}
+
+\begin{align*}
+   x^{a}(s) &= x^{a} + s Dx^{a}
+                     + (s-s^2) x^{a}_2
+                     + (s-s^3) x^{a}_3
+                     + (s-s^4) x^{a}_4
+                     + \BigO{s^5,\eps^5}
+\end{align*}
+
+\begin{dgroup*}
+   \begin{dmath*} x^{a}_2 = \nx{2}^{a}_2 + \nx{3}^{a}_2 + \nx{4}^{a}_2 + \BigO{\eps^5} \end{dmath*}
+   \begin{dmath*}   -3 \nx{2}^{a}_2 = \cdb{Rterm22.102} \end{dmath*}
+   \begin{dmath*}  -24 \nx{3}^{a}_2 = \cdb{Rterm23.102} \end{dmath*}
+   \begin{dmath*} -720 \nx{4}^{a}_2 = \cdb{Rterm24.102} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} x^{a}_3 = \nx{3}^{a}_3 + \nx{4}^{a}_3 + \BigO{\eps^5} \end{dmath*}
+   \begin{dmath*}   -12 \nx{3}^{a}_3 = \cdb{Rterm33.102} \end{dmath*}
+   \begin{dmath*}  -720 \nx{4}^{a}_3 = \cdb{Rterm34.102} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} x^{a}_4 = \nx{4}^{a}_4 + \BigO{\eps^5} \end{dmath*}
+   \begin{dmath*}  -180 \nx{4}^{a}_4 = \cdb{Rterm44.102} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Geodesic boundary value problem to terms linear in $\nabla^3 R$}
+
+The geodesic that connects the points with RNC coordinates $x^a$ and $x^a+Dx^a$ is described, for $0\le s\le 1$, by
+%
+% \begin{dgroup*}
+%    \begin{dmath*} x^{a}(s) = \cdb{bvp.604} + \BigO{s^6,\eps^6} \end{dmath*} % too big for pdfLaTeX
+% \end{dgroup*}
+%
+\begin{align*}
+   x^{a}(s) &= x^{a} + s Dx^{a}
+                     + (s-s^2) x^{a}_2
+                     + (s-s^3) x^{a}_3
+                     + (s-s^4) x^{a}_4
+                     + (s-s^5) x^{a}_5
+                     + \BigO{s^6,\eps^6}
+\end{align*}
+
+\begin{dgroup*}
+   \begin{dmath*} x^{a}_2 = \nx{2}^{a}_2 + \nx{3}^{a}_2 + \nx{4}^{a}_2 + \nx{5}^{a}_2 + \BigO{\eps^6} \end{dmath*}
+   \begin{dmath*}   -3 \nx{2}^{a}_2 = \cdb{Rterm22.102} \end{dmath*}
+   \begin{dmath*}  -24 \nx{3}^{a}_2 = \cdb{Rterm23.102} \end{dmath*}
+   \begin{dmath*} -720 \nx{4}^{a}_2 = \cdb{Rterm24.102} \end{dmath*}
+   \begin{dmath*} -360 \nx{5}^{a}_2 = \cdb{Rterm25.102} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} x^{a}_3 = \nx{3}^{a}_3 + \nx{4}^{a}_3 + \nx{5}^{a}_3 + \BigO{\eps^6} \end{dmath*}
+   \begin{dmath*}   -12 \nx{3}^{a}_3 = \cdb{Rterm33.102} \end{dmath*}
+   \begin{dmath*}  -720 \nx{4}^{a}_3 = \cdb{Rterm34.102} \end{dmath*}
+   \begin{dmath*} -1080 \nx{5}^{a}_3 = \cdb{Rterm35.102} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} x^{a}_4 = \nx{4}^{a}_4 + \nx{5}^{a}_4 + \BigO{\eps^6} \end{dmath*}
+   \begin{dmath*}  -180 \nx{4}^{a}_4 = \cdb{Rterm44.102} \end{dmath*}
+   \begin{dmath*} -2160 \nx{5}^{a}_4 = \cdb{Rterm45.102} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} x^{a}_5 = \nx{5}^{a}_5 + \BigO{\eps^6} \end{dmath*}
+   \begin{dmath*} -360 \nx{5}^{a}_5 = \cdb{Rterm55.102} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Geodesic arc-length}
+\input{geodesic-lsq.cdbtex}
+
+\begin{dgroup*}[spread=5pt]
+   % LCB: which of these is correct?
+   % \begin{dmath*} \left(\Delta s\right)^2 = \cdb{lsq.301} + \BigO{\eps^6,Dx^6} \end{dmath*}
+   % \begin{dmath*} \left(\Delta s\right)^2 = \cdb{lsq.301} + \BigO{\eps^6,Dx^7} \end{dmath*}
+   \begin{dmath*} \left(\Delta s\right)^2 = \cdb{lsq.301} + \BigO{\eps^6} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Geodesic arc-length curvature expansion}
+
+\begin{align*}
+   % LCB: which of these is correct?
+   % \left(\Delta s\right)^2 = \nD{0} + \nD{2} + \nD{3} + \nD{4} + \nD{5} + \BigO{\eps^6,Dx^6}
+   % \left(\Delta s\right)^2 = \nD{0} + \nD{2} + \nD{3} + \nD{4} + \nD{5} + \BigO{\eps^6,Dx^7}
+   \left(\Delta s\right)^2 = \nD{0} + \nD{2} + \nD{3} + \nD{4} + \nD{5} + \BigO{\eps^6}
+\end{align*}
+
+\begin{dgroup*}[spread=5pt]
+   \begin{dmath*}      \nD{0} = \cdb{scaled0.301} \end{dmath*}
+   \begin{dmath*}    3 \nD{2} = \cdb{scaled2.301} \end{dmath*}
+   \begin{dmath*}   12 \nD{3} = \cdb{scaled3.301} \end{dmath*}
+   \begin{dmath*}  360 \nD{4} = \cdb{scaled4.301} \end{dmath*}
+   \begin{dmath*} 1080 \nD{5} = \cdb{scaled5.301} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Tranformation between two RNC frames}
+\input{rnc2rnc.cdbtex}
+
+\begin{align*}
+   y^{a} = \ny{0}^{a} + \ny{2}^{a} + \ny{3}^{a} + \ny{4}^{a} + \ny{5}^{a} + \BigO{\eps^6}
+\end{align*}
+
+\begin{dgroup*}
+   \begin{dmath*} \ny{0}^{a} = Dx^{a} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \ny{2}^{a} = \ny{2}^{a}_1 \end{dmath*}
+   \begin{dmath*}   3 \ny{2}^{a}_1 = \cdb{xDxterm12.102} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \ny{3}^{a} = \ny{3}^{a}_1 + \ny{3}^{a}_2 \end{dmath*}
+   \begin{dmath*} -12 \ny{3}^{a}_1 = \cdb{xDxterm13.102} \end{dmath*}
+   \begin{dmath*} -24 \ny{3}^{a}_2 = \cdb{xDxterm22.102} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \ny{4}^{a} = \ny{4}^{a}_1 + \ny{4}^{a}_2 + \ny{4}^{a}_3 \end{dmath*}
+   \begin{dmath*} -180 \ny{4}^{a}_1 = \cdb{xDxterm14.102} \end{dmath*}
+   \begin{dmath*} -720 \ny{4}^{a}_2 = \cdb{xDxterm23.102} \end{dmath*}
+   \begin{dmath*} -720 \ny{4}^{a}_3 = \cdb{xDxterm32.102} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \ny{5}^{a} = \ny{5}^{a}_1 + \ny{5}^{a}_2 + \ny{5}^{a}_3 + \ny{5}^{a}_4 \end{dmath*}
+   \begin{dmath*}  -360 \ny{5}^{a}_1 = \cdb{xDxterm15.102} \end{dmath*}
+   \begin{dmath*} -2160 \ny{5}^{a}_2 = \cdb{xDxterm24.102} \end{dmath*}
+   \begin{dmath*} -1080 \ny{5}^{a}_3 = \cdb{xDxterm33.102} \end{dmath*}
+   \begin{dmath*}  -360 \ny{5}^{a}_4 = \cdb{xDxterm42.102} \end{dmath*}
+\end{dgroup*}
+
+\end{document}

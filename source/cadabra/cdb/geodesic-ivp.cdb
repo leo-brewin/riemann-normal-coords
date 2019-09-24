@@ -1,0 +1,77 @@
+import cdblib
+checkpoint_file = 'tests/semantic/output/geodesic-ivp.json'
+cdblib.create (checkpoint_file)
+checkpoint = []
+
+{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+\nabla{#}::Derivative.
+
+import cdblib
+
+sterm21 = cdblib.get ('genGamma01','genGamma.json')
+sterm22 = cdblib.get ('genGamma02','genGamma.json')
+sterm23 = cdblib.get ('genGamma03','genGamma.json')
+sterm24 = cdblib.get ('genGamma04','genGamma.json')
+
+sterm31 = cdblib.get ('genGamma11','genGamma.json')
+sterm32 = cdblib.get ('genGamma12','genGamma.json')
+sterm33 = cdblib.get ('genGamma13','genGamma.json')
+
+sterm41 = cdblib.get ('genGamma21','genGamma.json')
+sterm42 = cdblib.get ('genGamma22','genGamma.json')
+
+sterm51 = cdblib.get ('genGamma31','genGamma.json')
+
+sterm2 := @(sterm21) + @(sterm22) + @(sterm23) + @(sterm24).
+sterm3 := @(sterm31) + @(sterm32) + @(sterm33).
+sterm4 := @(sterm41) + @(sterm42).
+sterm5 := @(sterm51).
+
+factor_out (sterm2,$A^{a?}$)
+factor_out (sterm3,$A^{a?}$)
+factor_out (sterm4,$A^{a?}$)
+factor_out (sterm5,$A^{a?}$)
+
+sterm2 := 360 @(sterm2).
+sterm3 := 360 @(sterm3).
+sterm4 :=  90 @(sterm4).
+sterm5 :=   3 @(sterm5).
+
+substitute (sterm2,$A^{a}->1$)
+substitute (sterm3,$A^{a}->1$)
+substitute (sterm4,$A^{a}->1$)
+substitute (sterm5,$A^{a}->1$)
+
+
+sterm2short := @(sterm21) + @(sterm22).
+sterm3short := @(sterm31).
+sterm2shortscaled := 12 @(sterm2short).
+sterm3shortscaled :=  2 @(sterm3short).
+
+substitute (sterm2shortscaled,$A^{a}->1$)
+substitute (sterm3shortscaled,$A^{a}->1$)
+
+cdblib.create ('geodesic-ivp.export')
+
+# 4th order ivp terms scaled
+cdblib.put ('ivp42',sterm2shortscaled,'geodesic-ivp.export')
+cdblib.put ('ivp43',sterm3shortscaled,'geodesic-ivp.export')
+
+# 6th order ivp terms scaled
+cdblib.put ('ivp62',sterm2,'geodesic-ivp.export')
+cdblib.put ('ivp63',sterm3,'geodesic-ivp.export')
+cdblib.put ('ivp64',sterm4,'geodesic-ivp.export')
+cdblib.put ('ivp65',sterm5,'geodesic-ivp.export')
+
+checkpoint.append (sterm2shortscaled)
+checkpoint.append (sterm3shortscaled)
+
+checkpoint.append (sterm2)
+checkpoint.append (sterm3)
+checkpoint.append (sterm4)
+checkpoint.append (sterm5)
+
+for i in range( len(checkpoint) ):
+   cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+

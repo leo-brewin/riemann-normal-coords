@@ -1,0 +1,34 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+\section*{\jobname}
+
+\CdbSetup{action=hide}
+
+\begin{cadabra}
+   import shared
+
+   import cdblib
+
+   term00A = cdblib.get ('check000','expected/detg2.json')
+   term01A = cdblib.get ('check001','expected/detg2.json')
+   term02A = cdblib.get ('check002','expected/detg2.json')
+
+   term00B = cdblib.get ('check000','output/detg2.json')
+   term01B = cdblib.get ('check001','output/detg2.json')
+   term02B = cdblib.get ('check002','output/detg2.json')
+
+   diff000 = shared.check (term00A,term00B)   # cdb (diff000,diff000)
+   diff001 = shared.check (term01A,term01B)   # cdb (diff001,diff001)
+   diff002 = shared.check (term02A,term02B)   # cdb (diff002,diff002)
+
+\end{cadabra}
+
+\begin{dgroup*}
+   \Dmath*{ \cdb*{diff000} }
+   \Dmath*{ \cdb*{diff001} }
+   \Dmath*{ \cdb*{diff002} }
+\end{dgroup*}
+
+\end{document}

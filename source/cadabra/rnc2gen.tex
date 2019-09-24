@@ -1,0 +1,308 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+% =================================================================================================
+% create checkpoint file
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   import cdblib
+   checkpoint_file = 'tests/semantic/output/rnc2gen.json'
+   cdblib.create (checkpoint_file)
+   checkpoint = []
+\end{cadabra}
+\egroup
+
+% =================================================================================================
+\section*{Convert from rnc to generic coordinates}
+
+The following code is based on the {\tt gen2rnc.tex} code.
+
+It is common to do some computations in a local RNC. Doing so makes various parts of the
+computations much easier to manage than in the original non-RNC coordinates. One simple example
+is the proof of the second Bianchi identities.
+
+This code develops the inverse transformation, that is from the local RNC coordinates back to
+generic coordinates. The key equation (drawn form {\tt gen2rnc.tex}) is
+\begin{align}
+   x^a_j = x^a_i + y^a - \sum_{k=2}^\infty\>\frac{1}{k!}\>\Gamma^{a}_{\ubk}y^{.\ubk}
+\end{align}
+In {\tt gen2rnc.tex} this equation was solved for the RNC coordinates $y$ given the generic
+coordinates $x_j$ and $x_i$. Here we will instead take $x_i$ and $y$ as given and use this
+equation to compute $x_j$. The first change we will make is to replace $x_j$ with $x$ (as the
+subscript $j$ serves no useful purpose).
+
+Thus our job will be to compute
+\begin{align}
+   \label{eq:rnc2xyz}
+   x^a = x^a_i + y^a - \sum_{k=2}^\infty\>\frac{1}{k!}\>\Gamma^{a}_{\ubk}y^{.\ubk}
+\end{align}
+given $x_i$ and $y$. The generalised connections will be computed recursively by
+\begin{align}
+   \label{eq:GenGamma}
+   \Gamma^{a}{}_{b\uc d} = \Gamma^{a}{}_{(b\uc,d)}
+                   - (n+1) \Gamma^{a}{}_{p(\uc}
+                           \Gamma^{p}{}_{bd)}
+\end{align}
+
+As noted in {\tt gen2rnc.tex}, the generalised connections will scale with the expensions
+parameter $\eps$ according to
+\begin{gather*}
+   \Gamma^{a}{}_{bc} = \BigO{\eps}\>,\qquad
+   \Gamma^{a}{}_{bcd} = \BigO{\eps^2}\>,\qquad
+   \Gamma^{a}{}_{bcde} = \BigO{\eps^3}\>,\qquad
+   \text{etc.}
+\end{gather*}
+
+\clearpage
+
+% ===================================================================
+
+\begin{cadabra}
+   {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+   D{#}::Derivative.
+   \nabla{#}::Derivative.
+   \partial{#}::PartialDerivative.
+
+   g_{a b}::Metric.
+   g^{a b}::InverseMetric.
+   g_{a}^{b}::KroneckerDelta.
+   g^{a}_{b}::KroneckerDelta.
+   \delta^{a}_{b}::KroneckerDelta.
+   \delta_{a}^{b}::KroneckerDelta.
+
+   R_{a b c d}::RiemannTensor.
+   R^{a}_{b c d}::RiemannTensor.
+   R_{a b c}^{d}::RiemannTensor.
+
+   A^{a}::Depends(\partial{#}).
+
+   g_{a b}::Depends(\partial{#}).
+   R_{a b c d}::Depends(\partial{#}).
+   R^{a}_{b c d}::Depends(\partial{#}).
+
+   Q^{a}_{b c}::Depends(\partial{#}).
+
+   Q^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+   Q^{a}_{b c d}::TableauSymmetry(shape={3}, indices={1,2,3}).
+   Q^{a}_{b c d e}::TableauSymmetry(shape={4}, indices={1,2,3,4}).
+   Q^{a}_{b c d e f}::TableauSymmetry(shape={5}, indices={1,2,3,4,5}).
+   Q^{a}_{b c d e f g}::TableauSymmetry(shape={6}, indices={1,2,3,4,5,6}).
+
+   Q^{p}_{a b}::Weight(label=numQ,value=1).
+   Q^{p}_{a b c}::Weight(label=numQ,value=2).
+   Q^{p}_{a b c d}::Weight(label=numQ,value=3).
+   Q^{p}_{a b c d e}::Weight(label=numQ,value=4).
+   Q^{p}_{a b c d e f}::Weight(label=numQ,value=5).
+
+   def product_sort (obj):
+       substitute (obj,$ A^{a}                     -> A001^{a}               $)
+       substitute (obj,$ x^{a}                     -> A002^{a}               $)
+       substitute (obj,$ g^{a b}                   -> A003^{a b}             $)
+       substitute (obj,$ Q^{p}_{a b}               -> A004^{p}_{a b}         $)
+       substitute (obj,$ Q^{p}_{a b c}             -> A005^{p}_{a b c}       $)
+       substitute (obj,$ Q^{p}_{a b c d}           -> A006^{p}_{a b c d}     $)
+       substitute (obj,$ Q^{p}_{a b c d e}         -> A007^{p}_{a b c d e}   $)
+       substitute (obj,$ Q^{p}_{a b c d e f}       -> A008^{p}_{a b c d e f} $)
+       sort_product   (obj)
+       rename_dummies (obj)
+       substitute (obj,$ A001^{a}                  -> A^{a}                  $)
+       substitute (obj,$ A002^{a}                  -> x^{a}                  $)
+       substitute (obj,$ A003^{a b}                -> g^{a b}                $)
+       substitute (obj,$ A004^{p}_{a b}            -> Q^{p}_{a b}            $)
+       substitute (obj,$ A005^{p}_{a b c}          -> Q^{p}_{a b c}          $)
+       substitute (obj,$ A006^{p}_{a b c d}        -> Q^{p}_{a b c d}        $)
+       substitute (obj,$ A007^{p}_{a b c d e}      -> Q^{p}_{a b c d e}      $)
+       substitute (obj,$ A008^{p}_{a b c d e f}    -> Q^{p}_{a b c d e f}    $)
+
+       return obj
+
+   def truncateQ (obj,n):
+
+       ans = Ex(0)
+
+       for i in range (0,n+1):
+          foo := @(obj).
+          bah  = Ex("numQ = " + str(i))
+          keep_weight (foo, bah)
+          ans = ans + foo
+
+       return ans
+
+   # A^{a} = dx^a/ds
+
+   Gamma := Q^{d}_{a b} A^{a} A^{b}.
+
+   dAds  := A^{c} \partial_{c}{A^{d}}-> - @(Gamma).
+
+   # =============================================================
+   eq0 := @(Gamma).                        # cdb (eq0.000,eq0)
+
+   # =============================================================
+   eq1 := A^{c} \partial_{c}{@(eq0)}.      # cdb (eq1.000,eq1)
+
+   distribute      (eq1)                   # cdb (eq1.001,eq1)
+   unwrap          (eq1)                   # cdb (eq1.002,eq1)
+   product_rule    (eq1)                   # cdb (eq1.003,eq1)
+   distribute      (eq1)                   # cdb (eq1.004,eq1)
+   substitute      (eq1,dAds)              # cdb (eq1.005,eq1)
+   distribute      (eq1)                   # cdb (eq1.006,eq1)
+   eq1 = truncateQ (eq1,5)                 # cdb (eq1.007,eq1)
+   sort_product    (eq1)                   # cdb (eq1.008,eq1)
+   rename_dummies  (eq1)                   # cdb (eq1.009,eq1)
+   canonicalise    (eq1)                   # cdb (eq1.010,eq1)
+
+   # =============================================================
+   eq2 := A^{c} \partial_{c}{@(eq1)}.      # cdb (eq2.000,eq2)
+
+   distribute      (eq2)                   # cdb (eq2.001,eq2)
+   unwrap          (eq2)                   # cdb (eq2.002,eq2)
+   product_rule    (eq2)                   # cdb (eq2.003,eq2)
+   distribute      (eq2)                   # cdb (eq2.004,eq2)
+   substitute      (eq2,dAds)              # cdb (eq2.005,eq2)
+   distribute      (eq2)                   # cdb (eq2.006,eq2)
+   eq2 = truncateQ (eq2,5)                 # cdb (eq2.007,eq2)
+   sort_product    (eq2)                   # cdb (eq2.008,eq2)
+   rename_dummies  (eq2)                   # cdb (eq2.009,eq2)
+   canonicalise    (eq2)                   # cdb (eq2.010,eq2)
+
+   # =============================================================
+   eq3 := A^{c} \partial_{c}{@(eq2)}.      # cdb (eq3.000,eq3)
+
+   distribute      (eq3)                   # cdb (eq3.001,eq3)
+   unwrap          (eq3)                   # cdb (eq3.002,eq3)
+   product_rule    (eq3)                   # cdb (eq3.003,eq3)
+   distribute      (eq3)                   # cdb (eq3.004,eq3)
+   substitute      (eq3,dAds)              # cdb (eq3.005,eq3)
+   distribute      (eq3)                   # cdb (eq3.006,eq3)
+   eq3 = truncateQ (eq3,5)                 # cdb (eq3.007,eq3)
+   sort_product    (eq3)                   # cdb (eq3.008,eq3)
+   rename_dummies  (eq3)                   # cdb (eq3.009,eq3)
+   canonicalise    (eq3)                   # cdb (eq3.010,eq3)
+
+   # =============================================================
+   eq4 := A^{c} \partial_{c}{@(eq3)}.      # cdb (eq4.000,eq4)
+
+   distribute      (eq4)                   # cdb (eq4.001,eq4)
+   unwrap          (eq4)                   # cdb (eq4.002,eq4)
+   product_rule    (eq4)                   # cdb (eq4.003,eq4)
+   distribute      (eq4)                   # cdb (eq4.004,eq4)
+   substitute      (eq4,dAds)              # cdb (eq4.005,eq4)
+   distribute      (eq4)                   # cdb (eq4.006,eq4)
+   eq4 = truncateQ (eq4,5)                 # cdb (eq4.007,eq4)
+   sort_product    (eq4)                   # cdb (eq4.008,eq4)
+   rename_dummies  (eq4)                   # cdb (eq4.009,eq4)
+   canonicalise    (eq4)                   # cdb (eq4.010,eq4)
+
+\end{cadabra}
+
+\clearpage
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{eq0.000} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{eq1.000} \end{dmath*}
+   \begin{dmath*} \cdb*{eq1.001} \end{dmath*}
+   \begin{dmath*} \cdb*{eq1.002} \end{dmath*}
+   \begin{dmath*} \cdb*{eq1.003} \end{dmath*}
+   \begin{dmath*} \cdb*{eq1.004} \end{dmath*}
+   \begin{dmath*} \cdb*{eq1.005} \end{dmath*}
+   \begin{dmath*} \cdb*{eq1.006} \end{dmath*}
+   \begin{dmath*} \cdb*{eq1.007} \end{dmath*}
+   \begin{dmath*} \cdb*{eq1.008} \end{dmath*}
+   \begin{dmath*} \cdb*{eq1.009} \end{dmath*}
+   \begin{dmath*} \cdb*{eq1.010} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{eq2.000} \end{dmath*}
+   \begin{dmath*} \cdb*{eq2.001} \end{dmath*}
+   \begin{dmath*} \cdb*{eq2.002} \end{dmath*}
+   \begin{dmath*} \cdb*{eq2.003} \end{dmath*}
+   \begin{dmath*} \cdb*{eq2.004} \end{dmath*}
+   \begin{dmath*} \cdb*{eq2.005} \end{dmath*}
+   \begin{dmath*} \cdb*{eq2.006} \end{dmath*}
+   \begin{dmath*} \cdb*{eq2.007} \end{dmath*}
+   \begin{dmath*} \cdb*{eq2.008} \end{dmath*}
+   \begin{dmath*} \cdb*{eq2.009} \end{dmath*}
+   \begin{dmath*} \cdb*{eq2.010} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{eq3.010} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{eq4.010} \end{dmath*}
+\end{dgroup*}
+
+% -------------------------------------------------------------------
+% reformat
+
+\clearpage
+
+\begin{cadabra}
+   def reformat (obj):
+      bah := @(obj).
+      distribute     (bah)
+      bah = product_sort (bah)
+      rename_dummies (bah)
+      canonicalise   (bah)
+      factor_out     (bah,$A^{a?}$)
+      substitute     (bah,$A^{a}->y^{a}$)
+      substitute     (bah,$Q^{a}_{b c}->\Gamma^{a}_{b c}$)
+      ans := @(bah).
+      return ans
+
+   eq0 = reformat(eq0)  # cdb (eq0.100,eq0)
+   eq1 = reformat(eq1)  # cdb (eq1.100,eq1)
+   eq2 = reformat(eq2)  # cdb (eq2.100,eq2)
+   eq3 = reformat(eq3)  # cdb (eq3.100,eq3)
+   eq4 = reformat(eq4)  # cdb (eq4.100,eq4)
+
+   checkpoint.append (eq0)
+   checkpoint.append (eq1)
+   checkpoint.append (eq2)
+   checkpoint.append (eq3)
+   checkpoint.append (eq4)
+
+\end{cadabra}
+
+\clearpage
+
+% =================================================================================================
+\section*{Convert from local RNC coords (y) to generic (x)}
+
+\begin{align*}
+   x^a = x^a_i + \nx{0}^{a} - \nx{1}^{a} - \nx{2}^{a} - \nx{3}^{a} - \nx{4}^{a} - \nx{5}^{a}
+\end{align*}
+
+\begin{dgroup*}
+   \begin{dmath*}    \nx{0}^{a} = y^{a} \end{dmath*}
+   \begin{dmath*} 2! \nx{1}^{a} = \cdb{eq0.100} \end{dmath*}
+   \begin{dmath*} 3! \nx{2}^{a} = \cdb{eq1.100} \end{dmath*}
+   \begin{dmath*} 4! \nx{3}^{a} = \cdb{eq2.100} \end{dmath*}
+   \begin{dmath*} 5! \nx{4}^{a} = \cdb{eq3.100} \end{dmath*}
+   \begin{dmath*} 6! \nx{5}^{a} = \cdb{eq4.100} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+% export checkpoints in json format
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   for i in range( len(checkpoint) ):
+      cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+\end{cadabra}
+\egroup
+
+\end{document}

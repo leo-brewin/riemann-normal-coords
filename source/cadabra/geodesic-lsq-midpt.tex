@@ -1,0 +1,183 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+% =================================================================================================
+% create checkpoint file
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   import cdblib
+   checkpoint_file = 'tests/semantic/output/geodesic-lsq-midpt.json'
+   cdblib.create (checkpoint_file)
+   checkpoint = []
+\end{cadabra}
+\egroup
+
+% =================================================================================================
+\section*{Geodesic mid-point for arc-length}
+
+\input{metric.cdbtex}
+\input{geodesic-lsq.cdbtex}
+
+This code uses the results of {\tts geodesic-lsq} and {\tts metric} to show that the 2nd and 3rd
+order estimates for $L^2_{PQ}$ can be recovered using a mid-point estimate. For the 3rd order estimate
+we have
+\begin{align*}
+   g_{ab}(x) &= \cdb{gab4.601} + \BigO{\eps^4}\\
+   L^2_{PQ}  &= \cdb{lsq4.301} + \BigO{\eps^4}
+\end{align*}
+The code below verifies that
+\begin{equation*}
+   L^2_{PQ} = g_{ab}(\bar x) Dx^{a} Dx^{b} + \BigO{\eps^4}
+\end{equation*}
+where $\bar x$ is the \emph{coordinate} midpoint of the geodesic
+\begin{equation*}
+   {\bar x^a} = \frac{1}{2}\left(x^{a}_{P} + x^{a}_{Q}\right)
+\end{equation*}
+This result holds true only for the 2nd and 3rd order estimates. Note that the \emph{coordinate} midpoint
+is not the \emph{geometric} midpoint of the geodesic.
+
+It might be interesting to see if the higher order estimates could
+be recovered by sampling the metric at points other than the mid point.
+
+\clearpage
+
+\begin{cadabra}
+   {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+   \nabla{#}::Derivative.
+
+   g_{a b}::Metric.
+   g^{a b}::InverseMetric.
+
+   R_{a b c d}::RiemannTensor.
+
+   import cdblib
+
+   gab = cdblib.get('g_ab','metric.json')
+
+   lsq2 = cdblib.get('lsq2','geodesic-lsq.json')
+   lsq3 = cdblib.get('lsq3','geodesic-lsq.json')
+   lsq4 = cdblib.get('lsq4','geodesic-lsq.json')
+   lsq5 = cdblib.get('lsq5','geodesic-lsq.json')
+
+   substitute (gab,$x^{a}->(p^{a}+q^{a})/2$)   # evaluate rnc gab at mid-point
+   distribute (gab)
+
+   defgab := g_{a b} -> @(gab).
+
+   mid := g_{a b} (q^{a}-p^{a}) (q^{b}-p^{b}).
+
+   substitute     (mid,defgab)
+   distribute     (mid)
+   sort_product   (mid)
+   rename_dummies (mid)
+   canonicalise   (mid)
+
+   tst2 := @(lsq2) - @(mid).                             # cdb (tst2.201,tst2)
+   tst3 := @(lsq3) - @(mid).                             # cdb (tst3.201,tst3)
+   tst4 := @(lsq4) - @(mid).                             # cdb (tst4.201,tst4)
+   tst5 := @(lsq5) - @(mid).                             # cdb (tst5.201,tst5)
+
+   substitute     (tst2,$Dx^{a} -> q^{a}-p^{a}$)
+   substitute     (tst2,$x^{a} -> p^{a}$)
+   distribute     (tst2)
+   sort_product   (tst2)
+   rename_dummies (tst2)
+   canonicalise   (tst2)                                 # cdb (tst2.202,tst2)
+
+   substitute     (tst3,$Dx^{a} -> q^{a}-p^{a}$)
+   substitute     (tst3,$x^{a} -> p^{a}$)
+   distribute     (tst3)
+   sort_product   (tst3)
+   rename_dummies (tst3)
+   canonicalise   (tst3)                                 # cdb (tst3.202,tst3)
+
+   substitute     (tst4,$Dx^{a} -> q^{a}-p^{a}$)
+   substitute     (tst4,$x^{a} -> p^{a}$)
+   distribute     (tst4)
+   sort_product   (tst4)
+   rename_dummies (tst4)
+   canonicalise   (tst4)                                 # cdb (tst4.202,tst4)
+
+   substitute     (tst5,$Dx^{a} -> q^{a}-p^{a}$)
+   substitute     (tst5,$x^{a} -> p^{a}$)
+   distribute     (tst5)
+   sort_product   (tst5)
+   rename_dummies (tst5)
+   canonicalise   (tst5)                                 # cdb (tst5.202,tst5)
+
+\end{cadabra}
+
+\clearpage
+
+% =================================================================================================
+\section*{Reformatting}
+
+\begin{cadabra}
+   def truncateR (obj,n):
+
+   # I would like to assign different weights to \nabla_{a}, \nabla_{a b}, \nabla_{a b c} etc. but no matter
+   # what I do it appears that Cadabra assigns the same weight to all of these regardless of the number of subscripts.
+   # It seems that the weight is assigned to the symbol \nabla alone. So I'm forced to use the following substitution trick.
+
+       Q_{a b c d}::Weight(label=numR,value=2).
+       Q_{a b c d e}::Weight(label=numR,value=3).
+       Q_{a b c d e f}::Weight(label=numR,value=4).
+       Q_{a b c d e f g}::Weight(label=numR,value=5).
+
+       tmp := @(obj).
+
+       substitute (tmp, $\nabla_{e f g}{R_{a b c d}} -> Q_{a b c d e f g}$)
+       substitute (tmp, $\nabla_{e f}{R_{a b c d}} -> Q_{a b c d e f}$)
+       substitute (tmp, $\nabla_{e}{R_{a b c d}} -> Q_{a b c d e}$)
+       substitute (tmp, $R_{a b c d} -> Q_{a b c d}$)
+
+       ans = Ex(0)
+
+       for i in range (0,n+1):
+          foo := @(tmp).
+          bah = Ex("numR = " + str(i))
+          keep_weight (foo, bah)
+          ans = ans + foo
+
+       substitute (ans, $Q_{a b c d e f g} -> \nabla_{e f g}{R_{a b c d}}$)
+       substitute (ans, $Q_{a b c d e f} -> \nabla_{e f}{R_{a b c d}}$)
+       substitute (ans, $Q_{a b c d e} -> \nabla_{e}{R_{a b c d}}$)
+       substitute (ans, $Q_{a b c d} -> R_{a b c d}$)
+
+       return ans
+
+   tst2 = truncateR (tst2,2)  # cdb (tst2.301,tst2)
+   tst3 = truncateR (tst3,3)  # cdb (tst3.301,tst3)
+   tst4 = truncateR (tst4,4)  # cdb (tst4.301,tst4)
+   tst5 = truncateR (tst5,5)  # cdb (tst5.301,tst5)
+\end{cadabra}
+
+\clearpage
+
+% =================================================================================================
+\section*{Errors is mid-point estimates for $L^2_{PQ}$}
+
+\begin{dgroup*}
+   \begin{dmath*} \left(L^2_{PQ} - g_{ab}(\bar x) Dx^a Dx^b\right)_2 = \cdb{tst2.301} \end{dmath*}
+   \begin{dmath*} \left(L^2_{PQ} - g_{ab}(\bar x) Dx^a Dx^b\right)_3 = \cdb{tst3.301} \end{dmath*}
+   \begin{dmath*} \left(L^2_{PQ} - g_{ab}(\bar x) Dx^a Dx^b\right)_4 = \cdb{tst4.301} \end{dmath*}
+   \begin{dmath*} \left(L^2_{PQ} - g_{ab}(\bar x) Dx^a Dx^b\right)_5 = \cdb{tst5.301} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+% export checkpoints in json format
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   for i in range( len(checkpoint) ):
+      cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+\end{cadabra}
+\egroup
+
+\end{document}
+

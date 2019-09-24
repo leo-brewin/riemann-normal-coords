@@ -1,0 +1,68 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+\section*{\jobname}
+
+\CdbSetup{action=hide}
+
+\begin{cadabra}
+   import shared
+
+   import cdblib
+
+   term00A = cdblib.get ('check000','expected/metric.json')
+   term01A = cdblib.get ('check001','expected/metric.json')
+   term02A = cdblib.get ('check002','expected/metric.json')
+   term03A = cdblib.get ('check003','expected/metric.json')
+   term04A = cdblib.get ('check004','expected/metric.json')
+   term05A = cdblib.get ('check005','expected/metric.json')
+   term06A = cdblib.get ('check005','expected/metric.json')
+   term07A = cdblib.get ('check005','expected/metric.json')
+
+   term00B = cdblib.get ('check000','output/metric.json')
+   term01B = cdblib.get ('check001','output/metric.json')
+   term02B = cdblib.get ('check002','output/metric.json')
+   term03B = cdblib.get ('check003','output/metric.json')
+   term04B = cdblib.get ('check004','output/metric.json')
+   term05B = cdblib.get ('check005','output/metric.json')
+   term06B = cdblib.get ('check005','output/metric.json')
+   term07B = cdblib.get ('check005','output/metric.json')
+
+   # bug: can't push this function into shared.py
+   #      no synatx error, but cadabra doesn't cancel equal terms
+   # see ~/cadabra/bugs/bug02
+
+   def check (objA,objB):
+       tmp := @(objA) - @(objB).
+       distribute         (tmp)
+       tmp = shared.standard_indices (tmp)
+       tmp = shared.product_sort (tmp)
+       rename_dummies     (tmp)
+       canonicalise       (tmp)
+
+       return tmp
+
+   diff000 = shared.check (term00A,term00B)   # cdb (diff000,diff000)
+   diff001 = shared.check (term01A,term01B)   # cdb (diff001,diff001)
+   diff002 = shared.check (term02A,term02B)   # cdb (diff002,diff002)
+   diff003 = shared.check (term03A,term03B)   # cdb (diff003,diff003)
+   diff004 = shared.check (term04A,term04B)   # cdb (diff004,diff004)
+   diff005 = shared.check (term05A,term05B)   # cdb (diff005,diff005)
+   diff006 = shared.check (term06A,term06B)   # cdb (diff006,diff006)
+   diff007 = shared.check (term07A,term07B)   # cdb (diff007,diff007)
+
+\end{cadabra}
+
+\begin{dgroup*}
+   \Dmath*{ \cdb*{diff000} }
+   \Dmath*{ \cdb*{diff001} }
+   \Dmath*{ \cdb*{diff002} }
+   \Dmath*{ \cdb*{diff003} }
+   \Dmath*{ \cdb*{diff004} }
+   \Dmath*{ \cdb*{diff005} }
+   \Dmath*{ \cdb*{diff006} }
+   \Dmath*{ \cdb*{diff007} }
+\end{dgroup*}
+
+\end{document}

@@ -1,0 +1,719 @@
+import cdblib
+checkpoint_file = 'tests/semantic/output/geodesic-bvp.json'
+cdblib.create (checkpoint_file)
+checkpoint = []
+
+import time
+
+{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+\nabla{#}::Derivative.
+
+g_{a b}::Metric.
+g^{a b}::InverseMetric.
+
+R_{a b c d}::RiemannTensor.
+R_{a b c d}::Depends(\nabla{#}).
+
+{Gam22^{a}_{b c},Gam23^{a}_{b c},Gam24^{a}_{b c},Gam25^{a}_{b c}}::TableauSymmetry(shape={2}, indices={1,2}).
+{Gam33^{a}_{b c d},Gam34^{a}_{b c d},Gam35^{a}_{b c d}}::TableauSymmetry(shape={3}, indices={1,2,3}).
+{Gam44^{a}_{b c d e},Gam45^{a}_{b c d e}}::TableauSymmetry(shape={4}, indices={1,2,3,4}).
+{Gam55^{a}_{b c d e f}}::TableauSymmetry(shape={5}, indices={1,2,3,4,5}).
+
+{Gam22^{a}_{b c}}::Weight(label=eps,value=2).
+{Gam23^{a}_{b c},Gam33^{a}_{b c d}}::Weight(label=eps,value=3).
+{Gam24^{a}_{b c},Gam34^{a}_{b c d},Gam44^{a}_{b c d e}}::Weight(label=eps,value=4).
+{Gam25^{a}_{b c},Gam35^{a}_{b c d},Gam45^{a}_{b c d e},Gam55^{a}_{b c d e f}}::Weight(label=eps,value=5).
+
+{Dx^{a}}::Weight(label=eps,value=0).
+
+{y00^{a},y20^{a},y30^{a},y40^{a},y50^{a}}::Weight(label=eps,value=0).
+{y22^{a},y32^{a},y42^{a},y52^{a}}::Weight(label=eps,value=2).
+{y33^{a},y43^{a},y53^{a}}::Weight(label=eps,value=3).
+{y44^{a},y54^{a}}::Weight(label=eps,value=4).
+{y55^{a}}::Weight(label=eps,value=5).
+
+# Dx{#}::LaTeXForm{"{\Dx}"}.
+
+# note: keeping numbering as is (out of order) to ensure R appears before \nabla R etc.
+def product_sort (obj):
+    substitute (obj,$ x^{a}                            -> A001^{a}               $)
+    substitute (obj,$ Dx^{a}                           -> A002^{a}               $)
+    substitute (obj,$ g^{a b}                          -> A003^{a b}             $)
+    substitute (obj,$ \nabla_{e f g h}{R_{a b c d}}    -> A008_{a b c d e f g h} $)
+    substitute (obj,$ \nabla_{e f g}{R_{a b c d}}      -> A007_{a b c d e f g}   $)
+    substitute (obj,$ \nabla_{e f}{R_{a b c d}}        -> A006_{a b c d e f}     $)
+    substitute (obj,$ \nabla_{e}{R_{a b c d}}          -> A005_{a b c d e}       $)
+    substitute (obj,$ R_{a b c d}                      -> A004_{a b c d}         $)
+    sort_product   (obj)
+    rename_dummies (obj)
+    substitute (obj,$ A001^{a}                  -> x^{a}                         $)
+    substitute (obj,$ A002^{a}                  -> Dx^{a}                        $)
+    substitute (obj,$ A003^{a b}                -> g^{a b}                       $)
+    substitute (obj,$ A004_{a b c d}            -> R_{a b c d}                   $)
+    substitute (obj,$ A005_{a b c d e}          -> \nabla_{e}{R_{a b c d}}       $)
+    substitute (obj,$ A006_{a b c d e f}        -> \nabla_{e f}{R_{a b c d}}     $)
+    substitute (obj,$ A007_{a b c d e f g}      -> \nabla_{e f g}{R_{a b c d}}   $)
+    substitute (obj,$ A008_{a b c d e f g h}    -> \nabla_{e f g h}{R_{a b c d}} $)
+
+    return obj
+
+def get_term (obj,n):
+
+    tmp := @(obj).
+    foo = Ex("eps = " + str(n))
+    distribute  (tmp)
+    keep_weight (tmp, foo)
+
+    return tmp
+
+def truncate (obj,n):
+
+    ans = Ex(0)
+
+    for i in range (0,n+1):
+       foo := @(obj).
+       bah = Ex("eps = " + str(i))
+       distribute  (foo)
+       keep_weight (foo, bah)
+       ans = ans + foo
+
+    return ans
+
+def substitute_eps (obj):
+    substitute     (obj,epsy0)
+    substitute     (obj,epsy2)
+    substitute     (obj,epsy3)
+    substitute     (obj,epsy4)
+    substitute     (obj,epsy5)
+    substitute     (obj,epsGam2)
+    substitute     (obj,epsGam3)
+    substitute     (obj,epsGam4)
+    substitute     (obj,epsGam5)
+    distribute     (obj)
+    obj = truncate     (obj,5)
+    obj = product_sort (obj)
+    rename_dummies (obj)
+    canonicalise   (obj)
+
+    return obj
+
+beg_stage_1 = time.time()
+
+# yn = y expanded to terms upto and including O(eps^n)
+
+y0 := Dx^{a}.
+y2 := Dx^{a} +   (1/2) Gam^{a}_{b c} y0^{b} y0^{c}.
+y3 := Dx^{a} +   (1/2) Gam^{a}_{b c} y2^{b} y2^{c}
+             +   (1/6) Gam^{a}_{b c d} y0^{b} y0^{c} y0^{d}.
+y4 := Dx^{a} +   (1/2) Gam^{a}_{b c} y3^{b} y3^{c}
+             +   (1/6) Gam^{a}_{b c d} y2^{b} y2^{c} y2^{d}
+             +  (1/24) Gam^{a}_{b c d e} y0^{b} y0^{c} y0^{d} y0^{e}.
+y5 := Dx^{a} +   (1/2) Gam^{a}_{b c} y4^{b} y4^{c}
+             +   (1/6) Gam^{a}_{b c d} y3^{b} y3^{c} y3^{d}
+             +  (1/24) Gam^{a}_{b c d e} y2^{b} y2^{c} y2^{d} y2^{e}
+             + (1/120) Gam^{a}_{b c d e f} y0^{b} y0^{c} y0^{d} y0^{e} y0^{f}.
+
+# epsyN = y expanded to terms upto and including O(eps^N)
+# yPQ = O(eps^Q) term of epsyP
+
+# expand to O(eps^5)
+
+epsy0 := y0^{a} -> y00^{a}.
+epsy2 := y2^{a} -> y20^{a}+y22^{a}.
+epsy3 := y3^{a} -> y30^{a}+y32^{a}+y33^{a}.
+epsy4 := y4^{a} -> y40^{a}+y42^{a}+y43^{a}+y44^{a}.
+epsy5 := y5^{a} -> y50^{a}+y52^{a}+y53^{a}+y54^{a}+y55^{a}.
+
+# epsGamN = gen. gamma with N lower indices (epsGam2 = the connection)
+# epsGamPQ = O(eps^Q) term of epsGamP
+
+epsGam2 := Gam^{a}_{b c} -> Gam22^{a}_{b c}+Gam23^{a}_{b c}+Gam24^{a}_{b c}+Gam25^{a}_{b c}.
+epsGam3 := Gam^{a}_{b c d} -> Gam33^{a}_{b c d}+Gam34^{a}_{b c d}+Gam35^{a}_{b c d}.
+epsGam4 := Gam^{a}_{b c d e} -> Gam44^{a}_{b c d e}+Gam45^{a}_{b c d e}.
+epsGam5 := Gam^{a}_{b c d e f} -> Gam55^{a}_{b c d e f}.
+
+y0 = substitute_eps (y0)
+y2 = substitute_eps (y2)
+y3 = substitute_eps (y3)
+y4 = substitute_eps (y4)
+y5 = substitute_eps (y5)
+
+y0 = truncate (y0,1)
+y2 = truncate (y2,2)
+y3 = truncate (y3,3)
+y4 = truncate (y4,4)
+y5 = truncate (y5,5)
+
+defy0 := y0^{a} -> @(y0).
+defy2 := y2^{a} -> @(y2).
+defy3 := y3^{a} -> @(y3).
+defy4 := y4^{a} -> @(y4).
+defy5 := y5^{a} -> @(y5).
+
+# -----------------------------------
+def tidy (obj):
+    obj = product_sort (obj)
+    rename_dummies     (obj)
+    canonicalise       (obj)
+    return obj
+
+# -----------------------------------
+# y0
+
+y00 := @(y0).
+
+defy00 := y00^{a} -> @(y00).
+
+# -----------------------------------
+# y2
+
+substitute (y2,defy00)
+
+distribute (y2)
+
+y20 = get_term (y2,0)
+y22 = get_term (y2,2)
+
+y20 = tidy (y20)
+y22 = tidy (y22)
+
+defy20 := y20^{a} -> @(y20).
+defy22 := y22^{a} -> @(y22).
+
+# -----------------------------------
+# y3
+
+substitute (y3,defy00)
+
+substitute (y3,defy20)
+substitute (y3,defy22)
+
+distribute (y3)
+
+y30 = get_term (y3,0)
+y32 = get_term (y3,2)
+y33 = get_term (y3,3)
+
+y30 = tidy (y30)
+y32 = tidy (y32)
+y33 = tidy (y33)
+
+defy30 := y30^{a} -> @(y30).
+defy32 := y32^{a} -> @(y32).
+defy33 := y33^{a} -> @(y33).
+
+# -----------------------------------
+# y4
+
+substitute (y4,defy00)
+
+substitute (y4,defy20)
+substitute (y4,defy22)
+
+substitute (y4,defy30)
+substitute (y4,defy32)
+substitute (y4,defy33)
+
+distribute (y4)
+
+y40 = get_term (y4,0)
+y42 = get_term (y4,2)
+y43 = get_term (y4,3)
+y44 = get_term (y4,4)
+
+y40 = tidy (y40)
+y42 = tidy (y42)
+y43 = tidy (y43)
+y44 = tidy (y44)
+
+defy40 := y40^{a} -> @(y40).
+defy42 := y42^{a} -> @(y42).
+defy43 := y43^{a} -> @(y43).
+defy44 := y44^{a} -> @(y44).
+
+# -----------------------------------
+# y5
+
+substitute (y5,defy00)
+
+substitute (y5,defy20)
+substitute (y5,defy22)
+
+substitute (y5,defy30)
+substitute (y5,defy32)
+substitute (y5,defy33)
+
+substitute (y5,defy40)
+substitute (y5,defy42)
+substitute (y5,defy43)
+substitute (y5,defy44)
+
+distribute (y5)
+
+y50 = get_term (y5,0)
+y52 = get_term (y5,2)
+y53 = get_term (y5,3)
+y54 = get_term (y5,4)
+y55 = get_term (y5,5)
+
+y50 = tidy (y50)
+y52 = tidy (y52)
+y53 = tidy (y53)
+y54 = tidy (y54)
+y55 = tidy (y55)
+
+defy50 := y50^{a} -> @(y50).
+defy52 := y52^{a} -> @(y52).
+defy53 := y53^{a} -> @(y53).
+defy54 := y54^{a} -> @(y54).
+defy55 := y55^{a} -> @(y55).
+
+end_stage_1 = time.time()
+
+
+def substitute_gam (obj):
+
+    substitute     (obj,defGam22)
+    substitute     (obj,defGam23)
+    substitute     (obj,defGam24)
+    substitute     (obj,defGam25)
+
+    substitute     (obj,defGam33)
+    substitute     (obj,defGam34)
+    substitute     (obj,defGam35)
+
+    substitute     (obj,defGam44)
+    substitute     (obj,defGam45)
+
+    substitute     (obj,defGam55)
+
+    distribute     (obj)
+    return obj
+
+import cdblib
+
+beg_stage_2a = time.time()
+
+Gam22 = cdblib.get ('genGamma01','genGamma.json')
+Gam23 = cdblib.get ('genGamma02','genGamma.json')
+Gam24 = cdblib.get ('genGamma03','genGamma.json')
+Gam25 = cdblib.get ('genGamma04','genGamma.json')
+
+Gam33 = cdblib.get ('genGamma11','genGamma.json')
+Gam34 = cdblib.get ('genGamma12','genGamma.json')
+Gam35 = cdblib.get ('genGamma13','genGamma.json')
+
+Gam44 = cdblib.get ('genGamma21','genGamma.json')
+Gam45 = cdblib.get ('genGamma22','genGamma.json')
+
+Gam55 = cdblib.get ('genGamma31','genGamma.json')
+
+# peel off the A^{a}, must then symmetrise over revealed indices
+
+substitute (Gam22,$A^{a}->1$)
+substitute (Gam23,$A^{a}->1$)
+substitute (Gam24,$A^{a}->1$)
+substitute (Gam25,$A^{a}->1$)
+
+substitute (Gam33,$A^{a}->1$)
+substitute (Gam34,$A^{a}->1$)
+substitute (Gam35,$A^{a}->1$)
+
+substitute (Gam44,$A^{a}->1$)
+substitute (Gam45,$A^{a}->1$)
+
+substitute (Gam55,$A^{a}->1$)
+
+# now symmetrise
+
+sym (Gam22,$_{b},_{c}$)
+sym (Gam23,$_{b},_{c}$)
+sym (Gam24,$_{b},_{c}$)
+sym (Gam25,$_{b},_{c}$)
+
+sym (Gam33,$_{b},_{c},_{d}$)
+sym (Gam34,$_{b},_{c},_{d}$)
+sym (Gam35,$_{b},_{c},_{d}$)
+
+sym (Gam44,$_{b},_{c},_{d},_{e}$)
+sym (Gam45,$_{b},_{c},_{d},_{e}$)
+
+sym (Gam55,$_{b},_{c},_{d},_{e},_{f}$)
+
+defGam22 := Gam22^{a}_{b c} -> @(Gam22).
+defGam23 := Gam23^{a}_{b c} -> @(Gam23).
+defGam24 := Gam24^{a}_{b c} -> @(Gam24).
+defGam25 := Gam25^{a}_{b c} -> @(Gam25).
+
+defGam33 := Gam33^{a}_{b c d} -> @(Gam33).
+defGam34 := Gam34^{a}_{b c d} -> @(Gam34).
+defGam35 := Gam35^{a}_{b c d} -> @(Gam35).
+
+defGam44 := Gam44^{a}_{b c d e} -> @(Gam44).
+defGam45 := Gam45^{a}_{b c d e} -> @(Gam45).
+
+defGam55 := Gam55^{a}_{b c d e f} -> @(Gam55).
+
+# ---------------------------------------------------
+# y2
+
+y22 = substitute_gam (y22)
+
+y22 = tidy (y22)
+
+y2 := @(y20) + @(y22).
+
+# ---------------------------------------------------
+# y3
+
+y32 = substitute_gam (y32)
+y33 = substitute_gam (y33)
+
+y32 = tidy (y32)
+y33 = tidy (y33)
+
+y3 := @(y30) + @(y32) + @(y33).
+
+# ---------------------------------------------------
+# y4
+
+y42 = substitute_gam (y42)
+y43 = substitute_gam (y43)
+y44 = substitute_gam (y44)
+
+y42 = tidy (y42)
+y43 = tidy (y43)
+y44 = tidy (y44)
+
+y4 := @(y40) + @(y42) + @(y43) + @(y44).
+
+# ---------------------------------------------------
+# y5
+
+y52 = substitute_gam (y52)
+y53 = substitute_gam (y53)
+y54 = substitute_gam (y54)
+y55 = substitute_gam (y55)
+
+y52 = tidy (y52)
+y53 = tidy (y53)
+y54 = tidy (y54)
+y55 = tidy (y55)
+
+y5 := @(y50) + @(y52) + @(y53) + @(y54) + @(y55).
+
+# ---------------------------------------------------
+cdblib.create ('geodesic-bvp.json')
+
+cdblib.put ('y2',y2,'geodesic-bvp.json')
+cdblib.put ('y3',y3,'geodesic-bvp.json')
+cdblib.put ('y4',y4,'geodesic-bvp.json')
+cdblib.put ('y5',y5,'geodesic-bvp.json')
+
+cdblib.put ('y20',y20,'geodesic-bvp.json')
+cdblib.put ('y22',y22,'geodesic-bvp.json')
+
+cdblib.put ('y30',y30,'geodesic-bvp.json')
+cdblib.put ('y32',y32,'geodesic-bvp.json')
+cdblib.put ('y33',y33,'geodesic-bvp.json')
+
+cdblib.put ('y40',y40,'geodesic-bvp.json')
+cdblib.put ('y42',y42,'geodesic-bvp.json')
+cdblib.put ('y43',y43,'geodesic-bvp.json')
+cdblib.put ('y44',y44,'geodesic-bvp.json')
+
+cdblib.put ('y50',y50,'geodesic-bvp.json')
+cdblib.put ('y52',y52,'geodesic-bvp.json')
+cdblib.put ('y53',y53,'geodesic-bvp.json')
+cdblib.put ('y54',y54,'geodesic-bvp.json')
+cdblib.put ('y55',y55,'geodesic-bvp.json')
+
+end_stage_2a = time.time()
+
+
+def substitute_y (obj):
+    substitute (obj,defy00)
+    substitute (obj,defy20)
+    substitute (obj,defy30)
+    substitute (obj,defy32)
+    substitute (obj,defy40)
+    substitute (obj,defy42)
+    substitute (obj,defy43)
+    distribute (obj)
+    return obj
+
+beg_stage_2b = time.time()
+
+term2 := Gam^{a}_{b c} y4^{b} y4^{c}.
+term3 := Gam^{a}_{b c d} y3^{b} y3^{c} y3^{d}.
+term4 := Gam^{a}_{b c d e} y2^{b} y2^{c} y2^{d} y2^{e}.
+term5 := Gam^{a}_{b c d e f} y0^{b} y0^{c} y0^{d} y0^{e} y0^{f}.
+
+term2 = substitute_eps (term2)
+term3 = substitute_eps (term3)
+term4 = substitute_eps (term4)
+term5 = substitute_eps (term5)
+
+term2 = substitute_y (term2)
+term3 = substitute_y (term3)
+term4 = substitute_y (term4)
+term5 = substitute_y (term5)
+
+term2 = substitute_gam (term2)
+term3 = substitute_gam (term3)
+term4 = substitute_gam (term4)
+term5 = substitute_gam (term5)
+
+term2 = tidy (term2)
+term3 = tidy (term3)
+term4 = tidy (term4)
+term5 = tidy (term5)
+
+
+# Check:
+#    x^{a} at s=1 should equal x^{a} + Dx^{a}
+#    but x^{a}(s) = x^{a} + s y^{a} - \sum (1/n!) @(termn) s^n
+#    thus foo should equal Dx^{a} and it does (yeah)
+
+foo := @(y5)
+     -   (1/2) @(term2)
+     -   (1/6) @(term3)
+     -  (1/24) @(term4)
+     - (1/120) @(term5).
+
+distribute         (foo)
+obj = product_sort (foo)
+rename_dummies     (foo)
+canonicalise       (foo)
+
+term2 :=   (1/2) @(term2).
+term3 :=   (1/6) @(term3).
+term4 :=  (1/24) @(term4).
+term5 := (1/120) @(term5).
+
+end_stage_2b = time.time()
+
+
+def get_Rterm (obj,n):
+
+# I would like to assign different weights to \nabla_{a}, \nabla_{a b}, \nabla_{a b c} etc. but no matter
+# what I do it appears that Cadabra assigns the same weight to all of these regardless of the number of subscripts.
+# It seems that the weight is assigned to the symbol \nabla alone. So I'm forced to use the following substitution trick.
+
+    Q_{a b c d}::Weight(label=numR,value=2).
+    Q_{a b c d e}::Weight(label=numR,value=3).
+    Q_{a b c d e f}::Weight(label=numR,value=4).
+    Q_{a b c d e f g}::Weight(label=numR,value=5).
+
+    tmp := @(obj).
+
+    distribute (tmp)
+
+    substitute (tmp, $\nabla_{e f g}{R_{a b c d}} -> Q_{a b c d e f g}$)
+    substitute (tmp, $\nabla_{e f}{R_{a b c d}} -> Q_{a b c d e f}$)
+    substitute (tmp, $\nabla_{e}{R_{a b c d}} -> Q_{a b c d e}$)
+    substitute (tmp, $R_{a b c d} -> Q_{a b c d}$)
+
+    foo := @(tmp).
+    bah = Ex("numR = " + str(n))
+    keep_weight (foo, bah)
+
+    substitute (foo, $Q_{a b c d e f g} -> \nabla_{e f g}{R_{a b c d}}$)
+    substitute (foo, $Q_{a b c d e f} -> \nabla_{e f}{R_{a b c d}}$)
+    substitute (foo, $Q_{a b c d e} -> \nabla_{e}{R_{a b c d}}$)
+    substitute (foo, $Q_{a b c d} -> R_{a b c d}$)
+
+    return foo
+
+def reformat (obj,scale):
+    foo  = Ex(str(scale))
+    bah := @(foo) @(obj).
+    distribute     (bah)
+    bah = product_sort (bah)
+    rename_dummies (bah)
+    canonicalise   (bah)
+    substitute     (bah,$Dx^{b}->zzz^{b}$)
+    factor_out     (bah,$x^{a?},zzz^{b?}$)
+    substitute     (bah,$zzz^{b}->Dx^{b}$)
+    ans := @(bah) / @(foo).
+    return ans
+
+def rescale (obj,scale):
+    foo  = Ex(str(scale))
+    bah := @(foo) @(obj).
+    distribute  (bah)
+    substitute  (bah,$Dx^{b}->zzz^{b}$)
+    factor_out  (bah,$x^{a?},zzz^{b?}$)
+    substitute  (bah,$zzz^{b}->Dx^{b}$)
+    return bah
+
+beg_stage_3 = time.time()
+
+Rterm22 = get_Rterm (term2,2)
+Rterm23 = get_Rterm (term2,3)
+Rterm24 = get_Rterm (term2,4)
+Rterm25 = get_Rterm (term2,5)
+
+Rterm32 = get_Rterm (term3,2)
+Rterm33 = get_Rterm (term3,3)
+Rterm34 = get_Rterm (term3,4)
+Rterm35 = get_Rterm (term3,5)
+
+Rterm42 = get_Rterm (term4,2)
+Rterm43 = get_Rterm (term4,3)
+Rterm44 = get_Rterm (term4,4)
+Rterm45 = get_Rterm (term4,5)
+
+Rterm52 = get_Rterm (term5,2)
+Rterm53 = get_Rterm (term5,3)
+Rterm54 = get_Rterm (term5,4)
+Rterm55 = get_Rterm (term5,5)
+
+Rterm22 = rescale ( reformat (Rterm22,   -3),    -3 )
+Rterm23 = rescale ( reformat (Rterm23,  -24),   -24 )
+Rterm24 = rescale ( reformat (Rterm24, -720),  -720 )
+Rterm25 = rescale ( reformat (Rterm25, -360),  -360 )
+
+Rterm33 = rescale ( reformat (Rterm33,  -12),   -12 )
+Rterm34 = rescale ( reformat (Rterm34, -720),  -720 )
+Rterm35 = rescale ( reformat (Rterm35,-1080), -1080 )
+
+Rterm44 = rescale ( reformat (Rterm44, -180),  -180 )
+Rterm45 = rescale ( reformat (Rterm45,-2160), -2160 )
+
+Rterm55 = rescale ( reformat (Rterm55, -360),  -360 )
+
+# ----------------------------------------------------------------
+# bvp to terms linear in R
+
+tmp2 := -(1/3) @(Rterm22).
+
+bvp2 := x^{a}
+     + s Dx^{a}
+     + (s-s**2) @(tmp2).
+
+cdblib.put ('bvp2',bvp2,'geodesic-bvp.json')
+cdblib.put ('bvp22',tmp2,'geodesic-bvp.json')
+
+y2 := Dx^{a} + @(tmp2).
+
+# ----------------------------------------------------------------
+# bvp to terms linear in dR
+
+tmp2 :=  -(1/3) @(Rterm22) - (1/24) @(Rterm23).
+tmp3 := -(1/12) @(Rterm33).
+
+bvp3 := x^{a}
+     + s Dx^{a}
+     + (s-s**2) @(tmp2)
+     + (s-s**3) @(tmp3).
+
+cdblib.put ('bvp3',bvp3,'geodesic-bvp.json')
+cdblib.put ('bvp32',tmp2,'geodesic-bvp.json')
+cdblib.put ('bvp33',tmp3,'geodesic-bvp.json')
+
+y3 := Dx^{a} + @(tmp2) + @(tmp3).
+
+# ----------------------------------------------------------------
+# bvp to terms linear in d^2 R
+
+tmp2 :=   -(1/3) @(Rterm22) -  (1/24) @(Rterm23) - (1/720) @(Rterm24).
+tmp3 :=  -(1/12) @(Rterm33) - (1/720) @(Rterm34).
+tmp4 := -(1/180) @(Rterm44).
+
+bvp4 := x^{a}
+     + s Dx^{a}
+     + (s-s**2) @(tmp2)
+     + (s-s**3) @(tmp3)
+     + (s-s**4) @(tmp4).
+
+cdblib.put ('bvp4',bvp4,'geodesic-bvp.json')
+cdblib.put ('bvp42',tmp2,'geodesic-bvp.json')
+cdblib.put ('bvp43',tmp3,'geodesic-bvp.json')
+cdblib.put ('bvp44',tmp4,'geodesic-bvp.json')
+
+y4 := Dx^{a} + @(tmp2) + @(tmp3) + @(tmp4).
+
+# ----------------------------------------------------------------
+# bvp to terms linear in d^3 R
+
+tmp2 := @(term2).
+tmp3 := @(term3).
+tmp4 := @(term4).
+tmp5 := @(term5).
+
+bvp5 := x^{a}
+     + s Dx^{a}
+     + (s-s**2) @(tmp2)
+     + (s-s**3) @(tmp3)
+     + (s-s**4) @(tmp4)
+     + (s-s**5) @(tmp5).
+
+cdblib.put ('bvp5',bvp5,'geodesic-bvp.json')
+cdblib.put ('bvp52',term2,'geodesic-bvp.json')
+cdblib.put ('bvp53',term3,'geodesic-bvp.json')
+cdblib.put ('bvp54',term4,'geodesic-bvp.json')
+cdblib.put ('bvp55',term5,'geodesic-bvp.json')
+
+y5 := Dx^{a} + @(tmp2) + @(tmp3) + @(tmp4) + @(tmp5).
+
+end_stage_3 = time.time()
+
+print ("Stage 1:  {:7.1f} secs\\hfill\\break".format(end_stage_1-beg_stage_1))
+print ("Stage 2a: {:7.1f} secs\\hfill\\break".format(end_stage_2a-beg_stage_2a))
+print ("Stage 2b: {:7.1f} secs\\hfill\\break".format(end_stage_2b-beg_stage_2b))
+print ("Stage 3:  {:7.1f} secs\\hfill\\break".format(end_stage_3-beg_stage_3))
+
+
+tmp2 := 8 @(Rterm22) + @(Rterm23).
+tmp3 := @(Rterm33).
+
+factor_out     (tmp2,$Dx^{a?}$)
+rename_dummies (tmp2)
+factor_out     (tmp2,$Dx^{a?}$)
+
+bvp4 := x^{a}
+     + \lam Dx^{a}
+     - (1/24) (\lam-\lam**2) @(tmp2)
+     - (1/12) (\lam-\lam**3) @(tmp3).
+
+cdblib.create ('geodesic-bvp.export')
+
+# 4th order bvp
+cdblib.put ('bvp4',bvp4,'geodesic-bvp.export')
+
+# 6th order bvp terms, scaled
+cdblib.put ('bvp622',Rterm22,'geodesic-bvp.export')
+cdblib.put ('bvp623',Rterm23,'geodesic-bvp.export')
+cdblib.put ('bvp624',Rterm24,'geodesic-bvp.export')
+cdblib.put ('bvp625',Rterm25,'geodesic-bvp.export')
+
+cdblib.put ('bvp633',Rterm33,'geodesic-bvp.export')
+cdblib.put ('bvp634',Rterm34,'geodesic-bvp.export')
+cdblib.put ('bvp635',Rterm35,'geodesic-bvp.export')
+
+cdblib.put ('bvp644',Rterm44,'geodesic-bvp.export')
+cdblib.put ('bvp645',Rterm45,'geodesic-bvp.export')
+
+cdblib.put ('bvp655',Rterm55,'geodesic-bvp.export')
+
+checkpoint.append (bvp4)
+
+checkpoint.append (Rterm22)
+checkpoint.append (Rterm23)
+checkpoint.append (Rterm24)
+checkpoint.append (Rterm25)
+
+checkpoint.append (Rterm33)
+checkpoint.append (Rterm34)
+checkpoint.append (Rterm35)
+
+checkpoint.append (Rterm44)
+checkpoint.append (Rterm45)
+
+checkpoint.append (Rterm55)
+
+for i in range( len(checkpoint) ):
+   cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+

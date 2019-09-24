@@ -1,0 +1,67 @@
+%-------------------------------------------------------------------------------
+\parindent=0pt
+\parskip=8pt plus 2pt minus 1pt
+%-------------------------------------------------------------------------------
+% \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+% \setcounter{footnote}{0}% may need this in body of .tex to force LaTeX to return to
+% the first footnote symbol as there are only 9 fn symbols available
+% at the 10th \footnote LaTeX will whimper, LaTeX Error:  Counter too large.
+\renewcommand{\thefootnote}{\alph{footnote}}% use the letters a to z, 26 footnotes
+%-------------------------------------------------------------------------------
+\newbox\tmpbox
+\def\stomp#1{\setbox\tmpbox=\hbox{#1}\dp\tmpbox=0pt\ht\tmpbox=0pt\box\tmpbox}
+\def\at(#1,#2)#3{{\offinterlineskip\hbox{\vbox to 0pt{\kern#2cm\hbox to 0pt{\kern#1cm\stomp{#3}\hss}\vss}}}}
+\def\At(#1,#2)#3{{\offinterlineskip\vbox to 0pt{\kern#2cm\hbox to 0pt{\kern#1cm\stomp{#3}\hss}\vss}}}
+\def\Offset(#1,#2)#3{{\offinterlineskip\vbox{\kern#2cm\hbox{\kern#1cm\hbox{#3}\hss}\vss}}}
+\def\AT#1{\hbox{#1}}
+%-------------------------------------------------------------------------------
+\def\titlefont{\rmfamily\bfseries\Large}
+\def\authorfont{\rmfamily\normalsize}
+\def\datefont{\rmfamily\normalsize}
+\def\referencefont{\rmfamily\normalsize}
+\def\maketitle{%
+\noindent
+\At(0,-2){\hbox{\vtop{\referencefont\@thereference}}}%
+\begin{center}%
+\hrule height 0pt depth 0pt%
+\vskip 20pt%
+{\titlefont\@thetitle}%
+\vskip 20pt%
+{\authorfont\@theauthor}%
+\vskip 10pt%
+{\datefont\@thedate}%
+\end{center}}
+%-------------------------------------------------------------------------------
+\long\def\title#1{\long\gdef\@thetitle{\hbox{\vbox{#1}}}}
+\long\def\date#1{\long\gdef\@thedate{#1}}
+\long\def\author#1{\long\gdef\@theauthor{#1}}
+\long\def\reference#1{\long\gdef\@thereference{#1}}
+\let\@thetitle\@empty
+\let\@theauthor\@empty
+\let\@thedate\@empty
+\let\@thereference\@empty
+%-------------------------------------------------------------------------------
+\newcounter{MYappendix}
+\setcounter{MYappendix}{0}
+\gdef\appendix{%
+\gdef\@seccntformat##1{Appendix \@nameuse{the##1}.\quad}%
+\gdef\theequation{\Alph{MYappendix}.\arabic{equation}}
+\gdef\thesection{\Alph{MYappendix}}
+\global\let\oldsection=\section
+\gdef\section{\stepcounter{MYappendix}\setcounter{equation}{0}\oldsection}}
+%-------------------------------------------------------------------------------
+\def\BigO#1{\mathcal{O}\left(#1\right)}
+\def\eps{\epsilon}
+\def\dsp{\displaystyle}
+%-------------------------------------------------------------------------------
+\def\Note#1{\fbox{\color{Red}\hsize=0.9825\hsize\vbox{{\bf #1}}}}
+%-------------------------------------------------------------------------------
+\def\BegDate#1{\par\hbox to 1.0\hsize{\leaders\hrule height 1pt\hfill \kern5pt\lower2pt\hbox{\small{#1}}}\par}
+\def\EndDate{\par\hbox to 1.0\hsize{\leaders\hrule height 1pt\hfill}\par}
+%-------------------------------------------------------------------------------
+\def\BegNote#1{\par\hbox to 1.0\hsize{\leaders\hrule height 1pt\hfill \kern5pt\lower2pt\hbox{\small{#1}}\kern5pt\leaders\hrule height 1pt\hfill}\par}
+\def\EndNote{\par\hbox to 1.0\hsize{\leaders\hrule height 1pt\hfill}\par}
+%-------------------------------------------------------------------------------
+\def\tts{\tt\small}
+\def\bgcolour#1{\lstset{backgroundcolor=\color{#1}}}
+\definecolor{grey95}{rgb}{0.95,0.95,0.95}

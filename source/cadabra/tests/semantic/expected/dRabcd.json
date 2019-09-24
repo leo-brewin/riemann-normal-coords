@@ -1,0 +1,7 @@
+{
+  "check000": "g^{a f} \\nabla_{c}(R_{b d e f})",
+  "check001": "g^{a g} \\nabla_{c d}(R_{b e f g})",
+  "check002": "g^{a h} g^{i j} R_{b c d i} \\nabla_{e}(R_{f h g j})-g^{a h} g^{i j} R_{c h d i} \\nabla_{e}(R_{b f g j})-2g^{a h} \\nabla_{c d e}(R_{b f g h})",
+  "check003": "7g^{a i} g^{j k} R_{b c d j} \\nabla_{e f}(R_{g i h k})-7g^{a i} g^{j k} R_{c i d j} \\nabla_{e f}(R_{b g h k})-5g^{a i} \\nabla_{c d e f}(R_{b g h i})",
+  "check004": "6g^{a j} g^{k l} \\nabla_{c}(R_{b d e k}) \\nabla_{f g}(R_{h j i l})-6g^{a j} g^{k l} \\nabla_{c}(R_{d j e k}) \\nabla_{f g}(R_{b h i l}) + 8g^{a j} g^{k l} R_{b c d k} \\nabla_{e f g}(R_{h j i l})-8g^{a j} g^{k l} R_{c j d k} \\nabla_{e f g}(R_{b h i l})-g^{a j} g^{k l} g^{m n} R_{b c d k} R_{e l f m} \\nabla_{g}(R_{h j i n})-3g^{a j} g^{k l} g^{m n} R_{c j d k} R_{e l f m} \\nabla_{g}(R_{b h i n}) + 4g^{a j} g^{k l} g^{m n} R_{b c d k} R_{e j f m} \\nabla_{g}(R_{h l i n})-3g^{a j} \\nabla_{c d e f g}(R_{b h i j})"
+}

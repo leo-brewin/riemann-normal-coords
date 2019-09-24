@@ -1,0 +1,12 @@
+{
+  "g_ab": "g_{a b} -  1/3 x^{c} x^{d} R_{a c b d} -  1/6 x^{c} x^{d} x^{e} \\nabla_{c}(R_{a d b e}) +  1/180 x^{c} x^{d} x^{e} x^{f} (8g^{g h} R_{a c d g} R_{b e f h}-9\\nabla_{c d}(R_{a e b f})) +  1/90 x^{c} x^{d} x^{e} x^{f} x^{g} (2g^{h i} R_{a c d h} \\nabla_{e}(R_{b f g i}) + 2g^{h i} R_{b c d h} \\nabla_{e}(R_{a f g i})-\\nabla_{c d e}(R_{a f b g}))",
+  "g_ab_3": "g_{a b} -  1/3 x^{c} x^{d} R_{a c b d}",
+  "g_ab_4": "g_{a b} -  1/3 x^{c} x^{d} R_{a c b d} -  1/6 x^{c} x^{d} x^{e} \\partial_{c}(R_{a d b e})",
+  "g_ab_5": "g_{a b} -  1/3 x^{c} x^{d} R_{a c b d} -  1/6 x^{c} x^{d} x^{e} \\partial_{c}(R_{a d b e}) +  1/360 x^{c} x^{d} x^{e} x^{f} (-3R_{b c d g} R^{g}_{f a e}-13R_{a c d g} R^{g}_{f b e}-9g_{b g} \\partial_{c d}(R^{g}_{f a e})-9g_{a g} \\partial_{c d}(R^{g}_{f b e}))",
+  "g_ab_6": "g_{a b} -  1/3 x^{c} x^{d} R_{a c b d} -  1/6 x^{c} x^{d} x^{e} \\partial_{c}(R_{a d b e}) +  1/360 x^{c} x^{d} x^{e} x^{f} (-3R_{b c d g} R^{g}_{f a e}-13R_{a c d g} R^{g}_{f b e}-9g_{b g} \\partial_{c d}(R^{g}_{f a e})-9g_{a g} \\partial_{c d}(R^{g}_{f b e})) +  1/180 x^{c} x^{d} x^{e} x^{f} x^{g} (-3R^{h}_{d a c} \\partial_{e}(R_{b f g h})-R_{b c d h} \\partial_{e}(R^{h}_{g a f})-3R^{h}_{d b c} \\partial_{e}(R_{a f g h})-g_{b h} \\partial_{c d e}(R^{h}_{g a f})-R_{a c d h} \\partial_{e}(R^{h}_{g b f})-g_{a h} \\partial_{c d e}(R^{h}_{g b f}))",
+  "g_ab_scaled0": "g_{a b}",
+  "g_ab_scaled2": "-x^{c} x^{d} R_{a c b d}",
+  "g_ab_scaled3": "-x^{c} x^{d} x^{e} \\nabla_{c}(R_{a d b e})",
+  "g_ab_scaled4": "x^{c} x^{d} x^{e} x^{f} (8g^{g h} R_{a c d g} R_{b e f h}-9\\nabla_{c d}(R_{a e b f}))",
+  "g_ab_scaled5": "x^{c} x^{d} x^{e} x^{f} x^{g} (2g^{h i} R_{a c d h} \\nabla_{e}(R_{b f g i}) + 2g^{h i} R_{b c d h} \\nabla_{e}(R_{a f g i})-\\nabla_{c d e}(R_{a f b g}))"
+}

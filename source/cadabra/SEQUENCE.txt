@@ -1,0 +1,51 @@
+dependancy
+----------
+
+   file                           depends on
+------------------------------------------------
+
+   connection                  <- metric, metric-inv
+   detg2                       <- metric
+   dGamma                      <- <none>
+   dRabcd                      <- dGamma
+   genGamma                    <- connection
+   geodesic-bvp                <- genGamma
+   geodesic-ivp                <- genGamma
+   geodesic-lsq                <- metric, geodesic-bvp, rnc2rnc
+   geodesic-lsq-midpt          <- metric, geodesic-lsq
+   metric-inv                  <- dGamma, dRabcd
+   metric                      <- dGamma, dRabcd
+   gen2rnc                     <- <none>
+   rnc2gen                     <- <none>
+   rnc2rnc                     <- geodesic-bvp
+
+   export                      <- <all>
+   summary                     <- <all>
+   collection                  <- <all>
+
+   checks/check-bvp            <- connection
+   checks/check-checkCalzetta  <- connection
+   checks/check-genGamma       <- connection
+   checks/check-pGamma         <- connection
+
+execution sequence
+------------------
+
+   dGamma
+   dRabcd
+   metric
+   metric-inv
+   connection
+   genGamma
+   geodesic-bvp
+   geodesic-ivp
+   rnc2rnc
+   gen2rnc
+   rnc2gen
+   geodesic-lsq
+   geodesic-lsq-midpt
+   detg2
+
+   export
+   summary
+   collection

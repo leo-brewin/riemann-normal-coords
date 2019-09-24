@@ -1,0 +1,856 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+% =================================================================================================
+% create checkpoint file
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   import cdblib
+   checkpoint_file = 'tests/semantic/output/metric.json'
+   cdblib.create (checkpoint_file)
+   checkpoint = []
+\end{cadabra}
+\egroup
+
+% =================================================================================================
+\section*{The metric tensor in Riemann normal coordinates}
+
+In this notebook we compute the recursive sequences
+\begin{align}
+\label{eq:pdgab}
+g_{ab,d\ue} &=  \left(g_{cb}\Gamma^{c}{}_{a(d}\right){}_{,\ue)}
+               + \left(g_{ac}\Gamma^{c}{}_{b(d}\right){}_{,\ue)}\\[10pt]
+\label{eq:pdGamma}
+(n+3)\Gamma^a{}_{d(b,c\ue)} &= (n+1)\left(R^a{}_{(bc\Dot d,\ue)}
+                               - \left(\Gamma^a{}_{f(c}\Gamma^f{}_{b{\Dot d}}\right){}_{,\ue)}\right)
+\end{align}
+for $n=1,2,3,\cdots$. Note in these equations that the (extended) index $\ue$ contains $n$
+normal indices.
+
+We then construct a Taylor series for the metric using
+\begin{dmath*}[spread=5pt]
+g_{ab}(x) = g_{ab} + g_{ab,c}x^c + \frac{1}{2!} g_{ab,cd}x^cx^d + \frac{1}{3!} g_{ab,cde}x^cx^dx^e + \cdots
+          = g_{ab} + \sum_{n=1}^\infty\> \frac{1}{n!}\>g_{ab,\uc}\>x^{.\uc}
+\end{dmath*}
+
+% =================================================================================================
+\section*{Stage 1: Symmetrised partial derivatives of $g_{ab}$}
+
+In this stage, equation (\ref{eq:pdgab}) is used to express the symmetrised partial derivatives
+of the metric in terms of the symmetrised partial derivatives of the connection.
+
+\begin{dgroup*}
+   \begin{dmath*} g_{ab,c} A^{c} = \cdb{term1.200} \end{dmath*}
+   \begin{dmath*} g_{ab,cd} A^{c} A^{d} = \cdb{term2.200} \end{dmath*}
+   \begin{dmath*} g_{ab,cde} A^{c} A^{d} A^{e} = \cdb{term3.200} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+\section*{Stage 2: Replace derivatives of $\Gamma$ with partial derivs of $R$}
+
+Now we use the results from {\verb|dGamma|} to replace derivatives of $\Gamma$ with
+partial derivatives of $R$. These were computed in {\verb|dGamma|} using equation
+(\ref{eq:pdGamma}) above.
+
+\begin{dgroup*}
+   \begin{dmath*} g_{ab,c} A^{c} = \cdb{term1.200} \end{dmath*}
+   \begin{dmath*} g_{ab,cd} A^{c} A^{d} = \cdb{term2.303} \end{dmath*}
+   \begin{dmath*} g_{ab,cde} A^{c} A^{d} A^{e} = \cdb{term3.305} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+\section*{Stage 3: Replace partial derivs of $R$ with covariant derivs of $R$}
+
+Next we use the results from {\verb|dRabcd|} to replace the partial derivatives of $R$ with
+covariant deriavtives.
+
+\begin{dgroup*}
+   \begin{dmath*} g_{ab,c} A^{c} = \cdb{term1.404} \end{dmath*}
+   \begin{dmath*} g_{ab,cd} A^{c} A^{d} = \cdb{term2.404} \end{dmath*}
+   \begin{dmath*} g_{ab,cde} A^{c} A^{d} A^{e} = \cdb{term3.403} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+\section*{Stage 4: Build the Taylor series for $g_{ab}$, reformatting and output}
+
+Each of the above expressions constitutues one term in the Taylor series for the metric.
+We also make the trivial change $A\rightarrow x$. Then we do some trivial reformatting.
+
+\begin{align*}
+   g_{ab}(x) &=   g_{ab}
+                + g_{ab,c} x^c
+                + \frac{1}{2!} g_{ab,cd} x^c x^d
+                + \frac{1}{3!} g_{ab,cde} x^c x^d x^e +  \BigO{\eps^4}\\
+             &= \cdb{metric4.501} + \BigO{\eps^4}
+\end{align*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Shared properties}
+
+\begin{cadabra}
+   import time
+
+   def flatten_Rabcd (obj):
+       substitute (obj,$R^{a}_{b c d}   -> g^{a e} R_{e b c d}$)
+       substitute (obj,$R_{a}^{b}_{c d} -> g^{b e} R_{a e c d}$)
+       substitute (obj,$R_{a b}^{c}_{b} -> g^{c e} R_{a b e d}$)
+       substitute (obj,$R_{a b c}^{d}   -> g^{d e} R_{a b c e}$)
+       unwrap     (obj)
+       return obj
+
+   def impose_rnc (obj):
+       # hide the derivatives of Gamma
+       substitute (obj,$\partial_{d}{\Gamma^{a}_{b c}} -> zzz_{d}^{a}_{b c}$,repeat=True)
+       substitute (obj,$\partial_{d e}{\Gamma^{a}_{b c}} -> zzz_{d e}^{a}_{b c}$,repeat=True)
+       substitute (obj,$\partial_{d e f}{\Gamma^{a}_{b c}} -> zzz_{d e f}^{a}_{b c}$,repeat=True)
+       substitute (obj,$\partial_{d e f g}{\Gamma^{a}_{b c}} -> zzz_{d e f g}^{a}_{b c}$,repeat=True)
+       substitute (obj,$\partial_{d e f g h}{\Gamma^{a}_{b c}} -> zzz_{d e f g h}^{a}_{b c}$,repeat=True)
+       # set Gamma to zero
+       substitute (obj,$\Gamma^{a}_{b c} -> 0$,repeat=True)
+       # recover the derivatives Gamma
+       substitute (obj,$zzz_{d}^{a}_{b c} -> \partial_{d}{\Gamma^{a}_{b c}}$,repeat=True)
+       substitute (obj,$zzz_{d e}^{a}_{b c} -> \partial_{d e}{\Gamma^{a}_{b c}}$,repeat=True)
+       substitute (obj,$zzz_{d e f}^{a}_{b c} -> \partial_{d e f}{\Gamma^{a}_{b c}}$,repeat=True)
+       substitute (obj,$zzz_{d e f g}^{a}_{b c} -> \partial_{d e f g}{\Gamma^{a}_{b c}}$,repeat=True)
+       substitute (obj,$zzz_{d e f g h}^{a}_{b c} -> \partial_{d e f g h}{\Gamma^{a}_{b c}}$,repeat=True)
+       return obj
+
+   def get_xterm (obj,n):
+
+       x^{a}::Weight(label=numx).
+
+       foo := @(obj).
+       bah  = Ex("numx = " + str(n))
+       keep_weight (foo,bah)
+
+       return foo
+
+   # note: keeping numbering as is (out of order) to ensure R appears before \nabla R etc.
+   def product_sort (obj):
+       substitute (obj,$ A^{a}                             -> A001^{a}                  $)
+       substitute (obj,$ x^{a}                             -> A002^{a}                  $)
+       substitute (obj,$ g_{a b}                           -> A003_{a b}                $)
+       substitute (obj,$ g^{a b}                           -> A004^{a b}                $)
+       substitute (obj,$ \nabla_{e f g h}{R_{a b c d}}     -> A010_{a b c d e f g h}    $)
+       substitute (obj,$ \nabla_{e f g}{R_{a b c d}}       -> A009_{a b c d e f g}      $)
+       substitute (obj,$ \nabla_{e f}{R_{a b c d}}         -> A008_{a b c d e f}        $)
+       substitute (obj,$ \nabla_{e}{R_{a b c d}}           -> A007_{a b c d e}          $)
+       substitute (obj,$ \partial_{e f g h}{R_{a b c d}}   -> A014_{a b c d e f g h}    $)
+       substitute (obj,$ \partial_{e f g}{R_{a b c d}}     -> A013_{a b c d e f g}      $)
+       substitute (obj,$ \partial_{e f}{R_{a b c d}}       -> A012_{a b c d e f}        $)
+       substitute (obj,$ \partial_{e}{R_{a b c d}}         -> A011_{a b c d e}          $)
+       substitute (obj,$ \partial_{e f g h}{R^{a}_{b c d}} -> A018^{a}_{b c d e f g h}  $)
+       substitute (obj,$ \partial_{e f g}{R^{a}_{b c d}}   -> A017^{a}_{b c d e f g}    $)
+       substitute (obj,$ \partial_{e f}{R^{a}_{b c d}}     -> A016^{a}_{b c d e f}      $)
+       substitute (obj,$ \partial_{e}{R^{a}_{b c d}}       -> A015^{a}_{b c d e}        $)
+       substitute (obj,$ R_{a b c d}                       -> A005_{a b c d}            $)
+       substitute (obj,$ R^{a}_{b c d}                     -> A006^{a}_{b c d}          $)
+       sort_product   (obj)
+       rename_dummies (obj)
+       substitute (obj,$ A001^{a}                  -> A^{a}                             $)
+       substitute (obj,$ A002^{a}                  -> x^{a}                             $)
+       substitute (obj,$ A003_{a b}                -> g_{a b}                           $)
+       substitute (obj,$ A004^{a b}                -> g^{a b}                           $)
+       substitute (obj,$ A005_{a b c d}            -> R_{a b c d}                       $)
+       substitute (obj,$ A006^{a}_{b c d}          -> R^{a}_{b c d}                     $)
+       substitute (obj,$ A007_{a b c d e}          -> \nabla_{e}{R_{a b c d}}           $)
+       substitute (obj,$ A008_{a b c d e f}        -> \nabla_{e f}{R_{a b c d}}         $)
+       substitute (obj,$ A009_{a b c d e f g}      -> \nabla_{e f g}{R_{a b c d}}       $)
+       substitute (obj,$ A010_{a b c d e f g h}    -> \nabla_{e f g h}{R_{a b c d}}     $)
+       substitute (obj,$ A011_{a b c d e}          -> \partial_{e}{R_{a b c d}}         $)
+       substitute (obj,$ A012_{a b c d e f}        -> \partial_{e f}{R_{a b c d}}       $)
+       substitute (obj,$ A013_{a b c d e f g}      -> \partial_{e f g}{R_{a b c d}}     $)
+       substitute (obj,$ A014_{a b c d e f g h}    -> \partial_{e f g h}{R_{a b c d}}   $)
+       substitute (obj,$ A015^{a}_{b c d e}        -> \partial_{e}{R^{a}_{b c d}}       $)
+       substitute (obj,$ A016^{a}_{b c d e f}      -> \partial_{e f}{R^{a}_{b c d}}     $)
+       substitute (obj,$ A017^{a}_{b c d e f g}    -> \partial_{e f g}{R^{a}_{b c d}}   $)
+       substitute (obj,$ A018^{a}_{b c d e f g h}  -> \partial_{e f g h}{R^{a}_{b c d}} $)
+
+       return obj
+
+   def reformat_xterm (obj,scale):
+       foo  = Ex(str(scale))
+       bah := @(foo) @(obj).
+       distribute     (bah)
+       bah = product_sort (bah)
+       rename_dummies (bah)
+       canonicalise   (bah)
+       factor_out     (bah,$x^{a?}$)
+       ans := @(bah) / @(foo).
+       return ans
+
+   def rescale_xterm (obj,scale):
+       foo  = Ex(str(scale))
+       bah := @(foo) @(obj).
+       distribute  (bah)
+       factor_out  (bah,$x^{a?}$)
+       return bah
+
+   {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+   \nabla{#}::Derivative.
+   \partial{#}::PartialDerivative.
+
+   g_{a b}::Metric.
+   g^{a b}::InverseMetric.
+   g_{a}^{b}::KroneckerDelta.
+   g^{a}_{b}::KroneckerDelta.
+
+   R_{a b c d}::RiemannTensor.
+   R^{a}_{b c d}::RiemannTensor.
+   R_{a b c}^{d}::RiemannTensor.
+
+   \Gamma^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+
+   g_{a b}::Depends(\partial{#}).
+   R_{a b c d}::Depends(\partial{#}).
+   R^{a}_{b c d}::Depends(\partial{#}).
+   \Gamma^{a}_{b c}::Depends(\partial{#}).
+
+   R_{a b c d}::Depends(\nabla{#}).
+   R^{a}_{b c d}::Depends(\nabla{#}).
+
+\end{cadabra}
+
+\clearpage
+
+% =================================================================================================
+\section*{Stage 1: Symmetrised partial derivatives of $g_{ab}$}
+
+\begin{cadabra}
+   beg_stage_1 = time.time()
+
+   # symmetrised partial derivatives of g_{ab}
+
+   gab00:=g_{a b}.                                              # cdb (gab00.101,gab00)
+
+   gab01:=g_{c b}\Gamma^{c}_{a d} + g_{a c}\Gamma^{c}_{b d}.    # cdb (gab01.101,gab01)
+
+   gab02:=\partial_{e}{ @(gab01) }.                             # cdb (gab02.101,gab02)
+   distribute   (gab02)                                         # cdb (gab02.102,gab02)
+   product_rule (gab02)                                         # cdb (gab02.103,gab02)
+   substitute   (gab02, $\partial_{d}{g_{a b}} -> @(gab01)$)    # cdb (gab02.104,gab02)
+   distribute   (gab02)                                         # cdb (gab02.105,gab02)
+
+   gab03:=\partial_{f}{ @(gab02) }.                             # cdb (gab03.101,gab03)
+   distribute   (gab03)                                         # cdb (gab03.102,gab03)
+   product_rule (gab03)                                         # cdb (gab03.103,gab03)
+   substitute   (gab03, $\partial_{d}{g_{a b}} -> @(gab01)$)    # cdb (gab03.104,gab03)
+   distribute   (gab03)                                         # cdb (gab03.105,gab03)
+
+   gab04:=\partial_{g}{ @(gab03) }.                             # cdb (gab04.101,gab04)
+   distribute   (gab04)                                         # cdb (gab04.102,gab04)
+   product_rule (gab04)                                         # cdb (gab04.103,gab04)
+   substitute   (gab04, $\partial_{d}{g_{a b}} -> @(gab01)$)    # cdb (gab04.104,gab04)
+   distribute   (gab04)                                         # cdb (gab04.105,gab04)
+
+   gab05:=\partial_{h}{ @(gab04) }.                             # cdb (gab05.101,gab05)
+   distribute   (gab05)                                         # cdb (gab05.102,gab05)
+   product_rule (gab05)                                         # cdb (gab05.103,gab05)
+   substitute   (gab05, $\partial_{d}{g_{a b}} -> @(gab01)$)    # cdb (gab05.104,gab05)
+   distribute   (gab05)                                         # cdb (gab05.105,gab05)
+
+   gab00 = impose_rnc (gab00)   # cdb (gab00.102,gab00)
+   gab01 = impose_rnc (gab01)   # cdb (gab01.102,gab01)
+   gab02 = impose_rnc (gab02)   # cdb (gab02.106,gab02)
+   gab03 = impose_rnc (gab03)   # cdb (gab03.106,gab03)
+   gab04 = impose_rnc (gab04)   # cdb (gab04.106,gab04)
+   gab05 = impose_rnc (gab05)   # cdb (gab05.106,gab05)
+
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{gab00.101} \end{dmath*}
+   \begin{dmath*} \cdb*{gab00.102} \end{dmath*}
+   \begin{dmath*} \cdb*{gab01.101} \end{dmath*}
+   \begin{dmath*} \cdb*{gab01.102} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{gab02.101} \end{dmath*}
+   \begin{dmath*} \cdb*{gab02.102} \end{dmath*}
+   \begin{dmath*} \cdb*{gab02.103} \end{dmath*}
+   \begin{dmath*} \cdb*{gab02.104} \end{dmath*}
+   \begin{dmath*} \cdb*{gab02.105} \end{dmath*}
+   \begin{dmath*} \cdb*{gab02.106} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{gab03.101} \end{dmath*}
+   \begin{dmath*} \cdb*{gab03.102} \end{dmath*}
+   \begin{dmath*} \cdb*{gab03.103} \end{dmath*}
+   \begin{dmath*} \cdb*{gab03.104} \end{dmath*}
+   \begin{dmath*} \cdb*{gab03.105} \end{dmath*}
+   \begin{dmath*} \cdb*{gab03.106} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{gab04.101} \end{dmath*}
+   \begin{dmath*} \cdb*{gab04.102} \end{dmath*}
+   \begin{dmath*} \cdb*{gab04.103} \end{dmath*}
+   \begin{dmath*} \cdb*{gab04.104} \end{dmath*}
+   \begin{dmath*} \cdb*{gab04.105} \end{dmath*}
+   \begin{dmath*} \cdb*{gab04.106} \end{dmath*}
+\end{dgroup*}
+
+\begin{cadabra}
+   # prepare first six terms in the Taylor series expansion of g_{ab}(x)
+
+   term0:= @(gab00).
+   distribute (term0)                             # cdb(term0.200,term0)
+
+   term1:= @(gab01) A^d.
+   distribute (term1)                             # cdb(term1.200,term1)
+
+   term2:= @(gab02) A^d A^e.
+   distribute (term2)                             # cdb(term2.200,term2)
+
+   term3:= @(gab03) A^d A^e A^f.
+   distribute (term3)                             # cdb(term3.200,term3)
+
+   term4:= @(gab04) A^d A^e A^f A^g.
+   distribute (term4)                             # cdb(term4.200,term4)
+
+   term5:= @(gab05) A^d A^e A^f A^g A^h.
+   distribute (term5)                             # cdb(term5.200,term5)
+
+   end_stage_1 = time.time()
+\end{cadabra}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{term0.200} \end{dmath*}
+   \begin{dmath*} \cdb*{term1.200} \end{dmath*}
+   \begin{dmath*} \cdb*{term2.200} \end{dmath*}
+   \begin{dmath*} \cdb*{term3.200} \end{dmath*}
+   % \begin{dmath*} \cdb*{term4.200} \end{dmath*}
+   % \begin{dmath*} \cdb*{term5.200} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Stage 2: Replace derivatives of $\Gamma$ with partial derivs of $R$}
+
+\begin{cadabra}
+   import cdblib
+
+   beg_stage_2 = time.time()
+
+   dGamma01 = cdblib.get ('dGamma01','dGamma.json')  # cdb(dGamma01.300,dGamma01)
+   dGamma02 = cdblib.get ('dGamma02','dGamma.json')  # cdb(dGamma02.300,dGamma02)
+   dGamma03 = cdblib.get ('dGamma03','dGamma.json')  # cdb(dGamma03.300,dGamma03)
+   dGamma04 = cdblib.get ('dGamma04','dGamma.json')  # cdb(dGamma04.300,dGamma04)
+   dGamma05 = cdblib.get ('dGamma05','dGamma.json')  # cdb(dGamma05.300,dGamma05)
+
+   # replace partial derivs of \Gamma with products and derivs of Riemann tensor
+
+   substitute (term2,$\partial_{c}{\Gamma^{a}_{b d}}A^{c}A^{b} -> @(dGamma01)$,repeat=True)                       # cdb(term2.301,term2)
+   substitute (term2,$\partial_{c}{\Gamma^{a}_{d b}}A^{c}A^{b} -> @(dGamma01)$,repeat=True)                       # cdb(term2.302,term2)
+   distribute (term2)                                                                                             # cdb(term2.303,term2)
+
+   substitute (term3,$\partial_{c e}{\Gamma^{a}_{d b}}A^{c}A^{b}A^{e} -> @(dGamma02)$,repeat=True)                # cdb(term3.301,term3)
+   substitute (term3,$\partial_{c e}{\Gamma^{a}_{b d}}A^{c}A^{b}A^{e} -> @(dGamma02)$,repeat=True)                # cdb(term3.302,term3)
+   substitute (term3,$\partial_{c}{\Gamma^{a}_{b d}}A^{c}A^{b} -> @(dGamma01)$,repeat=True)                       # cdb(term3.303,term3)
+   substitute (term3,$\partial_{c}{\Gamma^{a}_{d b}}A^{c}A^{b} -> @(dGamma01)$,repeat=True)                       # cdb(term3.304,term3)
+   distribute (term3)                                                                                             # cdb(term3.305,term3)
+
+   substitute (term4,$\partial_{c e f}{\Gamma^{a}_{d b}}A^{c}A^{b}A^{e}A^{f} -> @(dGamma03)$,repeat=True)         # cdb(term4.301,term4)
+   substitute (term4,$\partial_{c e f}{\Gamma^{a}_{b d}}A^{c}A^{b}A^{e}A^{f} -> @(dGamma03)$,repeat=True)         # cdb(term4.302,term4)
+   substitute (term4,$\partial_{c e}{\Gamma^{a}_{d b}}A^{c}A^{b}A^{e} -> @(dGamma02)$,repeat=True)                # cdb(term4.303,term4)
+   substitute (term4,$\partial_{c e}{\Gamma^{a}_{b d}}A^{c}A^{b}A^{e} -> @(dGamma02)$,repeat=True)                # cdb(term4.304,term4)
+   substitute (term4,$\partial_{c}{\Gamma^{a}_{b d}}A^{c}A^{b} -> @(dGamma01)$,repeat=True)                       # cdb(term4.305,term4)
+   substitute (term4,$\partial_{c}{\Gamma^{a}_{d b}}A^{c}A^{b} -> @(dGamma01)$,repeat=True)                       # cdb(term4.306,term4)
+   distribute (term4)                                                                                             # cdb(term4.307,term4)
+
+   substitute (term5,$\partial_{c e f g}{\Gamma^{a}_{d b}}A^{c}A^{b}A^{e}A^{f}A^{g} -> @(dGamma04)$,repeat=True)  # cdb(term5.301,term5)
+   substitute (term5,$\partial_{c e f g}{\Gamma^{a}_{b d}}A^{c}A^{b}A^{e}A^{f}A^{g} -> @(dGamma04)$,repeat=True)  # cdb(term5.302,term5)
+   substitute (term5,$\partial_{c e f}{\Gamma^{a}_{d b}}A^{c}A^{b}A^{e}A^{f} -> @(dGamma03)$,repeat=True)         # cdb(term5.303,term5)
+   substitute (term5,$\partial_{c e f}{\Gamma^{a}_{b d}}A^{c}A^{b}A^{e}A^{f} -> @(dGamma03)$,repeat=True)         # cdb(term5.304,term5)
+   substitute (term5,$\partial_{c e}{\Gamma^{a}_{d b}}A^{c}A^{b}A^{e} -> @(dGamma02)$,repeat=True)                # cdb(term5.305,term5)
+   substitute (term5,$\partial_{c e}{\Gamma^{a}_{b d}}A^{c}A^{b}A^{e} -> @(dGamma02)$,repeat=True)                # cdb(term5.306,term5)
+   substitute (term5,$\partial_{c}{\Gamma^{a}_{b d}}A^{c}A^{b} -> @(dGamma01)$,repeat=True)                       # cdb(term5.307,term5)
+   substitute (term5,$\partial_{c}{\Gamma^{a}_{d b}}A^{c}A^{b} -> @(dGamma01)$,repeat=True)                       # cdb(term5.308,term5)
+   distribute (term5)                                                                                             # cdb(term5.309,term5)
+
+   end_stage_2 = time.time()
+
+   # -------------------------------------------------------------------------------------------
+   # this block of Xterms only produces formatted output, it's not part of the main computation
+   # -------------------------------------------------------------------------------------------
+
+   # the metric in terms of partial derivatives of Rabcd
+
+   metric:=@(term0)
+         + (1/1) @(term1)  # zero
+         + (1/2) @(term2)
+         + (1/6) @(term3)
+         + (1/24) @(term4)
+         + (1/120) @(term5).  # cdb(metric.301,metric)
+
+   substitute (metric,$A^{a} -> x^{a}$)  # cdb (metric.302,metric)
+
+   # reformat and tidy up
+
+   Xterm0 := @(term0).
+   Xterm1 := (1/1) @(term1).
+   Xterm2 := (1/2) @(term2).
+   Xterm3 := (1/6) @(term3).
+   Xterm4 := (1/24) @(term4).
+   Xterm5 := (1/120) @(term5).
+
+   substitute (Xterm0,$A^{a} -> x^{a}$)
+   substitute (Xterm1,$A^{a} -> x^{a}$)
+   substitute (Xterm2,$A^{a} -> x^{a}$)
+   substitute (Xterm3,$A^{a} -> x^{a}$)
+   substitute (Xterm4,$A^{a} -> x^{a}$)
+   substitute (Xterm5,$A^{a} -> x^{a}$)
+
+   substitute (Xterm2,$g_{a b} \partial_{c}{R^{b}_{d e f}} -> \partial_{c}{R_{a d e f}}$)  # cdb(Xterm2.301,Xterm2)
+   substitute (Xterm3,$g_{a b} \partial_{c}{R^{b}_{d e f}} -> \partial_{c}{R_{a d e f}}$)  # cdb(Xterm3.301,Xterm3)
+   substitute (Xterm4,$g_{a b} \partial_{c}{R^{b}_{d e f}} -> \partial_{c}{R_{a d e f}}$)  # cdb(Xterm4.301,Xterm4)
+   substitute (Xterm5,$g_{a b} \partial_{c}{R^{b}_{d e f}} -> \partial_{c}{R_{a d e f}}$)  # cdb(Xterm5.301,Xterm5)
+
+   substitute (Xterm2,$g_{b a} \partial_{c}{R^{b}_{d e f}} -> \partial_{c}{R_{a d e f}}$)  # cdb(Xterm2.301,Xterm2)
+   substitute (Xterm3,$g_{b a} \partial_{c}{R^{b}_{d e f}} -> \partial_{c}{R_{a d e f}}$)  # cdb(Xterm3.301,Xterm3)
+   substitute (Xterm4,$g_{b a} \partial_{c}{R^{b}_{d e f}} -> \partial_{c}{R_{a d e f}}$)  # cdb(Xterm4.301,Xterm4)
+   substitute (Xterm5,$g_{b a} \partial_{c}{R^{b}_{d e f}} -> \partial_{c}{R_{a d e f}}$)  # cdb(Xterm5.301,Xterm5)
+
+   eliminate_metric (Xterm2)  # cdb(Xterm2.302,Xterm2)
+   eliminate_metric (Xterm3)  # cdb(Xterm3.302,Xterm3)
+   eliminate_metric (Xterm4)  # cdb(Xterm4.302,Xterm4)
+   eliminate_metric (Xterm5)  # cdb(Xterm5.302,Xterm5)
+
+   sort_product     (Xterm2)  # cdb(Xterm2.303,Xterm2)
+   sort_product     (Xterm3)  # cdb(Xterm3.303,Xterm3)
+   sort_product     (Xterm4)  # cdb(Xterm4.303,Xterm4)
+   sort_product     (Xterm5)  # cdb(Xterm5.303,Xterm5)
+
+   rename_dummies   (Xterm2)  # cdb(Xterm2.304,Xterm2)
+   rename_dummies   (Xterm3)  # cdb(Xterm3.304,Xterm3)
+   rename_dummies   (Xterm4)  # cdb(Xterm4.304,Xterm4)
+   rename_dummies   (Xterm5)  # cdb(Xterm5.304,Xterm5)
+
+   canonicalise     (Xterm2)  # cdb(Xterm2.305,Xterm2)
+   canonicalise     (Xterm3)  # cdb(Xterm3.305,Xterm3)
+   canonicalise     (Xterm4)  # cdb(Xterm4.305,Xterm4)
+   canonicalise     (Xterm5)  # cdb(Xterm5.305,Xterm5)
+
+   # push upper index to the left
+   def tidy_Rabcd (obj):
+       substitute (obj,$R_{a b c}^{d} -> - R^{d}_{c a b}$)
+       substitute (obj,$R_{a b}^{c}_{d} -> R^{c}_{d a b}$)
+       substitute (obj,$R_{a}^{b}_{c d} -> - R^{b}_{a c d}$)
+       return obj
+
+   Xterm0 = tidy_Rabcd (Xterm0)  # cdb(Xterm0.666,Xterm0)
+   Xterm2 = tidy_Rabcd (Xterm2)  # cdb(Xterm2.666,Xterm2)
+   Xterm3 = tidy_Rabcd (Xterm3)  # cdb(Xterm3.666,Xterm3)
+   Xterm4 = tidy_Rabcd (Xterm4)  # cdb(Xterm4.666,Xterm4)
+   Xterm5 = tidy_Rabcd (Xterm5)  # cdb(Xterm5.666,Xterm5)
+
+   Xterm0 = reformat_xterm (Xterm0,  1)    # cdb(Xterm0.301,Xterm0)
+   Xterm2 = reformat_xterm (Xterm2,  3)    # cdb(Xterm2.301,Xterm2)
+   Xterm3 = reformat_xterm (Xterm3,  6)    # cdb(Xterm3.301,Xterm3)
+   Xterm4 = reformat_xterm (Xterm4,360)    # cdb(Xterm4.301,Xterm4)
+   Xterm5 = reformat_xterm (Xterm5,180)    # cdb(Xterm5.301,Xterm5)
+
+   # canonicalise from reformat_xterm will slide upper index from left hand side
+   # so now we slide the upper index back to the left
+
+   Xterm0 = tidy_Rabcd (Xterm0)  # cdb(Xterm0.667,Xterm0)
+   Xterm2 = tidy_Rabcd (Xterm2)  # cdb(Xterm2.667,Xterm2)
+   Xterm3 = tidy_Rabcd (Xterm3)  # cdb(Xterm3.667,Xterm3)
+   Xterm4 = tidy_Rabcd (Xterm4)  # cdb(Xterm4.667,Xterm4)
+   Xterm5 = tidy_Rabcd (Xterm5)  # cdb(Xterm5.667,Xterm5)
+
+   # metric to 3rd, 4th, 5th and 6th order terms in powers of x^a
+
+   Metric3 := @(Xterm0) + @(Xterm2).                                      # cdb (Metric3.301,Metric3)
+   Metric4 := @(Xterm0) + @(Xterm2) + @(Xterm3).                          # cdb (Metric4.301,Metric4)
+   Metric5 := @(Xterm0) + @(Xterm2) + @(Xterm3) + @(Xterm4).              # cdb (Metric5.301,Metric5)
+   Metric6 := @(Xterm0) + @(Xterm2) + @(Xterm3) + @(Xterm4) + @(Xterm5).  # cdb (Metric6.301,Metric6)
+
+   # ------------------------------------------------------------------------------------
+   # end of format block
+   # ------------------------------------------------------------------------------------
+
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{term2.301} \end{dmath*}
+   \begin{dmath*} \cdb*{term2.302} \end{dmath*}
+   \begin{dmath*} \cdb*{term2.303} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{term3.301} \end{dmath*}
+   \begin{dmath*} \cdb*{term3.302} \end{dmath*}
+   \begin{dmath*} \cdb*{term3.303} \end{dmath*}
+   \begin{dmath*} \cdb*{term3.304} \end{dmath*}
+   \begin{dmath*} \cdb*{term3.305} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{term4.301} \end{dmath*}
+   \begin{dmath*} \cdb*{term4.302} \end{dmath*}
+   \begin{dmath*} \cdb*{term4.303} \end{dmath*}
+   \begin{dmath*} \cdb*{term4.304} \end{dmath*}
+   \begin{dmath*} \cdb*{term4.305} \end{dmath*}
+   \begin{dmath*} \cdb*{term4.306} \end{dmath*}
+   \begin{dmath*} \cdb*{term4.307} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} g_{ab}(x) = \cdb{Metric3.301} \end{dmath*}
+   \begin{dmath*} g_{ab}(x) = \cdb{Metric4.301} \end{dmath*}
+   \begin{dmath*} g_{ab}(x) = \cdb{Metric5.301} \end{dmath*}
+   \begin{dmath*} g_{ab}(x) = \cdb{Metric6.301} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Stage 3: Replace partial derivs of $R$ with covariant derivs of $R$}
+
+\begin{cadabra}
+   beg_stage_3 = time.time()
+
+   # now convert partial derivs of Rabcd to covariant derivs
+
+   dRabcd01 = cdblib.get ('dRabcd01','dRabcd.json')  # cdb(dRabcd01.400,dRabcd01)
+   dRabcd02 = cdblib.get ('dRabcd02','dRabcd.json')  # cdb(dRabcd02.400,dRabcd02)
+   dRabcd03 = cdblib.get ('dRabcd03','dRabcd.json')  # cdb(dRabcd03.400,dRabcd03)
+
+   # term1 & term2 need no special care, just a bit of tidying
+
+   eliminate_metric (term1)   # cdb(term1.401,term1)
+   sort_product     (term1)   # cdb(term1.402,term1)
+   rename_dummies   (term1)   # cdb(term1.403,term1)
+   canonicalise     (term1)   # cdb(term1.404,term1)
+
+   eliminate_metric (term2)   # cdb(term2.401,term2)
+   sort_product     (term2)   # cdb(term2.402,term2)
+   rename_dummies   (term2)   # cdb(term2.403,term2)
+   canonicalise     (term2)   # cdb(term2.404,term2)
+
+   # replace partial derivatives of Riemann tensor in term3, term4 etc. with covariant derivatives of Rabcd
+
+   tmp01 := @(dRabcd01).      # cdb(tmp01.403,tmp01)
+   tmp02 := @(dRabcd02).      # cdb(tmp02.403,tmp02)
+   tmp03 := @(dRabcd03).      # cdb(tmp03.403,tmp03)
+
+   substitute (term3,$A^{c}A^{d}A^{e}\partial_{e}{R^{a}_{c d b}} ->   @(tmp01)$,repeat=True)         # cdb(term3.401,term3)
+   substitute (term3,$A^{c}A^{d}A^{e}\partial_{e}{R^{a}_{c b d}} -> - @(tmp01)$,repeat=True)         # cdb(term3.402,term3)
+   distribute (term3)                                                                                # cdb(term3.403,term3)
+
+   substitute (term4,$A^{c}A^{d}A^{e}A^{f}\partial_{e f}{R^{a}_{c d b}} ->   @(tmp02)$,repeat=True)  # cdb(term4.401,term4)
+   substitute (term4,$A^{c}A^{d}A^{e}A^{f}\partial_{e f}{R^{a}_{c b d}} -> - @(tmp02)$,repeat=True)  # cdb(term4.402,term4)
+   substitute (term4,$A^{c}A^{d}A^{e}\partial_{e}{R^{a}_{c d b}} ->   @(tmp01)$,repeat=True)         # cdb(term4.403,term4)
+   substitute (term4,$A^{c}A^{d}A^{e}\partial_{e}{R^{a}_{c b d}} -> - @(tmp01)$,repeat=True)         # cdb(term4.404,term4)
+   distribute (term4)                                                                                # cdb(term4.405,term4)
+
+   substitute (term5,$A^{c}A^{d}A^{e}A^{f}A^{g}\partial_{e f g}{R^{a}_{c d b}} ->   @(tmp03)$,repeat=True)
+   substitute (term5,$A^{c}A^{d}A^{e}A^{f}A^{g}\partial_{e f g}{R^{a}_{c b d}} -> - @(tmp03)$,repeat=True)
+   substitute (term5,$A^{c}A^{d}A^{e}A^{f}\partial_{e f}{R^{a}_{c d b}} ->   @(tmp02)$,repeat=True)
+   substitute (term5,$A^{c}A^{d}A^{e}A^{f}\partial_{e f}{R^{a}_{c b d}} -> - @(tmp02)$,repeat=True)
+   substitute (term5,$A^{c}A^{d}A^{e}\partial_{e}{R^{a}_{c d b}} ->   @(tmp01)$,repeat=True)
+   substitute (term5,$A^{c}A^{d}A^{e}\partial_{e}{R^{a}_{c b d}} -> - @(tmp01)$,repeat=True)
+   distribute (term5)
+
+   end_stage_3 = time.time()
+\end{cadabra}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{tmp01.403} \end{dmath*}
+   \begin{dmath*} \cdb*{tmp02.403} \end{dmath*}
+   \begin{dmath*} \cdb*{tmp03.403} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{term1.401} \end{dmath*}
+   \begin{dmath*} \cdb*{term1.402} \end{dmath*}
+   \begin{dmath*} \cdb*{term1.403} \end{dmath*}
+   \begin{dmath*} \cdb*{term1.404} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{term2.401} \end{dmath*}
+   \begin{dmath*} \cdb*{term2.402} \end{dmath*}
+   \begin{dmath*} \cdb*{term2.403} \end{dmath*}
+   \begin{dmath*} \cdb*{term2.404} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{term3.401} \end{dmath*}
+   \begin{dmath*} \cdb*{term3.402} \end{dmath*}
+   \begin{dmath*} \cdb*{term3.403} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{term4.401} \end{dmath*}
+   \begin{dmath*} \cdb*{term4.402} \end{dmath*}
+   \begin{dmath*} \cdb*{term4.403} \end{dmath*}
+   \begin{dmath*} \cdb*{term4.404} \end{dmath*}
+   \begin{dmath*} \cdb*{term4.405} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Stage 4: Build the Taylor series for $g_{ab}$, reformatting and output}
+
+\begin{cadabra}
+   beg_stage_4 = time.time()
+   # final housekeeping
+
+   term1 = flatten_Rabcd (term1)         # cdb(term1.501,term1)
+   term2 = flatten_Rabcd (term2)         # cdb(term2.501,term2)
+   term3 = flatten_Rabcd (term3)         # cdb(term3.501,term3)
+   term4 = flatten_Rabcd (term4)         # cdb(term4.501,term4)
+   term5 = flatten_Rabcd (term5)         # cdb(term5.501,term5)
+
+   eliminate_metric (term1)
+   eliminate_metric (term2)
+   eliminate_metric (term3)
+   eliminate_metric (term4)
+   eliminate_metric (term5)
+
+   eliminate_kronecker (term1)
+   eliminate_kronecker (term2)
+   eliminate_kronecker (term3)
+   eliminate_kronecker (term4)
+   eliminate_kronecker (term5)
+
+   sort_product (term1)
+   sort_product (term2)
+   sort_product (term3)
+   sort_product (term4)
+   sort_product (term5)
+
+   rename_dummies (term1)
+   rename_dummies (term2)
+   rename_dummies (term3)
+   rename_dummies (term4)
+   rename_dummies (term5)
+
+   canonicalise (term1)                  # cdb(term1.502,term1)
+   canonicalise (term2)                  # cdb(term2.502,term2)
+   canonicalise (term3)                  # cdb(term3.502,term3)
+   canonicalise (term4)                  # cdb(term4.502,term4)
+   canonicalise (term5)                  # cdb(term5.502,term5)
+
+   # this is out final answer
+
+   metric:=@(term0)
+         + (1/1) @(term1)
+         + (1/2) @(term2)
+         + (1/6) @(term3)
+         + (1/24) @(term4)
+         + (1/120) @(term5).             # cdb(metric.501,metric)
+
+   substitute (metric,$A^{a} -> x^{a}$)  # cdb (metric.502,metric)
+
+   cdblib.create ('metric.json')
+
+   cdblib.put ('g_ab',metric,'metric.json')
+
+   # extract the terms of the metric in powers of x
+
+   term0 = get_xterm (metric,0)          # cdb(term0.503,term0)
+   term1 = get_xterm (metric,1)          # cdb(term1.503,term1)
+   term2 = get_xterm (metric,2)          # cdb(term2.503,term2)
+   term3 = get_xterm (metric,3)          # cdb(term3.503,term3)
+   term4 = get_xterm (metric,4)          # cdb(term4.503,term4)
+   term5 = get_xterm (metric,5)          # cdb(term5.503,term5)
+
+   cdblib.put ('g_ab_0',term0,'metric.json')
+   cdblib.put ('g_ab_1',term1,'metric.json')
+   cdblib.put ('g_ab_2',term2,'metric.json')
+   cdblib.put ('g_ab_3',term3,'metric.json')
+   cdblib.put ('g_ab_4',term4,'metric.json')
+   cdblib.put ('g_ab_5',term5,'metric.json')
+
+   # this version of "metric" is used only in the commentary at the start of this notebook
+
+   metric4:=@(term0) + @(term1) + @(term2) + @(term3).  # cdb(metric4.501,metric4)
+
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{term2.501} \end{dmath*}
+   \begin{dmath*} \cdb*{term2.502} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{term3.501} \end{dmath*}
+   \begin{dmath*} \cdb*{term3.502} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{term4.501} \end{dmath*}
+   \begin{dmath*} \cdb*{term4.502} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{term5.501} \end{dmath*}
+   \begin{dmath*} \cdb*{term5.502} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{metric.501} \end{dmath*}
+   \begin{dmath*} \cdb*{metric.502} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{term0.503} \end{dmath*}
+   \begin{dmath*} \cdb*{term1.503} \end{dmath*}
+   \begin{dmath*} \cdb*{term2.503} \end{dmath*}
+   \begin{dmath*} \cdb*{term3.503} \end{dmath*}
+   \begin{dmath*} \cdb*{term4.503} \end{dmath*}
+   \begin{dmath*} \cdb*{term5.503} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+% the remaining code is just for pretty printing
+
+\clearpage
+
+\begin{cadabra}
+   Xterm0 := @(term0).
+   Xterm1 := @(term1).  # zero
+   Xterm2 := @(term2).
+   Xterm3 := @(term3).
+   Xterm4 := @(term4).
+   Xterm5 := @(term5).
+
+   Xterm0 = reformat_xterm (Xterm0,  1)    # cdb(Xterm0.601,Xterm0)
+   Xterm2 = reformat_xterm (Xterm2,  3)    # cdb(Xterm2.601,Xterm2)
+   Xterm3 = reformat_xterm (Xterm3,  6)    # cdb(Xterm3.601,Xterm3)
+   Xterm4 = reformat_xterm (Xterm4,180)    # cdb(Xterm4.601,Xterm4)
+   Xterm5 = reformat_xterm (Xterm5, 90)    # cdb(Xterm5.601,Xterm5)
+
+   gab3   := @(Xterm0) + @(Xterm2).                                      # cdb (gab3.601,gab3)
+   gab4   := @(Xterm0) + @(Xterm2) + @(Xterm3).                          # cdb (gab4.601,gab4)
+   gab5   := @(Xterm0) + @(Xterm2) + @(Xterm3) + @(Xterm4).              # cdb (gab5.601,gab5)
+   gab6   := @(Xterm0) + @(Xterm2) + @(Xterm3) + @(Xterm4) + @(Xterm5).  # cdb (gab6.601,gab6)
+
+   Metric := @(Xterm0) + @(Xterm2) + @(Xterm3) + @(Xterm4) + @(Xterm5).  # cdb (Metric.601,Metric)
+
+   scaled0 = rescale_xterm (Xterm0,  1)    # cdb(scaled0.601,scaled0)
+   scaled2 = rescale_xterm (Xterm2,  3)    # cdb(scaled2.601,scaled2)
+   scaled3 = rescale_xterm (Xterm3,  6)    # cdb(scaled3.601,scaled3)
+   scaled4 = rescale_xterm (Xterm4,180)    # cdb(scaled4.601,scaled4)
+   scaled5 = rescale_xterm (Xterm5, 90)    # cdb(scaled5.601,scaled5)
+
+   end_stage_4 = time.time()
+\end{cadabra}
+
+\clearpage
+
+% =================================================================================================
+\section*{The metric in Riemann normal coordinates}
+
+\begin{dgroup*}
+   \begin{dmath*} g_{a b}(x) = \cdb{Metric.601}+\BigO{\eps^6} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Curvature expansion of the metric}
+\begin{align*}
+     g_{a b}(x) =
+     \ngab{0}_{a b}
+   + \ngab{2}_{a b}
+   + \ngab{3}_{a b}
+   + \ngab{4}_{a b}
+   + \ngab{5}_{a b}+\BigO{\eps^6}
+\end{align*}
+\begin{dgroup*}
+   \begin{dmath*}     \ngab{0}_{a b} = \cdb{scaled0.601} \end{dmath*}
+   \begin{dmath*}   3 \ngab{2}_{a b} = \cdb{scaled2.601} \end{dmath*}
+   \begin{dmath*}   6 \ngab{3}_{a b} = \cdb{scaled3.601} \end{dmath*}
+   \begin{dmath*} 180 \ngab{4}_{a b} = \cdb{scaled4.601} \end{dmath*}
+   \begin{dmath*}  90 \ngab{5}_{a b} = \cdb{scaled5.601} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+% export selected objects, these will later be imported into a library
+% these are the objects that will appear in the paper
+
+\begin{cadabra}
+   cdblib.create ('metric.export')
+
+   cdblib.put ('g_ab_3',Metric3,'metric.export')  # R and \partial R
+   cdblib.put ('g_ab_4',Metric4,'metric.export')
+   cdblib.put ('g_ab_5',Metric5,'metric.export')
+   cdblib.put ('g_ab_6',Metric6,'metric.export')
+
+   cdblib.put ('g_ab',  Metric, 'metric.export')  # R and \nabla R
+
+   cdblib.put ('g_ab_scaled0',scaled0,'metric.export')
+   cdblib.put ('g_ab_scaled2',scaled2,'metric.export')
+   cdblib.put ('g_ab_scaled3',scaled3,'metric.export')
+   cdblib.put ('g_ab_scaled4',scaled4,'metric.export')
+   cdblib.put ('g_ab_scaled5',scaled5,'metric.export')
+
+   checkpoint.append (Metric4)
+   checkpoint.append (Metric6)
+
+   checkpoint.append (Metric)
+
+   checkpoint.append (scaled0)
+   checkpoint.append (scaled2)
+   checkpoint.append (scaled3)
+   checkpoint.append (scaled4)
+   checkpoint.append (scaled5)
+
+   # cdbBeg (timing)
+   print ("Stage 1: {:7.1f} secs\\hfill\\break".format(end_stage_1-beg_stage_1))
+   print ("Stage 2: {:7.1f} secs\\hfill\\break".format(end_stage_2-beg_stage_2))
+   print ("Stage 3: {:7.1f} secs\\hfill\\break".format(end_stage_3-beg_stage_3))
+   print ("Stage 4: {:7.1f} secs".format(end_stage_4-beg_stage_4))
+   # cdbEnd (timing)
+
+\end{cadabra}
+
+\clearpage
+
+% =================================================================================================
+\section*{Timing}
+
+\cdb{timing}
+
+% =================================================================================================
+% export checkpoints in json format
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   for i in range( len(checkpoint) ):
+      cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+\end{cadabra}
+\egroup
+
+\end{document}

@@ -1,0 +1,273 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+% =================================================================================================
+\section*{Symmetrised derivatives of the connection}
+
+Here we compute, just for a check, the symmetrised derivatives of the connections.
+These are defined by
+\begin{align}
+   \Gamma^{d}_{a(b,\uc)} = \Gamma^{d}_{a(b,c_1,c_2,\cdots c_n)}
+\end{align}
+Note that these are \emph{not} the generalised connections. The generalised connections
+involve $\Gamma^{d}_{(ab,\uc)}$ and quadratice combinations of lower order generalised
+connections (see eq (1) of {\tt\small ../genGamma.pdf}). Note that the
+generalised connections vanish at the origin (unlike the $\Gamma^{d}_{a(b,\uc)}$).
+
+These results agree with those of Hatzinikitas equation (12) (arXiv:hep-th/0001078).
+
+This code provides an indirect check on our results for the connection. It does not
+prove that the code {\tt connection.tex} is correct but it does show that our
+results are consistent with those of Hatzinikitas.
+
+\clearpage
+
+\begin{cadabra}
+   {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+   D{#}::Derivative.
+   \nabla{#}::Derivative.
+   \partial{#}::PartialDerivative.
+
+   g_{a b}::Metric.
+   g^{a b}::InverseMetric.
+   g_{a}^{b}::KroneckerDelta.
+   g^{a}_{b}::KroneckerDelta.
+   \delta^{a}_{b}::KroneckerDelta.
+   \delta_{a}^{b}::KroneckerDelta.
+
+   R_{a b c d}::RiemannTensor.
+   R^{a}_{b c d}::RiemannTensor.
+   R_{a b c}^{d}::RiemannTensor.
+
+   \Gamma^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+
+   x^{a}::Depends(D{#}).
+
+   g_{a b}::Depends(\partial{#}).
+   R_{a b c d}::Depends(\partial{#}).
+   R^{a}_{b c d}::Depends(\partial{#}).
+   \Gamma^{a}_{b c}::Depends(\partial{#}).
+
+   R_{a b c d}::Depends(\nabla{#}).
+   R^{a}_{b c d}::Depends(\nabla{#}).
+
+   import cdblib
+
+   Gamma = cdblib.get ('Gamma','../connection.json')
+
+\end{cadabra}
+
+\clearpage
+
+\begin{cadabra}
+   tmp := D_{p}{@(Gamma)}.
+   distribute     (tmp)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   eliminate_kronecker (tmp)
+   substitute     (tmp,$x^{a}->0$)
+   sort_product   (tmp)
+   rename_dummies (tmp)
+   canonicalise   (tmp)
+
+   foo := A^{p} A^{b} @(tmp).
+   distribute     (foo) # cdb(foo.301,foo)
+   sort_product   (foo) # cdb(foo.302,foo)
+   rename_dummies (foo) # cdb(foo.303,foo)
+   canonicalise   (foo) # cdb(foo.304,foo)
+
+   # save the result
+   dGamma1 := @(foo).   # cdb (dGamma1.000,dGamma1)
+
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{foo.301} \end{dmath*}
+   \begin{dmath*} \cdb*{foo.302} \end{dmath*}
+   \begin{dmath*} \cdb*{foo.303} \end{dmath*}
+   \begin{dmath*} \cdb*{foo.304} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{cadabra}
+   tmp := D_{p q}{@(Gamma)}.
+   distribute     (tmp)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   eliminate_kronecker (tmp)
+   substitute     (tmp,$x^{a}->0$)
+   sort_product   (tmp)
+   rename_dummies (tmp)
+   canonicalise   (tmp)
+
+   foo := A^{p} A^{q} A^{b} @(tmp).
+   distribute     (foo) # cdb(foo.401,foo)
+   sort_product   (foo) # cdb(foo.402,foo)
+   rename_dummies (foo) # cdb(foo.403,foo)
+   canonicalise   (foo) # cdb(foo.404,foo)
+
+   # save the result
+   dGamma2 := @(foo).   # cdb (dGamma2.000,dGamma2)
+
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{foo.401} \end{dmath*}
+   \begin{dmath*} \cdb*{foo.402} \end{dmath*}
+   \begin{dmath*} \cdb*{foo.403} \end{dmath*}
+   \begin{dmath*} \cdb*{foo.404} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{cadabra}
+   tmp := D_{p q r}{@(Gamma)}.
+   distribute     (tmp)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   eliminate_kronecker (tmp)
+   substitute     (tmp,$x^{a}->0$)
+   sort_product   (tmp)
+   rename_dummies (tmp)
+   canonicalise   (tmp)
+
+   foo := A^{p} A^{q} A^{r} A^{b} @(tmp).
+   distribute     (foo) # cdb(foo.501,foo)
+   sort_product   (foo) # cdb(foo.502,foo)
+   rename_dummies (foo) # cdb(foo.503,foo)
+   canonicalise   (foo) # cdb(foo.504,foo)
+
+   # save the result
+   dGamma3 := @(foo).   # cdb (dGamma3.000,dGamma3)
+
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   % \begin{dmath*} \cdb*{foo.501} \end{dmath*}
+   % \begin{dmath*} \cdb*{foo.502} \end{dmath*}
+   % \begin{dmath*} \cdb*{foo.503} \end{dmath*}
+   \begin{dmath*} \cdb*{foo.504} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{cadabra}
+   tmp := D_{p q r s}{@(Gamma)}.
+   distribute     (tmp)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   eliminate_kronecker (tmp)
+   substitute     (tmp,$x^{a}->0$)
+   sort_product   (tmp)
+   rename_dummies (tmp)
+   canonicalise   (tmp)
+
+   foo := A^{p} A^{q} A^{r} A^{s} A^{b} @(tmp).
+   distribute     (foo)
+   sort_product   (foo)
+   rename_dummies (foo)
+   canonicalise   (foo)
+
+   # save the result
+   dGamma4 := @(foo).   # cdb (dGamma4.000,dGamma4)
+
+\end{cadabra}
+
+\clearpage
+
+\begin{cadabra}
+   tmp := D_{p q r s t}{@(Gamma)}.
+   distribute     (tmp)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   unwrap         (tmp)
+   product_rule   (tmp)
+   distribute     (tmp)
+   substitute     (tmp,$D_{a}{x^{b}}->\delta_{a}^{b}$)
+   eliminate_kronecker (tmp)
+   substitute     (tmp,$x^{a}->0$)
+   sort_product   (tmp)
+   rename_dummies (tmp)
+   canonicalise   (tmp)
+
+   foo := A^{p} A^{q} A^{r} A^{s} A^{t} A^{b} @(tmp).
+   distribute     (foo)
+   sort_product   (foo)
+   rename_dummies (foo)
+   canonicalise   (foo)
+
+   # save the result
+   dGamma5 := @(foo).   # cdb (dGamma5.000,dGamma5)
+
+\end{cadabra}
+
+\clearpage
+
+Compare these results against those of Hatzinikitas equation (12) (arXiv:hep-th/0001078).
+Our final $d\Gamma$ is zero because our metric was expanded to order $x^5$ so the $\Gamma$
+only contain terms to order $x^4$. Hence the 5-th partial derivatices are zero.
+
+\begin{dgroup*}
+   \begin{dmath*} A^b A^c \Gamma^{d}{}_{ab,c} = \Cdb*{dGamma1.000} \end{dmath*}
+   \begin{dmath*} A^b A^c A^e \Gamma^{d}{}_{ab,ce} = \Cdb*{dGamma2.000} \end{dmath*}
+   \begin{dmath*} A^b A^c A^e A^f \Gamma^{d}{}_{ab,cef} = \Cdb*{dGamma3.000} \end{dmath*}
+   \begin{dmath*} A^b A^c A^e A^f A^g \Gamma^{d}{}_{ab,cefg} = \Cdb*{dGamma4.000} \end{dmath*}
+   \begin{dmath*} A^b A^c A^e A^f A^g A^h \Gamma^{d}{}_{ab,cefgh} = \Cdb*{dGamma5.000} \end{dmath*}
+\end{dgroup*}
+
+\end{document}

@@ -1,0 +1,151 @@
+import cdblib
+checkpoint_file = 'tests/semantic/output/rnc2rnc.json'
+cdblib.create (checkpoint_file)
+checkpoint = []
+
+{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+\nabla{#}::Derivative.
+
+g_{a b}::Metric.
+g^{a b}::InverseMetric.
+
+R_{a b c d}::RiemannTensor.
+R^{a}_{b c d}::RiemannTensor.
+
+# Dx{#}::LaTeXForm{"{\Dx}"}.
+
+import cdblib
+
+Y5 = cdblib.get ('y5','geodesic-bvp.json')
+
+Y50 = cdblib.get ('y50','geodesic-bvp.json')
+Y52 = cdblib.get ('y52','geodesic-bvp.json')
+Y53 = cdblib.get ('y53','geodesic-bvp.json')
+Y54 = cdblib.get ('y54','geodesic-bvp.json')
+Y55 = cdblib.get ('y55','geodesic-bvp.json')
+
+# this copies y5* from geodesic-bvp.json to rnc2rnc.json
+
+cdblib.create ('rnc2rnc.json')
+
+cdblib.put ('rnc2rnc',Y5,'rnc2rnc.json')
+
+cdblib.put ('rnc2rnc0',Y50,'rnc2rnc.json')
+cdblib.put ('rnc2rnc2',Y52,'rnc2rnc.json')
+cdblib.put ('rnc2rnc3',Y53,'rnc2rnc.json')
+cdblib.put ('rnc2rnc4',Y54,'rnc2rnc.json')
+cdblib.put ('rnc2rnc5',Y55,'rnc2rnc.json')
+
+
+# note: keeping numbering as is (out of order) to ensure R appears before \nabla R etc.
+def product_sort (obj):
+    substitute (obj,$ x^{a}                            -> A001^{a}               $)
+    substitute (obj,$ Dx^{a}                           -> A002^{a}               $)
+    substitute (obj,$ g^{a b}                          -> A003^{a b}             $)
+    substitute (obj,$ \nabla_{e f g h}{R_{a b c d}}    -> A008_{a b c d e f g h} $)
+    substitute (obj,$ \nabla_{e f g}{R_{a b c d}}      -> A007_{a b c d e f g}   $)
+    substitute (obj,$ \nabla_{e f}{R_{a b c d}}        -> A006_{a b c d e f}     $)
+    substitute (obj,$ \nabla_{e}{R_{a b c d}}          -> A005_{a b c d e}       $)
+    substitute (obj,$ R_{a b c d}                      -> A004_{a b c d}         $)
+    sort_product   (obj)
+    rename_dummies (obj)
+    substitute (obj,$ A001^{a}                  -> x^{a}                         $)
+    substitute (obj,$ A002^{a}                  -> Dx^{a}                        $)
+    substitute (obj,$ A003^{a b}                -> g^{a b}                       $)
+    substitute (obj,$ A004_{a b c d}            -> R_{a b c d}                   $)
+    substitute (obj,$ A005_{a b c d e}          -> \nabla_{e}{R_{a b c d}}       $)
+    substitute (obj,$ A006_{a b c d e f}        -> \nabla_{e f}{R_{a b c d}}     $)
+    substitute (obj,$ A007_{a b c d e f g}      -> \nabla_{e f g}{R_{a b c d}}   $)
+    substitute (obj,$ A008_{a b c d e f g h}    -> \nabla_{e f g h}{R_{a b c d}} $)
+
+    return obj
+
+def get_xDxterm (obj,n,m):
+
+    x^{a}::Weight(label=numx,value=1).
+    Dx^{a}::Weight(label=numDx,value=1).
+
+    tmp := @(obj).
+    distribute  (tmp)
+
+    foo = Ex("numx = " + str(n))
+    bah = Ex("numDx = " + str(m))
+    keep_weight (tmp, foo)
+    keep_weight (tmp, bah)
+
+    return tmp
+
+def reformat (obj,scale):
+    foo  = Ex(str(scale))
+    bah := @(foo) @(obj).
+    distribute     (bah)
+    bah = product_sort (bah)
+    rename_dummies (bah)
+    canonicalise   (bah)
+    substitute     (bah,$Dx^{b}->zzz^{b}$)
+    factor_out     (bah,$x^{a?},zzz^{b?}$)
+    substitute     (bah,$zzz^{b}->Dx^{b}$)
+    ans := @(bah) / @(foo).
+    return ans
+
+def rescale (obj,scale):
+    foo  = Ex(str(scale))
+    bah := @(foo) @(obj).
+    distribute  (bah)
+    substitute  (bah,$Dx^{b}->zzz^{b}$)
+    factor_out  (bah,$x^{a?},zzz^{b?}$)
+    substitute  (bah,$zzz^{b}->Dx^{b}$)
+    return bah
+
+term0 := @(Y50).
+term2 := @(Y52).
+term3 := @(Y53).
+term4 := @(Y54).
+term5 := @(Y55).
+
+term0 = reformat (term0,1)
+term2 = reformat (term2,1)
+term3 = reformat (term3,1)
+term4 = reformat (term4,1)
+term5 = reformat (term5,1)
+
+xDxterm12 = get_xDxterm (term2,1,2)
+
+xDxterm13 = get_xDxterm (term3,1,3)
+xDxterm22 = get_xDxterm (term3,2,2)
+
+xDxterm14 = get_xDxterm (term4,1,4)
+xDxterm23 = get_xDxterm (term4,2,3)
+xDxterm32 = get_xDxterm (term4,3,2)
+
+xDxterm15 = get_xDxterm (term5,1,5)
+xDxterm24 = get_xDxterm (term5,2,4)
+xDxterm33 = get_xDxterm (term5,3,3)
+xDxterm42 = get_xDxterm (term5,4,2)
+
+
+xDxterm12 = rescale ( reformat (xDxterm12,    3),     3 )
+
+xDxterm13 = rescale ( reformat (xDxterm13,   12),   -12 )
+xDxterm22 = rescale ( reformat (xDxterm22,   24),   -24 )
+
+xDxterm14 = rescale ( reformat (xDxterm14,  180),  -180 )
+xDxterm23 = rescale ( reformat (xDxterm23,  720),  -720 )
+xDxterm32 = rescale ( reformat (xDxterm32,  720),  -720 )
+
+xDxterm15 = rescale ( reformat (xDxterm15,  360),  -360 )
+xDxterm24 = rescale ( reformat (xDxterm24, 2160), -2160 )
+xDxterm33 = rescale ( reformat (xDxterm33, 1080), -1080 )
+xDxterm42 = rescale ( reformat (xDxterm42,  360),  -360 )
+
+checkpoint.append (term0)
+checkpoint.append (term2)
+checkpoint.append (term3)
+checkpoint.append (term4)
+checkpoint.append (term5)
+
+
+for i in range( len(checkpoint) ):
+   cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+

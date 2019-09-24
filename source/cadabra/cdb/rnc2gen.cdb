@@ -1,0 +1,170 @@
+import cdblib
+checkpoint_file = 'tests/semantic/output/rnc2gen.json'
+cdblib.create (checkpoint_file)
+checkpoint = []
+
+{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+D{#}::Derivative.
+\nabla{#}::Derivative.
+\partial{#}::PartialDerivative.
+
+g_{a b}::Metric.
+g^{a b}::InverseMetric.
+g_{a}^{b}::KroneckerDelta.
+g^{a}_{b}::KroneckerDelta.
+\delta^{a}_{b}::KroneckerDelta.
+\delta_{a}^{b}::KroneckerDelta.
+
+R_{a b c d}::RiemannTensor.
+R^{a}_{b c d}::RiemannTensor.
+R_{a b c}^{d}::RiemannTensor.
+
+A^{a}::Depends(\partial{#}).
+
+g_{a b}::Depends(\partial{#}).
+R_{a b c d}::Depends(\partial{#}).
+R^{a}_{b c d}::Depends(\partial{#}).
+
+Q^{a}_{b c}::Depends(\partial{#}).
+
+Q^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+Q^{a}_{b c d}::TableauSymmetry(shape={3}, indices={1,2,3}).
+Q^{a}_{b c d e}::TableauSymmetry(shape={4}, indices={1,2,3,4}).
+Q^{a}_{b c d e f}::TableauSymmetry(shape={5}, indices={1,2,3,4,5}).
+Q^{a}_{b c d e f g}::TableauSymmetry(shape={6}, indices={1,2,3,4,5,6}).
+
+Q^{p}_{a b}::Weight(label=numQ,value=1).
+Q^{p}_{a b c}::Weight(label=numQ,value=2).
+Q^{p}_{a b c d}::Weight(label=numQ,value=3).
+Q^{p}_{a b c d e}::Weight(label=numQ,value=4).
+Q^{p}_{a b c d e f}::Weight(label=numQ,value=5).
+
+def product_sort (obj):
+    substitute (obj,$ A^{a}                     -> A001^{a}               $)
+    substitute (obj,$ x^{a}                     -> A002^{a}               $)
+    substitute (obj,$ g^{a b}                   -> A003^{a b}             $)
+    substitute (obj,$ Q^{p}_{a b}               -> A004^{p}_{a b}         $)
+    substitute (obj,$ Q^{p}_{a b c}             -> A005^{p}_{a b c}       $)
+    substitute (obj,$ Q^{p}_{a b c d}           -> A006^{p}_{a b c d}     $)
+    substitute (obj,$ Q^{p}_{a b c d e}         -> A007^{p}_{a b c d e}   $)
+    substitute (obj,$ Q^{p}_{a b c d e f}       -> A008^{p}_{a b c d e f} $)
+    sort_product   (obj)
+    rename_dummies (obj)
+    substitute (obj,$ A001^{a}                  -> A^{a}                  $)
+    substitute (obj,$ A002^{a}                  -> x^{a}                  $)
+    substitute (obj,$ A003^{a b}                -> g^{a b}                $)
+    substitute (obj,$ A004^{p}_{a b}            -> Q^{p}_{a b}            $)
+    substitute (obj,$ A005^{p}_{a b c}          -> Q^{p}_{a b c}          $)
+    substitute (obj,$ A006^{p}_{a b c d}        -> Q^{p}_{a b c d}        $)
+    substitute (obj,$ A007^{p}_{a b c d e}      -> Q^{p}_{a b c d e}      $)
+    substitute (obj,$ A008^{p}_{a b c d e f}    -> Q^{p}_{a b c d e f}    $)
+
+    return obj
+
+def truncateQ (obj,n):
+
+    ans = Ex(0)
+
+    for i in range (0,n+1):
+       foo := @(obj).
+       bah  = Ex("numQ = " + str(i))
+       keep_weight (foo, bah)
+       ans = ans + foo
+
+    return ans
+
+# A^{a} = dx^a/ds
+
+Gamma := Q^{d}_{a b} A^{a} A^{b}.
+
+dAds  := A^{c} \partial_{c}{A^{d}}-> - @(Gamma).
+
+# =============================================================
+eq0 := @(Gamma).
+
+# =============================================================
+eq1 := A^{c} \partial_{c}{@(eq0)}.
+
+distribute      (eq1)
+unwrap          (eq1)
+product_rule    (eq1)
+distribute      (eq1)
+substitute      (eq1,dAds)
+distribute      (eq1)
+eq1 = truncateQ (eq1,5)
+sort_product    (eq1)
+rename_dummies  (eq1)
+canonicalise    (eq1)
+
+# =============================================================
+eq2 := A^{c} \partial_{c}{@(eq1)}.
+
+distribute      (eq2)
+unwrap          (eq2)
+product_rule    (eq2)
+distribute      (eq2)
+substitute      (eq2,dAds)
+distribute      (eq2)
+eq2 = truncateQ (eq2,5)
+sort_product    (eq2)
+rename_dummies  (eq2)
+canonicalise    (eq2)
+
+# =============================================================
+eq3 := A^{c} \partial_{c}{@(eq2)}.
+
+distribute      (eq3)
+unwrap          (eq3)
+product_rule    (eq3)
+distribute      (eq3)
+substitute      (eq3,dAds)
+distribute      (eq3)
+eq3 = truncateQ (eq3,5)
+sort_product    (eq3)
+rename_dummies  (eq3)
+canonicalise    (eq3)
+
+# =============================================================
+eq4 := A^{c} \partial_{c}{@(eq3)}.
+
+distribute      (eq4)
+unwrap          (eq4)
+product_rule    (eq4)
+distribute      (eq4)
+substitute      (eq4,dAds)
+distribute      (eq4)
+eq4 = truncateQ (eq4,5)
+sort_product    (eq4)
+rename_dummies  (eq4)
+canonicalise    (eq4)
+
+
+def reformat (obj):
+   bah := @(obj).
+   distribute     (bah)
+   bah = product_sort (bah)
+   rename_dummies (bah)
+   canonicalise   (bah)
+   factor_out     (bah,$A^{a?}$)
+   substitute     (bah,$A^{a}->y^{a}$)
+   substitute     (bah,$Q^{a}_{b c}->\Gamma^{a}_{b c}$)
+   ans := @(bah).
+   return ans
+
+eq0 = reformat(eq0)
+eq1 = reformat(eq1)
+eq2 = reformat(eq2)
+eq3 = reformat(eq3)
+eq4 = reformat(eq4)
+
+checkpoint.append (eq0)
+checkpoint.append (eq1)
+checkpoint.append (eq2)
+checkpoint.append (eq3)
+checkpoint.append (eq4)
+
+
+for i in range( len(checkpoint) ):
+   cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+

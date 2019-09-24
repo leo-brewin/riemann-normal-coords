@@ -1,0 +1,170 @@
+\documentclass[12pt]{cdblatex}
+
+\lstset{gobble=2}
+
+\begin{document}
+
+% =================================================================================================
+% create checkpoint file
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   import cdblib
+   checkpoint_file = 'tests/semantic/output/geodesic-ivp.json'
+   cdblib.create (checkpoint_file)
+   checkpoint = []
+\end{cadabra}
+\egroup
+
+% =================================================================================================
+\section*{Geodesic IVP}
+
+Our game here is to find the solution of
+\begin{align*}
+   0 = \frac{d^2 x^{a}}{ds^2} + \Gamma^{a}_{bc}(x) \frac{dx^b}{ds} \frac{dx^c}{ds}
+\end{align*}
+subject to the initial conditions $x^{a}(s) = x^a$ and $dx^a(s)/ds={\Dot x}^{a}$ at $s=0$.
+
+% =================================================================================================
+\section*{Algorithm}
+
+By successive differentiation of the above equation we can compute
+\begin{align*}
+   \frac{d^n x^{a}}{ds^n} = -\Gamma^{a}_{\udn}\frac{dx^{\udn}}{ds}
+\end{align*}
+at $s=0$ for $n=2,3,4,\dotsc$. The $\Gamma^{a}_{\udn}$ are the \emph{generalised connections}.
+
+We can then construct the Taylor series solution for $x^{a}(s)$
+\begin{align*}
+   x^a(s) = x^a + s {\Dot x}^a - \sum_{k=2}^\infty\>\frac{s^{k}}{k!} \Gamma^{a}_{\udk}{\Dot x}^{\udk}
+\end{align*}
+
+\clearpage
+
+\begin{cadabra}
+   {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+   \nabla{#}::Derivative.
+
+   import cdblib
+
+   sterm21 = cdblib.get ('genGamma01','genGamma.json')
+   sterm22 = cdblib.get ('genGamma02','genGamma.json')
+   sterm23 = cdblib.get ('genGamma03','genGamma.json')
+   sterm24 = cdblib.get ('genGamma04','genGamma.json')
+
+   sterm31 = cdblib.get ('genGamma11','genGamma.json')
+   sterm32 = cdblib.get ('genGamma12','genGamma.json')
+   sterm33 = cdblib.get ('genGamma13','genGamma.json')
+
+   sterm41 = cdblib.get ('genGamma21','genGamma.json')
+   sterm42 = cdblib.get ('genGamma22','genGamma.json')
+
+   sterm51 = cdblib.get ('genGamma31','genGamma.json')
+
+   sterm2 := @(sterm21) + @(sterm22) + @(sterm23) + @(sterm24).  # cdb (sterm2.000,sterm2)
+   sterm3 := @(sterm31) + @(sterm32) + @(sterm33).               # cdb (sterm3.000,sterm3)
+   sterm4 := @(sterm41) + @(sterm42).                            # cdb (sterm4.000,sterm4)
+   sterm5 := @(sterm51).                                         # cdb (sterm5.000,sterm5)
+
+   factor_out (sterm2,$A^{a?}$)                                  # cdb (sterm2.001,sterm2)
+   factor_out (sterm3,$A^{a?}$)                                  # cdb (sterm3.001,sterm3)
+   factor_out (sterm4,$A^{a?}$)                                  # cdb (sterm4.001,sterm4)
+   factor_out (sterm5,$A^{a?}$)                                  # cdb (sterm5.001,sterm5)
+
+   sterm2 := 360 @(sterm2).
+   sterm3 := 360 @(sterm3).
+   sterm4 :=  90 @(sterm4).
+   sterm5 :=   3 @(sterm5).
+
+   substitute (sterm2,$A^{a}->1$)                                # cdb (sterm2.002,sterm2)
+   substitute (sterm3,$A^{a}->1$)                                # cdb (sterm3.002,sterm3)
+   substitute (sterm4,$A^{a}->1$)                                # cdb (sterm4.002,sterm4)
+   substitute (sterm5,$A^{a}->1$)                                # cdb (sterm5.002,sterm5)
+
+\end{cadabra}
+
+% =================================================================================================
+% the remaining code is just for pretty printing
+
+\clearpage
+
+% =================================================================================================
+\section*{The geodesic ivp}
+
+\begin{align*}
+   x^{d}(s) = x^{d}
+            + s {\dot{x}^d}
+            + \frac{s^2}{2!} {\dot{x}^a} {\dot{x}^b} A^{d}_{ab}
+            + \frac{s^3}{3!} {\dot{x}^a} {\dot{x}^b} {\dot{x}^c} A^{d}_{abc}
+            + \frac{s^4}{4!} {\dot{x}^a} {\dot{x}^b} {\dot{x}^c} {\dot{x}^d} A^{d}_{abce}
+            + \frac{s^5}{5!} {\dot{x}^a} {\dot{x}^b} {\dot{x}^c} {\dot{x}^d} {\dot{x}^e} A^{d}_{abcef}
+            + \dotsb
+\end{align*}
+\begin{dgroup*}
+   \begin{dmath*} 360 A^{d}_{ab} = \cdb{sterm2.002} \end{dmath*}
+   \begin{dmath*} 360 A^{d}_{abc} = \cdb{sterm3.002} \end{dmath*}
+   \begin{dmath*}  90 A^{d}_{abce} = \cdb{sterm4.002} \end{dmath*}
+   \begin{dmath*}   3 A^{d}_{abcef} = \cdb{sterm5.002} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+% export selected objects, these will later be imported into a library
+% these are the objects that will appear in the paper
+
+\begin{cadabra}
+   sterm2short := @(sterm21) + @(sterm22).             # cdb (sterm2.short.001,sterm2short)
+   sterm3short := @(sterm31).                          # cdb (sterm3.short.001,sterm3short)
+   sterm2shortscaled := 12 @(sterm2short).             # cdb (sterm2.short.scaled.002,sterm2shortscaled)
+   sterm3shortscaled :=  2 @(sterm3short).             # cdb (sterm3.short.scaled.002,sterm3shortscaled)
+
+   substitute (sterm2shortscaled,$A^{a}->1$)           # cdb (sterm2.short.scaled.003,sterm2shortscaled)
+   substitute (sterm3shortscaled,$A^{a}->1$)           # cdb (sterm3.short.scaled.003,sterm3shortscaled)
+
+   cdblib.create ('geodesic-ivp.export')
+
+   # 4th order ivp terms scaled
+   cdblib.put ('ivp42',sterm2shortscaled,'geodesic-ivp.export')
+   cdblib.put ('ivp43',sterm3shortscaled,'geodesic-ivp.export')
+
+   # 6th order ivp terms scaled
+   cdblib.put ('ivp62',sterm2,'geodesic-ivp.export')
+   cdblib.put ('ivp63',sterm3,'geodesic-ivp.export')
+   cdblib.put ('ivp64',sterm4,'geodesic-ivp.export')
+   cdblib.put ('ivp65',sterm5,'geodesic-ivp.export')
+
+   checkpoint.append (sterm2shortscaled)
+   checkpoint.append (sterm3shortscaled)
+
+   checkpoint.append (sterm2)
+   checkpoint.append (sterm3)
+   checkpoint.append (sterm4)
+   checkpoint.append (sterm5)
+\end{cadabra}
+
+% just to check that we are exporting the correct 4th order terms
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{sterm2.short.001} \end{dmath*}
+   \begin{dmath*} \cdb*{sterm3.short.001} \end{dmath*}
+   \begin{dmath*} \cdb*{sterm2.short.scaled.002} \end{dmath*}
+   \begin{dmath*} \cdb*{sterm3.short.scaled.002} \end{dmath*}
+   \begin{dmath*} \cdb*{sterm2.short.scaled.003} \end{dmath*}
+   \begin{dmath*} \cdb*{sterm3.short.scaled.003} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+% export checkpoints in json format
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   for i in range( len(checkpoint) ):
+      cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+\end{cadabra}
+\egroup
+
+\end{document}

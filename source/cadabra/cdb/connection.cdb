@@ -1,0 +1,246 @@
+import cdblib
+checkpoint_file = 'tests/semantic/output/connection.json'
+cdblib.create (checkpoint_file)
+checkpoint = []
+
+{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+D{#}::Derivative.
+\nabla{#}::Derivative.
+\partial{#}::PartialDerivative.
+
+g_{a b}::Metric.
+g^{a b}::InverseMetric.
+g_{a}^{b}::KroneckerDelta.
+g^{a}_{b}::KroneckerDelta.
+\delta^{a}_{b}::KroneckerDelta.
+\delta_{a}^{b}::KroneckerDelta.
+
+R_{a b c d}::RiemannTensor.
+R^{a}_{b c d}::RiemannTensor.
+
+x^{a}::Depends(D{#}).
+
+R_{a b c d}::Depends(\nabla{#}).
+R^{a}_{b c d}::Depends(\nabla{#}).
+
+import cdblib
+
+gab = cdblib.get ('g_ab','metric.json')
+iab = cdblib.get ('g^ab','metric-inv.json')
+
+defgab := g_{a b} -> @(gab).
+defiab := g^{a b} -> @(iab).
+
+dgab := D_{a}{g_{c b}} + D_{b}{g_{a c}} - D_{c}{g_{a b}}.
+
+substitute   (dgab,defgab)
+
+distribute   (dgab)
+unwrap       (dgab)
+product_rule (dgab)
+distribute   (dgab)
+substitute   (dgab,$D_{a}{x^{b}}->\delta^{b}_{a}$,repeat=True)
+eliminate_kronecker (dgab)
+sort_product   (dgab)
+rename_dummies (dgab)
+canonicalise   (dgab)
+
+
+# Note:
+# Computing Gamma directly by (1/2) iab dgab and *then* truncating to lower order
+# is not optimal. We only want the leading oder terms (to 4th order in x). But the direct
+# calculation would compute *all* terms before the truncation. This does work but it
+# is slower than the following code.
+#
+# The better approach (as adopted in this code) is to extract all of the terms of iab
+# and dgab then construct the leading order terms of Gamma (to fifth order) term by term.
+
+def get_Rterm (obj,n):
+
+# I would like to assign different weights to \nabla_{a}, \nabla_{a b}, \nabla_{a b c} etc. but no matter
+# what I do it appears that Cadabra assigns the same weight to all of these regardless of the number of subscripts.
+# It seems that the weight is assigned to the symbol \nabla alone. So I'm forced to use the following substitution trick.
+
+    Q_{a b c d}::Weight(label=numR,value=2).
+    Q_{a b c d e}::Weight(label=numR,value=3).
+    Q_{a b c d e f}::Weight(label=numR,value=4).
+    Q_{a b c d e f g}::Weight(label=numR,value=5).
+
+    tmp := @(obj).
+
+    distribute (tmp)
+
+    substitute (tmp, $\nabla_{e f g}{R_{a b c d}} -> Q_{a b c d e f g}$)
+    substitute (tmp, $\nabla_{e f}{R_{a b c d}} -> Q_{a b c d e f}$)
+    substitute (tmp, $\nabla_{e}{R_{a b c d}} -> Q_{a b c d e}$)
+    substitute (tmp, $R_{a b c d} -> Q_{a b c d}$)
+
+    foo := @(tmp).
+    bah = Ex("numR = " + str(n))
+    keep_weight (foo, bah)
+
+    substitute (foo, $Q_{a b c d e f g} -> \nabla_{e f g}{R_{a b c d}}$)
+    substitute (foo, $Q_{a b c d e f} -> \nabla_{e f}{R_{a b c d}}$)
+    substitute (foo, $Q_{a b c d e} -> \nabla_{e}{R_{a b c d}}$)
+    substitute (foo, $Q_{a b c d} -> R_{a b c d}$)
+
+    return foo
+
+# terms of the curvature expansion of dg_{ab}
+
+dgab00 = get_Rterm (dgab,0)
+dgab01 = get_Rterm (dgab,1)
+dgab02 = get_Rterm (dgab,2)
+dgab03 = get_Rterm (dgab,3)
+dgab04 = get_Rterm (dgab,4)
+dgab05 = get_Rterm (dgab,5)
+
+# Convert free indices on iab from ^{a b} to ^{d c}
+# This ensures we can later build products like @(iab) @(dgab) knowing that the indices are correctly ordered.
+# Without this step we would be using free indices ^{a b} and _{a b c}. Thus the product @(iab) @(dgab) would
+# have just one free index _{c}. This is clearly wrong.
+
+tmp := @(iab) \delta_{a}^{d} \delta_{b}^{c}.
+
+distribute     (tmp)
+eliminate_kronecker (tmp)
+sort_product   (tmp)
+rename_dummies (tmp)
+canonicalise   (tmp)
+
+idc := @(tmp).
+
+# terms of the curvature expansion of g^{ab}
+
+idc00 = get_Rterm (idc,0)
+idc01 = get_Rterm (idc,1)
+idc02 = get_Rterm (idc,2)
+idc03 = get_Rterm (idc,3)
+idc04 = get_Rterm (idc,4)
+idc05 = get_Rterm (idc,5)
+
+
+# idc  = g^{d c}
+# dgab = D_{a}{g_{c b}} + D_{b}{g_{a c}} - D_{c}{g_{a b}}
+
+# terms of the curvature expansion of \Gamma^{d}_{a b}
+
+# term0 := (1/2)  @(idc00) @(dgab00).
+# term1 := (1/2) (@(idc01) @(dgab00) + @(idc00) @(dgab01)).
+# term2 := (1/2) (@(idc02) @(dgab00) + @(idc01) @(dgab01) + @(idc00) @(dgab02)).
+# term3 := (1/2) (@(idc03) @(dgab00) + @(idc02) @(dgab01) + @(idc01) @(dgab02) + @(idc00) @(dgab03)).
+# term4 := (1/2) (@(idc04) @(dgab00) + @(idc03) @(dgab01) + @(idc02) @(dgab02) + @(idc01) @(dgab03) + @(idc00) @(dgab04)).
+# term5 := (1/2) (@(idc05) @(dgab00) + @(idc04) @(dgab01) + @(idc03) @(dgab02) + @(idc02) @(dgab03) + @(idc01) @(dgab04) + @(idc00) @(dgab05)).
+
+# simplidied version of the above after noting dgab00 = dgab01 = 0
+
+term0 := 0.
+term1 := 0.
+term2 := (1/2) (@(idc00) @(dgab02)).
+term3 := (1/2) (@(idc01) @(dgab02) + @(idc00) @(dgab03)).
+term4 := (1/2) (@(idc02) @(dgab02) + @(idc01) @(dgab03) + @(idc00) @(dgab04)).
+term5 := (1/2) (@(idc03) @(dgab02) + @(idc02) @(dgab03) + @(idc01) @(dgab04) + @(idc00) @(dgab05)).
+
+def tidy_terms (obj):
+    substitute     (obj,$x^{a}->AA^{a}$,repeat=True)
+    distribute     (obj)
+    sort_product   (obj)
+    rename_dummies (obj)
+    canonicalise   (obj)
+    substitute     (obj,$AA^{a}->x^{a}$,repeat=True)
+    factor_out     (obj,$x^{a?}$)
+
+    return obj
+
+term0 = tidy_terms (term0)
+term1 = tidy_terms (term1)
+term2 = tidy_terms (term2)
+term3 = tidy_terms (term3)
+term4 = tidy_terms (term4)
+term5 = tidy_terms (term5)
+
+Gamma := @(term0) + @(term1) + @(term2) + @(term3) + @(term4) + @(term5).
+
+
+cdblib.create ('connection.json')
+
+cdblib.put ('Gamma',Gamma,'connection.json')
+
+cdblib.put ('GammaRterm0',term0,'connection.json')
+cdblib.put ('GammaRterm1',term1,'connection.json')
+cdblib.put ('GammaRterm2',term2,'connection.json')
+cdblib.put ('GammaRterm3',term3,'connection.json')
+cdblib.put ('GammaRterm4',term4,'connection.json')
+cdblib.put ('GammaRterm5',term5,'connection.json')
+
+checkpoint.append (term0)
+checkpoint.append (term1)
+checkpoint.append (term2)
+checkpoint.append (term3)
+checkpoint.append (term4)
+checkpoint.append (term5)
+
+
+# note: keeping numbering as is (out of order) to ensure R appears before \nabla R etc.
+def product_sort (obj):
+    substitute (obj,$ A^{a}                            -> A001^{a}               $)
+    substitute (obj,$ x^{a}                            -> A002^{a}               $)
+    substitute (obj,$ g^{a b}                          -> A003^{a b}             $)
+    substitute (obj,$ \nabla_{e f g h}{R_{a b c d}}    -> A008_{a b c d e f g h} $)
+    substitute (obj,$ \nabla_{e f g}{R_{a b c d}}      -> A007_{a b c d e f g}   $)
+    substitute (obj,$ \nabla_{e f}{R_{a b c d}}        -> A006_{a b c d e f}     $)
+    substitute (obj,$ \nabla_{e}{R_{a b c d}}          -> A005_{a b c d e}       $)
+    substitute (obj,$ R_{a b c d}                      -> A004_{a b c d}         $)
+    sort_product   (obj)
+    rename_dummies (obj)
+    substitute (obj,$ A001^{a}                  -> A^{a}                         $)
+    substitute (obj,$ A002^{a}                  -> x^{a}                         $)
+    substitute (obj,$ A003^{a b}                -> g^{a b}                       $)
+    substitute (obj,$ A008_{a b c d e f g h}    -> \nabla_{e f g h}{R_{a b c d}} $)
+    substitute (obj,$ A007_{a b c d e f g}      -> \nabla_{e f g}{R_{a b c d}}   $)
+    substitute (obj,$ A006_{a b c d e f}        -> \nabla_{e f}{R_{a b c d}}     $)
+    substitute (obj,$ A005_{a b c d e}          -> \nabla_{e}{R_{a b c d}}       $)
+    substitute (obj,$ A004_{a b c d}            -> R_{a b c d}                   $)
+
+    return obj
+
+def reformat (obj,scale):
+   foo  = Ex(str(scale))
+   bah := @(foo) @(obj).
+   distribute     (bah)
+   bah = product_sort (bah)
+   rename_dummies (bah)
+   canonicalise   (bah)
+   factor_out     (bah,$A^{a?},x^{b?}$)
+   ans := @(bah) / @(foo).
+   return ans
+
+def rescale (obj,scale):
+   foo  = Ex(str(scale))
+   bah := @(foo) @(obj).
+   distribute  (bah)
+   factor_out  (bah,$A^{a?},x^{b?}$)
+   return bah
+
+Rterm2 := @(term2) A^{a} A^{b}.
+Rterm3 := @(term3) A^{a} A^{b}.
+Rterm4 := @(term4) A^{a} A^{b}.
+Rterm5 := @(term5) A^{a} A^{b}.
+
+Rterm2 = reformat (Rterm2,  3)
+Rterm3 = reformat (Rterm3, 12)
+Rterm4 = reformat (Rterm4,360)
+Rterm5 = reformat (Rterm5,180)
+
+Gamma  := @(Rterm2) + @(Rterm3) + @(Rterm4) + @(Rterm5).
+Scaled := 360 @(Gamma).
+
+scaled2 = rescale (Rterm2,   3)
+scaled3 = rescale (Rterm3,  12)
+scaled4 = rescale (Rterm4, 360)
+scaled5 = rescale (Rterm5, 180)
+
+for i in range( len(checkpoint) ):
+   cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+

@@ -1,0 +1,479 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+% =================================================================================================
+% create checkpoint file
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   import cdblib
+   checkpoint_file = 'tests/semantic/output/dGamma.json'
+   cdblib.create (checkpoint_file)
+   checkpoint = []
+\end{cadabra}
+\egroup
+
+% =================================================================================================
+\section*{Symmetrized partial derivatives of the connection}
+
+Here we calculate the recursive sequences
+\begin{align*}
+(n+3)\Gamma^a{}_{d(b,c\uen)}
+   &= (n+1)\left(R^a{}_{(bc\Dot d,\uen)}
+    - \left(\Gamma^a{}_{f(c}\Gamma^f{}_{b{\Dot d}}\right){\vphantom{\Gamma}}_{,\uen)}\right)
+\end{align*}
+for $n=1,2,3,\cdots$. Note that the (extended) index $\uen$ contains $n$ normal indices.
+
+The result will be expressions for the $\Gamma^a{}_{d(b,c\uen)}$ in terms of the Riemann tensor and its
+partial derivatives.
+
+% =================================================================================================
+\section*{Stage 1: Compute symmetrised derivatives}
+
+In the first stage we simply apply the above recursive equation using a simple trick to impose
+the symmetries. Start with the original equation and dot out the symmetric indices with $A^a$ then
+factor out the partial derivatives. This leads to
+\begin{equation}
+(n+3)\Gamma^a{}_{db,c\uen} A^b A^c A^{\cdot\uen}
+    = (n+1)\left(R^a{}_{bcd}
+    - \Gamma^a{}_{fc}\Gamma^f{}_{bd}\right)_{,\uen} A^b A^c A^{\cdot\uen}
+\end{equation}
+Thus we also have (for the next iteration)
+\begin{equation}
+(n+4)\Gamma^a{}_{db,c\uenp} A^b A^c A^{\cdot\uenp}
+    = (n+2)\left(R^a{}_{bcd}
+    - \Gamma^a{}_{fc}\Gamma^f{}_{bd}\right)_{,\uenp} A^b A^c A^{\cdot\uenp}
+\end{equation}
+The $A^a$ can be freely chosen so choose $A^a$ to be a constant (i.e., zero derivative). Now
+define $P_n$ by
+\begin{equation}
+   P_n = \Gamma^a{}_{db,c\uen} A^b A^c A^{\cdot\uen}
+\end{equation}
+then the above pair of equations can be combinded to give
+\begin{equation}
+   P_{n+1} = \frac{(n+2)(n+3)}{(n+4)(n+1)} A^f\partial_f\left(P_n\right)
+\end{equation}
+This is a very easy equation to compute as it just requires successive rounds of differentiation.
+
+The first term in the sequence is $P_0$ given by
+\begin{equation}
+   P_0 = \cdb{dGamma01.101}
+\end{equation}
+
+The first few results are
+
+\begin{dgroup*}
+   \begin{dmath*} P_0 \hiderel{=} A^{b} A^{c} \Gamma^a{}_{d(b,c)} = \cdb{dGamma01.101} \end{dmath*}
+   \begin{dmath*} P_1 \hiderel{=} A^{b} A^{c} A^{e} \Gamma^a{}_{d(b,ce)} = \cdb{dGamma02.105} \end{dmath*}
+   \begin{dmath*} P_2 \hiderel{=} A^{b} A^{c} A^{e} A^{f} \Gamma^a{}_{d(b,cef)} = \cdb{dGamma03.105} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+\section*{Stage 2: Impose Riemann normal coordinates}
+
+Here we impose the RNC conition by setting the $\Gamma^{a}{}_{bc}$ to zero (but not their derivatives).
+
+\begin{dgroup*}
+   \begin{dmath*} A^{b} A^{c} \Gamma^a{}_{d(b,c)} = \cdb{dGamma01.201} \end{dmath*}
+   \begin{dmath*} A^{b} A^{c} A^{e} \Gamma^a{}_{d(b,ce)} = \cdb{dGamma02.202} \end{dmath*}
+   \begin{dmath*} A^{b} A^{c} A^{e} A^{f} \Gamma^a{}_{d(b,cef)} = \cdb{dGamma03.203} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+\section*{Stage 3: Replace partial derivatives $\Gamma$ with partial derivatives $R$}
+
+The key point to note is that the partial derivatives of $\Gamma$ on the right hand side are all
+symmetrized in exactly the same manner as the partial derivatives on the left hand side. Thus
+results from the lower order equations can be fed into the later equations to completely eliminate
+the partial derivatives of $\Gamma$.
+
+\begin{dgroup*}
+   \begin{dmath*} A^{b} A^{c} \Gamma^a{}_{d(b,c)} = \cdb{dGamma01.201} \end{dmath*}
+   \begin{dmath*} A^{b} A^{c} A^{e} \Gamma^a{}_{d(b,ce)} = \cdb{dGamma02.202} \end{dmath*}
+   \begin{dmath*} A^{b} A^{c} A^{e} A^{f} \Gamma^a{}_{d(b,cef)} = \cdb{dGamma03.402} \end{dmath*}
+\end{dgroup*}
+
+% =================================================================================================
+\section*{Stage 4: Reformatting}
+
+This is just simple reformatting.
+
+\begin{dgroup*}
+   \begin{dmath*}   3 A^b A^c\Gamma^a{}_{d(b,c)} = \cdb{scaled1.002} \end{dmath*}
+   \begin{dmath*}   6 A^b A^c A^e \Gamma^a{}_{d(b,ce)} = \cdb{scaled2.002} \end{dmath*}
+   \begin{dmath*}  15 A^b A^c A^e A^f \Gamma^a{}_{d(b,cef)} = \cdb{scaled3.002} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Stage 1: Compute symmetrised derivatives}
+
+\begin{cadabra}
+   {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+   \nabla{#}::Derivative.
+   \partial{#}::PartialDerivative.
+
+   g_{a b}::Metric.
+   g^{a b}::InverseMetric.
+   g_{a}^{b}::KroneckerDelta.
+   g^{a}_{b}::KroneckerDelta.
+
+   R_{a b c d}::RiemannTensor.
+   R^{a}_{b c d}::RiemannTensor.
+   R_{a b c}^{d}::RiemannTensor.
+
+   \Gamma^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+
+   g_{a b}::Depends(\partial{#}).
+   R_{a b c d}::Depends(\partial{#}).
+   R^{a}_{b c d}::Depends(\partial{#}).
+   \Gamma^{a}_{b c}::Depends(\partial{#}).
+
+   # symmetrized partial derivatives of \Gamma
+
+   dGamma01:= (1/3) A^{b} A^{c} ( R^{a}_{b c d} - \Gamma^{a}_{c e}\Gamma^{e}_{b d} ).
+                                                        # cdb (dGamma01.101,dGamma01)
+
+   dGamma02:= (6/4) A^{a}\partial_{a}{ @(dGamma01) }.   # cdb (dGamma02.101,dGamma02)
+   distribute   (dGamma02)                              # cdb (dGamma02.102,dGamma02)
+   product_rule (dGamma02)                              # cdb (dGamma02.103,dGamma02)
+   unwrap       (dGamma02)                              # cdb (dGamma02.104,dGamma02)
+   distribute   (dGamma02)                              # cdb (dGamma02.105,dGamma02)
+
+   dGamma03:= (12/10) A^{a}\partial_{a}{ @(dGamma02) }. # cdb (dGamma03.101,dGamma03)
+   distribute   (dGamma03)                              # cdb (dGamma03.102,dGamma03)
+   product_rule (dGamma03)                              # cdb (dGamma03.103,dGamma03)
+   unwrap       (dGamma03)                              # cdb (dGamma03.104,dGamma03)
+   distribute   (dGamma03)                              # cdb (dGamma03.105,dGamma03)
+
+   dGamma04:= (20/18) A^{a}\partial_{a}{ @(dGamma03) }. # cdb (dGamma04.101,dGamma04)
+   distribute   (dGamma04)                              # cdb (dGamma04.102,dGamma04)
+   product_rule (dGamma04)                              # cdb (dGamma04.103,dGamma04)
+   unwrap       (dGamma04)                              # cdb (dGamma04.104,dGamma04)
+   distribute   (dGamma04)                              # cdb (dGamma04.105,dGamma04)
+
+   dGamma05:= (30/28) A^{a}\partial_{a}{ @(dGamma04) }. # cdb (dGamma05.101,dGamma05)
+   distribute   (dGamma05)                              # cdb (dGamma05.102,dGamma05)
+   product_rule (dGamma05)                              # cdb (dGamma05.103,dGamma05)
+   unwrap       (dGamma05)                              # cdb (dGamma05.104,dGamma05)
+   distribute   (dGamma05)                              # cdb (dGamma05.105,dGamma05)
+
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{dGamma01.101} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{dGamma02.101} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma02.102} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma02.103} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma02.104} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma02.105} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{dGamma03.101} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma03.102} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma03.103} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma03.104} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma03.105} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{dGamma04.101} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma04.102} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma04.103} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma04.104} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma04.105} \end{dmath*}
+\end{dgroup*}
+
+% too long for pdflatex
+
+% \begin{dgroup*}
+%    \begin{dmath*} \cdb*{dGamma05.101} \end{dmath*}
+%    \begin{dmath*} \cdb*{dGamma05.102} \end{dmath*}
+%    \begin{dmath*} \cdb*{dGamma05.103} \end{dmath*}
+%    \begin{dmath*} \cdb*{dGamma05.104} \end{dmath*}
+%    \begin{dmath*} \cdb*{dGamma05.105} \end{dmath*}
+% \end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Stage 2: Impose Riemann normal coordinates}
+
+\begin{cadabra}
+   def impose_rnc (obj):
+       # hide the derivatives of Gamma
+       substitute (obj,$\partial_{d}{\Gamma^{a}_{b c}} -> zzz_{d}^{a}_{b c}$,repeat=True)
+       substitute (obj,$\partial_{d e}{\Gamma^{a}_{b c}} -> zzz_{d e}^{a}_{b c}$,repeat=True)
+       substitute (obj,$\partial_{d e f}{\Gamma^{a}_{b c}} -> zzz_{d e f}^{a}_{b c}$,repeat=True)
+       substitute (obj,$\partial_{d e f g}{\Gamma^{a}_{b c}} -> zzz_{d e f g}^{a}_{b c}$,repeat=True)
+       substitute (obj,$\partial_{d e f g h}{\Gamma^{a}_{b c}} -> zzz_{d e f g h}^{a}_{b c}$,repeat=True)
+       # set Gamma to zero
+       substitute (obj,$\Gamma^{a}_{b c} -> 0$,repeat=True)
+       # recover the derivatives Gamma
+       substitute (obj,$zzz_{d}^{a}_{b c} -> \partial_{d}{\Gamma^{a}_{b c}}$,repeat=True)
+       substitute (obj,$zzz_{d e}^{a}_{b c} -> \partial_{d e}{\Gamma^{a}_{b c}}$,repeat=True)
+       substitute (obj,$zzz_{d e f}^{a}_{b c} -> \partial_{d e f}{\Gamma^{a}_{b c}}$,repeat=True)
+       substitute (obj,$zzz_{d e f g}^{a}_{b c} -> \partial_{d e f g}{\Gamma^{a}_{b c}}$,repeat=True)
+       substitute (obj,$zzz_{d e f g h}^{a}_{b c} -> \partial_{d e f g h}{\Gamma^{a}_{b c}}$,repeat=True)
+       return obj
+
+   # switch to RNC
+
+   dGamma01 = impose_rnc (dGamma01)   # cdb (dGamma01.201,dGamma01)
+   dGamma02 = impose_rnc (dGamma02)   # cdb (dGamma02.202,dGamma02)
+   dGamma03 = impose_rnc (dGamma03)   # cdb (dGamma03.203,dGamma03)
+   dGamma04 = impose_rnc (dGamma04)   # cdb (dGamma04.204,dGamma04)
+   dGamma05 = impose_rnc (dGamma05)   # cdb (dGamma05.205,dGamma05)
+
+\end{cadabra}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{dGamma01.201} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma02.202} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma03.203} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma04.204} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma05.205} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Stage 3: Replace partial derivatives $\Gamma$ with partial derivatives $R$}
+
+\begin{cadabra}
+   # use lower equations to eliminate partial derivs of Gamma from rhs
+
+   # this produces experssions for the partial derivs of the Gamma's in terms of the Rabcd and its partial derivs
+
+   substitute (dGamma03,$A^{c}A^{b}\partial_{c}{\Gamma^{a}_{b d}} -> @(dGamma01)$,repeat=True)                 # cdb(dGamma03.301,dGamma03)
+   substitute (dGamma03,$A^{c}A^{b}\partial_{c}{\Gamma^{a}_{d b}} -> @(dGamma01)$,repeat=True)                 # cdb(dGamma03.302,dGamma03)
+   distribute (dGamma03)                                                                                       # cdb(dGamma03.303,dGamma03)
+
+   substitute (dGamma04,$A^{c}A^{b}A^{e}\partial_{c e}{\Gamma^{a}_{d b}} -> @(dGamma02)$,repeat=True)          # cdb(dGamma04.301,dGamma04)
+   substitute (dGamma04,$A^{c}A^{b}A^{e}\partial_{c e}{\Gamma^{a}_{b d}} -> @(dGamma02)$,repeat=True)          # cdb(dGamma04.302,dGamma04)
+   substitute (dGamma04,$A^{c}A^{b}\partial_{c}{\Gamma^{a}_{b d}} -> @(dGamma01)$,repeat=True)                 # cdb(dGamma04.303,dGamma04)
+   substitute (dGamma04,$A^{c}A^{b}\partial_{c}{\Gamma^{a}_{d b}} -> @(dGamma01)$,repeat=True)                 # cdb(dGamma04.304,dGamma04)
+   distribute (dGamma04)                                                                                       # cdb(dGamma04.305,dGamma04)
+
+   substitute (dGamma05,$A^{c}A^{b}A^{e}A^{f}\partial_{c e f}{\Gamma^{a}_{d b}} -> @(dGamma03)$,repeat=True)   # cdb(dGamma05.301,dGamma05)
+   substitute (dGamma05,$A^{c}A^{b}A^{e}A^{f}\partial_{c e f}{\Gamma^{a}_{b d}} -> @(dGamma03)$,repeat=True)   # cdb(dGamma05.302,dGamma05)
+   substitute (dGamma05,$A^{c}A^{b}A^{e}\partial_{c e}{\Gamma^{a}_{d b}} -> @(dGamma02)$,repeat=True)          # cdb(dGamma05.303,dGamma05)
+   substitute (dGamma05,$A^{c}A^{b}A^{e}\partial_{c e}{\Gamma^{a}_{b d}} -> @(dGamma02)$,repeat=True)          # cdb(dGamma05.304,dGamma05)
+   substitute (dGamma05,$A^{c}A^{b}\partial_{c}{\Gamma^{a}_{b d}} -> @(dGamma01)$,repeat=True)                 # cdb(dGamma05.305,dGamma05)
+   substitute (dGamma05,$A^{c}A^{b}\partial_{c}{\Gamma^{a}_{d b}} -> @(dGamma01)$,repeat=True)                 # cdb(dGamma05.306,dGamma05)
+   distribute (dGamma05)                                                                                       # cdb(dGamma05.307,dGamma05)
+
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{dGamma03.301} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma03.302} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma03.303} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{dGamma04.301} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma04.302} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma04.303} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma04.304} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma04.305} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{dGamma05.301} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma05.302} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma05.303} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma05.304} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma05.305} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma05.306} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma05.307} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{cadabra}
+   # note:
+   # canonicalise must not be used here because it may make changes like
+   #    R^{a}_{b c d} -> - R_{b}^{a}_{c d}
+   # these changes can not be applied inside a \partial, must defer use
+   # of canocialise until we have \nabla acting on curvatures
+
+   sort_product   (dGamma03) # cdb(dGamma03.401,dGamma03)
+   rename_dummies (dGamma03) # cdb(dGamma03.402,dGamma03)
+   # canonicalise   (dGamma03) # cdb(dGamma03.403,dGamma03)
+
+   sort_product   (dGamma04) # cdb(dGamma04.401,dGamma04)
+   rename_dummies (dGamma04) # cdb(dGamma04.402,dGamma04)
+   # canonicalise   (dGamma04) # cdb(dGamma04.403,dGamma04)
+
+   sort_product   (dGamma05) # cdb(dGamma05.401,dGamma05)
+   rename_dummies (dGamma05) # cdb(dGamma05.402,dGamma05)
+   # canonicalise   (dGamma05) # cdb(dGamma05.403,dGamma05)
+
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{dGamma03.401} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma03.402} \end{dmath*}
+   % \begin{dmath*} \cdb*{dGamma03.403} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{dGamma04.401} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma04.402} \end{dmath*}
+   % \begin{dmath*} \cdb*{dGamma04.403} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb*{dGamma05.401} \end{dmath*}
+   \begin{dmath*} \cdb*{dGamma05.402} \end{dmath*}
+   % \begin{dmath*} \cdb*{dGamma05.403} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{cadabra}
+   import cdblib
+
+   cdblib.create ('dGamma.json')
+
+   cdblib.put ('dGamma01',dGamma01,'dGamma.json')
+   cdblib.put ('dGamma02',dGamma02,'dGamma.json')
+   cdblib.put ('dGamma03',dGamma03,'dGamma.json')
+   cdblib.put ('dGamma04',dGamma04,'dGamma.json')
+   cdblib.put ('dGamma05',dGamma05,'dGamma.json')
+
+\end{cadabra}
+
+\clearpage
+
+% =================================================================================================
+\section*{Stage 4: Reformatting}
+
+\begin{cadabra}
+   # note: keeping numbering as is (out of order) to ensure R appears before \nabla R etc.
+   def product_sort (obj):
+       substitute (obj,$ A^{a}                              -> A001^{a}                 $)
+       substitute (obj,$ x^{a}                              -> A002^{a}                 $)
+       substitute (obj,$ g^{a b}                            -> A003^{a b}               $)
+       substitute (obj,$ \partial_{e f g h}{R^{a}_{b c d}}  -> A008^{a}_{b c d e f g h} $)
+       substitute (obj,$ \partial_{e f g}{R^{a}_{b c d}}    -> A007^{a}_{b c d e f g}   $)
+       substitute (obj,$ \partial_{e f}{R^{a}_{b c d}}      -> A006^{a}_{b c d e f}     $)
+       substitute (obj,$ \partial_{e}{R^{a}_{b c d}}        -> A005^{a}_{b c d e}       $)
+       substitute (obj,$ R^{a}_{b c d}                      -> A004^{a}_{b c d}         $)
+       sort_product   (obj)
+       rename_dummies (obj)
+       substitute (obj,$ A001^{a}                  -> A^{a}                             $)
+       substitute (obj,$ A002^{a}                  -> x^{a}                             $)
+       substitute (obj,$ A003^{a b}                -> g^{a b}                           $)
+       substitute (obj,$ A004^{a}_{b c d}          -> R^{a}_{b c d}                     $)
+       substitute (obj,$ A005^{a}_{b c d e}        -> \partial_{e}{R^{a}_{b c d}}       $)
+       substitute (obj,$ A006^{a}_{b c d e f}      -> \partial_{e f}{R^{a}_{b c d}}     $)
+       substitute (obj,$ A007^{a}_{b c d e f g}    -> \partial_{e f g}{R^{a}_{b c d}}   $)
+       substitute (obj,$ A008^{a}_{b c d e f g h}  -> \partial_{e f g h}{R^{a}_{b c d}} $)
+
+       return obj
+
+   def reformat (obj,scale):
+       bah  = Ex(str(scale))
+       tmp := @(bah) @(obj).
+       distribute     (tmp)
+       tmp = product_sort (tmp)
+       rename_dummies (tmp)
+       factor_out     (tmp,$A^{a?}$)
+       return tmp
+
+   def get_term (obj,n):
+
+       A^{a}::Weight(label=numA).
+
+       foo := @(obj).
+       bah  = Ex("numA = " + str(n))
+       distribute  (foo)
+       keep_weight (foo, bah)
+
+       return foo
+
+   Gterm01 := @(dGamma01).
+   Gterm02 := @(dGamma02).
+   Gterm03 := @(dGamma03).
+   Gterm04 := @(dGamma04).
+   Gterm05 := @(dGamma05).
+
+   scaled1 = reformat (Gterm01,   3)   # cdb (scaled1.002,scaled1)
+   scaled2 = reformat (Gterm02,   6)   # cdb (scaled2.002,scaled2)
+   scaled3 = reformat (Gterm03,  15)   # cdb (scaled3.002,scaled3)
+   scaled4 = reformat (Gterm04,   9)   # cdb (scaled4.002,scaled4)
+   scaled5 = reformat (Gterm05, 252)   # cdb (scaled5.002,scaled5)
+
+\end{cadabra}
+
+\clearpage
+
+% =================================================================================================
+\section*{Symmetrised partial derivatives of the connection}
+
+\begin{dgroup*}
+   \begin{dmath*}   3 A^b A^c\Gamma^a{}_{d(b,c)} = \cdb{scaled1.002} \end{dmath*}
+   \begin{dmath*}   6 A^b A^c A^e \Gamma^a{}_{d(b,ce)} = \cdb{scaled2.002} \end{dmath*}
+   \begin{dmath*}  15 A^b A^c A^e A^f \Gamma^a{}_{d(b,cef)} = \cdb{scaled3.002} \end{dmath*}
+   \begin{dmath*}   9 A^b A^c A^e A^f A^g \Gamma^a{}_{d(b,cefg)} = \cdb{scaled4.002} \end{dmath*}
+   \begin{dmath*} 252 A^b A^c A^e A^f A^g A^h\Gamma^a{}_{d(b,cefgh)} = \cdb{scaled5.002} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+% export selected objects, these will later be imported into a library
+% these are the objects that will appear in the paper
+
+\begin{cadabra}
+   substitute (scaled1,$A^{a}->1$)
+   substitute (scaled2,$A^{a}->1$)
+   substitute (scaled3,$A^{a}->1$)
+   substitute (scaled4,$A^{a}->1$)
+   substitute (scaled5,$A^{a}->1$)
+
+   cdblib.create ('dGamma.export')
+
+   # 6th order dGamma, scaled
+   cdblib.put ('dGamma61scaled',scaled1,'dGamma.export')
+   cdblib.put ('dGamma62scaled',scaled2,'dGamma.export')
+   cdblib.put ('dGamma63scaled',scaled3,'dGamma.export')
+   cdblib.put ('dGamma64scaled',scaled4,'dGamma.export')
+   cdblib.put ('dGamma65scaled',scaled5,'dGamma.export')
+
+   checkpoint.append (scaled1)
+   checkpoint.append (scaled2)
+   checkpoint.append (scaled3)
+   checkpoint.append (scaled4)
+   checkpoint.append (scaled5)
+
+\end{cadabra}
+
+% =================================================================================================
+% export checkpoints in json format
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   for i in range( len(checkpoint) ):
+      cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+\end{cadabra}
+\egroup
+
+\end{document}

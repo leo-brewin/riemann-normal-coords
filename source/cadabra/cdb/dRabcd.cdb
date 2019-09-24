@@ -1,0 +1,456 @@
+import cdblib
+checkpoint_file = 'tests/semantic/output/dRabcd.json'
+cdblib.create (checkpoint_file)
+checkpoint = []
+
+import time
+
+{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+\nabla{#}::Derivative.
+\partial{#}::PartialDerivative.
+
+g_{a b}::Metric.
+g^{a b}::InverseMetric.
+g_{a}^{b}::KroneckerDelta.
+g^{a}_{b}::KroneckerDelta.
+
+R_{a b c d}::RiemannTensor.
+R^{a}_{b c d}::RiemannTensor.
+
+\Gamma^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+
+g_{a b}::Depends(\partial{#}).
+R_{a b c d}::Depends(\partial{#}).
+R^{a}_{b c d}::Depends(\partial{#}).
+\Gamma^{a}_{b c}::Depends(\partial{#}).
+
+B^{a}_{b::Depends(\nabla{#}).
+R_{a b c d}::Depends(\nabla{#}).
+R^{a}_{b c d}::Depends(\nabla{#}).
+
+
+def flatten_Rabcd (obj):
+    substitute (obj,$R^{a}_{b c d}   -> g^{a e} R_{e b c d}$)
+    substitute (obj,$R_{a}^{b}_{c d} -> g^{b e} R_{a e c d}$)
+    substitute (obj,$R_{a b}^{c}_{b} -> g^{c e} R_{a b e d}$)
+    substitute (obj,$R_{a b c}^{d}   -> g^{d e} R_{a b c e}$)
+    unwrap     (obj)
+    sort_product   (obj)
+    rename_dummies (obj)
+    return obj
+
+# compute the symmetric covariant derivatives of R^{a}_{bcd} B^{d}_{a}
+
+beg_stage_1 = time.time()
+
+dRabcd00:=R^{a}_{b c d} B^{d}_{a} A^{b} A^{c}.
+
+dRabcd01:=A^{a}\nabla_{a}{ @(dRabcd00) }.
+distribute     (dRabcd01)
+product_rule   (dRabcd01)
+distribute     (dRabcd01)
+substitute     (dRabcd01,$\nabla_{a}{A^{b}} -> 0$)
+substitute     (dRabcd01,$\nabla_{a}{g^{b c}} -> 0$)
+
+sort_product   (dRabcd01)
+rename_dummies (dRabcd01)
+canonicalise   (dRabcd01)
+dRabcd01 = flatten_Rabcd (dRabcd01)
+
+dRabcd02:=A^{a}\nabla_{a}{ @(dRabcd01) }.
+distribute     (dRabcd02)
+product_rule   (dRabcd02)
+distribute     (dRabcd02)
+substitute     (dRabcd02,$\nabla_{a}{A^{b}} -> 0$)
+substitute     (dRabcd02,$\nabla_{a}{g^{b c}} -> 0$)
+
+sort_product   (dRabcd02)
+rename_dummies (dRabcd02)
+canonicalise   (dRabcd02)
+dRabcd02 = flatten_Rabcd (dRabcd02)
+
+dRabcd03:=A^{a}\nabla_{a}{ @(dRabcd02) }.
+distribute     (dRabcd03)
+product_rule   (dRabcd03)
+distribute     (dRabcd03)
+substitute     (dRabcd03,$\nabla_{a}{A^{b}} -> 0$)
+substitute     (dRabcd03,$\nabla_{a}{g^{b c}} -> 0$)
+
+sort_product   (dRabcd03)
+rename_dummies (dRabcd03)
+canonicalise   (dRabcd03)
+dRabcd03 = flatten_Rabcd (dRabcd03)
+
+dRabcd04:=A^{a}\nabla_{a}{ @(dRabcd03) }.
+distribute     (dRabcd04)
+product_rule   (dRabcd04)
+distribute     (dRabcd04)
+substitute     (dRabcd04,$\nabla_{a}{A^{b}} -> 0$)
+substitute     (dRabcd04,$\nabla_{a}{g^{b c}} -> 0$)
+
+sort_product   (dRabcd04)
+rename_dummies (dRabcd04)
+canonicalise   (dRabcd04)
+dRabcd04 = flatten_Rabcd (dRabcd04)
+
+dRabcd05:=A^{a}\nabla_{a}{ @(dRabcd04) }.
+distribute     (dRabcd05)
+product_rule   (dRabcd05)
+distribute     (dRabcd05)
+substitute     (dRabcd05,$\nabla_{a}{A^{b}} -> 0$)
+substitute     (dRabcd05,$\nabla_{a}{g^{b c}} -> 0$)
+
+sort_product   (dRabcd05)
+rename_dummies (dRabcd05)
+canonicalise   (dRabcd05)
+dRabcd05 = flatten_Rabcd (dRabcd05)
+
+def combine_nabla (obj):
+    substitute (obj,$\nabla_{p}{\nabla_{q}{\nabla_{r}{\nabla_{s}{\nabla_{t}{A??}}}}}->\nabla_{p q r s t}{A??}$,repeat=True)
+    substitute (obj,$\nabla_{p}{\nabla_{q}{\nabla_{r}{\nabla_{s}{A??}}}}->\nabla_{p q r s}{A??}$,repeat=True)
+    substitute (obj,$\nabla_{p}{\nabla_{q}{\nabla_{r}{A??}}}->\nabla_{p q r}{A??}$,repeat=True)
+    substitute (obj,$\nabla_{p}{\nabla_{q}{A??}}->\nabla_{p q}{A??}$,repeat=True)
+    return obj
+
+dRabcd01 = combine_nabla (dRabcd01)
+dRabcd02 = combine_nabla (dRabcd02)
+dRabcd03 = combine_nabla (dRabcd03)
+dRabcd04 = combine_nabla (dRabcd04)
+dRabcd05 = combine_nabla (dRabcd05)
+
+end_stage_1 = time.time()
+
+# compute the covariant derivatives of B^{a}_{b}, note B^{a}_{b,c} is zero, by choice
+# this method of computing covariant derivatives does not use auxillary fields
+
+beg_stage_2 = time.time()
+
+dBab00:=B^{a}_{b}.
+
+dBab01:=A^{c}\partial_{c}{ @(dBab00) } + \Gamma^{a}_{p q} W^{p}_{b} A^{q}
+                                       - \Gamma^{p}_{b q} W^{a}_{p} A^{q}.
+distribute   (dBab01)
+product_rule (dBab01)
+distribute   (dBab01)
+substitute   (dBab01,$\partial_{a}{A^{b}} -> 0$)
+substitute   (dBab01,$\partial_{a}{B^{b}_{c}} -> 0$)
+substitute   (dBab01,$W^{a}_{b} -> @(dBab00)$)
+distribute   (dBab01)
+canonicalise (dBab01)
+
+dBab02:=A^{c}\partial_{c}{ @(dBab01) } + \Gamma^{a}_{p q} W^{p}_{b} A^{q}
+                                       - \Gamma^{p}_{b q} W^{a}_{p} A^{q}.
+distribute   (dBab02)
+product_rule (dBab02)
+distribute   (dBab02)
+substitute   (dBab02,$\partial_{a}{A^{b}} -> 0$)
+substitute   (dBab02,$\partial_{a}{B^{b}_{c}} -> 0$)
+substitute   (dBab02,$W^{a}_{b} -> @(dBab01)$)
+distribute   (dBab02)
+canonicalise (dBab02)
+
+dBab03:=A^{c}\partial_{c}{ @(dBab02) } + \Gamma^{a}_{p q} W^{p}_{b} A^{q}
+                                       - \Gamma^{p}_{b q} W^{a}_{p} A^{q}.
+distribute   (dBab03)
+product_rule (dBab03)
+distribute   (dBab03)
+substitute   (dBab03,$\partial_{a}{A^{b}} -> 0$)
+substitute   (dBab03,$\partial_{a}{B^{b}_{c}} -> 0$)
+substitute   (dBab03,$W^{a}_{b} -> @(dBab02)$)
+distribute   (dBab03)
+canonicalise (dBab03)
+
+dBab04:=A^{c}\partial_{c}{ @(dBab03) } + \Gamma^{a}_{p q} W^{p}_{b} A^{q}
+                                       - \Gamma^{p}_{b q} W^{a}_{p} A^{q}.
+distribute   (dBab04)
+product_rule (dBab04)
+distribute   (dBab04)
+substitute   (dBab04,$\partial_{a}{A^{b}} -> 0$)
+substitute   (dBab04,$\partial_{a}{B^{b}_{c}} -> 0$)
+substitute   (dBab04,$W^{a}_{b} -> @(dBab03)$)
+distribute   (dBab04)
+canonicalise (dBab04)
+
+dBab05:=A^{c}\partial_{c}{ @(dBab04) } + \Gamma^{a}_{p q} W^{p}_{b} A^{q}
+                                       - \Gamma^{p}_{b q} W^{a}_{p} A^{q}.
+distribute   (dBab05)
+product_rule (dBab05)
+distribute   (dBab05)
+substitute   (dBab05,$\partial_{a}{A^{b}} -> 0$)
+substitute   (dBab05,$\partial_{a}{B^{b}_{c}} -> 0$)
+substitute   (dBab05,$W^{a}_{b} -> @(dBab04)$)
+distribute   (dBab05)
+canonicalise (dBab05)
+
+end_stage_2 = time.time()
+
+def impose_rnc (obj):
+    # hide the derivatives of Gamma
+    substitute (obj,$\partial_{d}{\Gamma^{a}_{b c}} -> zzz_{d}^{a}_{b c}$,repeat=True)
+    substitute (obj,$\partial_{d e}{\Gamma^{a}_{b c}} -> zzz_{d e}^{a}_{b c}$,repeat=True)
+    substitute (obj,$\partial_{d e f}{\Gamma^{a}_{b c}} -> zzz_{d e f}^{a}_{b c}$,repeat=True)
+    substitute (obj,$\partial_{d e f g}{\Gamma^{a}_{b c}} -> zzz_{d e f g}^{a}_{b c}$,repeat=True)
+    substitute (obj,$\partial_{d e f g h}{\Gamma^{a}_{b c}} -> zzz_{d e f g h}^{a}_{b c}$,repeat=True)
+    # set Gamma to zero
+    substitute (obj,$\Gamma^{a}_{b c} -> 0$,repeat=True)
+    # recover the derivatives Gamma
+    substitute (obj,$zzz_{d}^{a}_{b c} -> \partial_{d}{\Gamma^{a}_{b c}}$,repeat=True)
+    substitute (obj,$zzz_{d e}^{a}_{b c} -> \partial_{d e}{\Gamma^{a}_{b c}}$,repeat=True)
+    substitute (obj,$zzz_{d e f}^{a}_{b c} -> \partial_{d e f}{\Gamma^{a}_{b c}}$,repeat=True)
+    substitute (obj,$zzz_{d e f g}^{a}_{b c} -> \partial_{d e f g}{\Gamma^{a}_{b c}}$,repeat=True)
+    substitute (obj,$zzz_{d e f g h}^{a}_{b c} -> \partial_{d e f g h}{\Gamma^{a}_{b c}}$,repeat=True)
+    return obj
+
+# switch to RNC
+
+beg_stage_3 = time.time()
+
+dBab01 = impose_rnc (dBab01)
+dBab02 = impose_rnc (dBab02)
+dBab03 = impose_rnc (dBab03)
+dBab04 = impose_rnc (dBab04)
+dBab05 = impose_rnc (dBab05)
+
+end_stage_3 = time.time()
+
+# substitute covariant derivs of B^{a}_{b} into covariant derivs of R^{a}_{bcd}B^{d}_{a}
+# this produces expressions for the partial derivs of Rabcd its covariant derivs and partial derivs of Gamma
+# the partial derivs of Gamma will be eliminted later by using results imported from dGamma.json
+
+beg_stage_4 = time.time()
+
+substitute (dRabcd01,$A^{c}\nabla_{c}{B^{a}_{b}} -> @(dBab01)$,repeat=True);   distribute (dRabcd01)
+substitute (dRabcd02,$A^{c}\nabla_{c}{B^{a}_{b}} -> @(dBab01)$,repeat=True);   distribute (dRabcd02)
+substitute (dRabcd03,$A^{c}\nabla_{c}{B^{a}_{b}} -> @(dBab01)$,repeat=True);   distribute (dRabcd03)
+substitute (dRabcd04,$A^{c}\nabla_{c}{B^{a}_{b}} -> @(dBab01)$,repeat=True);   distribute (dRabcd04)
+substitute (dRabcd05,$A^{c}\nabla_{c}{B^{a}_{b}} -> @(dBab01)$,repeat=True);   distribute (dRabcd05)
+
+substitute (dRabcd02,$A^{c}A^{d}\nabla_{c d}{B^{a}_{b}} -> @(dBab02)$,repeat=True);   distribute (dRabcd02)
+substitute (dRabcd03,$A^{c}A^{d}\nabla_{c d}{B^{a}_{b}} -> @(dBab02)$,repeat=True);   distribute (dRabcd03)
+substitute (dRabcd04,$A^{c}A^{d}\nabla_{c d}{B^{a}_{b}} -> @(dBab02)$,repeat=True);   distribute (dRabcd04)
+substitute (dRabcd05,$A^{c}A^{d}\nabla_{c d}{B^{a}_{b}} -> @(dBab02)$,repeat=True);   distribute (dRabcd05)
+
+substitute (dRabcd03,$A^{c}A^{d}A^{e}\nabla_{c d e}{B^{a}_{b}} -> @(dBab03)$,repeat=True);   distribute (dRabcd03)
+substitute (dRabcd04,$A^{c}A^{d}A^{e}\nabla_{c d e}{B^{a}_{b}} -> @(dBab03)$,repeat=True);   distribute (dRabcd04)
+substitute (dRabcd05,$A^{c}A^{d}A^{e}\nabla_{c d e}{B^{a}_{b}} -> @(dBab03)$,repeat=True);   distribute (dRabcd05)
+
+substitute (dRabcd04,$A^{c}A^{d}A^{e}A^{f}\nabla_{c d e f}{B^{a}_{b}} -> @(dBab04)$,repeat=True); distribute (dRabcd04)
+substitute (dRabcd05,$A^{c}A^{d}A^{e}A^{f}\nabla_{c d e f}{B^{a}_{b}} -> @(dBab04)$,repeat=True); distribute (dRabcd05)
+
+substitute (dRabcd05,$A^{c}A^{d}A^{e}A^{f}A^{g}\nabla_{c d e f g}{B^{a}_{b}} -> @(dBab05)$,repeat=True); distribute (dRabcd05)
+
+# no longer need B, so let's get rid of it
+
+# two subtle tricks are used here
+# 1) rename A and B as A002 and A001 before sort_product,
+#    this ensures B will be to left of A after the sort
+# 2) indices on B changed from B^{a}_{b} to B_{b}^{a},
+#    this ensures that after factor_out B will have dummy indices B_{a}^{b}
+
+def remove_Bab (obj):
+    foo := @(obj).
+    substitute     (foo,$A^{a}->A002^{a},B^{a}_{b}->A001_{b}^{a}$)
+    sort_product   (foo)
+    rename_dummies (foo)
+    factor_out     (foo,$A001^{a?}_{b?},A002^{c?}$)
+    substitute     (foo,$A001_{a}^{b}->1,A002^{a}->A^{a}$)
+    return foo
+
+dRabcd01 = remove_Bab (dRabcd01)
+dRabcd02 = remove_Bab (dRabcd02)
+dRabcd03 = remove_Bab (dRabcd03)
+dRabcd04 = remove_Bab (dRabcd04)
+dRabcd05 = remove_Bab (dRabcd05)
+
+end_stage_4 = time.time()
+
+import cdblib
+
+beg_stage_5 = time.time()
+
+dGamma01 = cdblib.get ('dGamma01','dGamma.json')
+dGamma02 = cdblib.get ('dGamma02','dGamma.json')
+dGamma03 = cdblib.get ('dGamma03','dGamma.json')
+dGamma04 = cdblib.get ('dGamma04','dGamma.json')
+dGamma05 = cdblib.get ('dGamma05','dGamma.json')
+
+distribute (dRabcd01)
+distribute (dRabcd02)
+distribute (dRabcd03)
+distribute (dRabcd04)
+distribute (dRabcd05)
+
+# use dGamma to eliminate the partial derivs of Gamma
+# this will introduces some lower order partial dervis of Rabcd on the rhs
+# these extra partial derivs of Rabcd will be eliminated (later) by substiting lower order dRabcd into the higher order dRabcd
+
+substitute (dRabcd02,$A^{c}A^{b}\partial_{c}{\Gamma^{a}_{d b}} -> @(dGamma01)$,repeat=True)
+substitute (dRabcd02,$A^{c}A^{b}\partial_{c}{\Gamma^{a}_{b d}} -> @(dGamma01)$,repeat=True)
+distribute (dRabcd02)
+sort_product   (dRabcd02)
+rename_dummies (dRabcd02)
+
+
+substitute (dRabcd03,$A^{c}A^{b}A^{e}\partial_{c e}{\Gamma^{a}_{d b}} -> @(dGamma02)$,repeat=True)
+substitute (dRabcd03,$A^{c}A^{b}A^{e}\partial_{c e}{\Gamma^{a}_{b d}} -> @(dGamma02)$,repeat=True)
+substitute (dRabcd03,$A^{c}A^{b}\partial_{c}{\Gamma^{a}_{d b}} -> @(dGamma01)$,repeat=True)
+substitute (dRabcd03,$A^{c}A^{b}\partial_{c}{\Gamma^{a}_{b d}} -> @(dGamma01)$,repeat=True)
+distribute (dRabcd03)
+sort_product   (dRabcd03)
+rename_dummies (dRabcd03)
+
+substitute (dRabcd04,$A^{c}A^{b}A^{e}A^{f}\partial_{c e f}{\Gamma^{a}_{d b}} -> @(dGamma03)$,repeat=True)
+substitute (dRabcd04,$A^{c}A^{b}A^{e}A^{f}\partial_{c e f}{\Gamma^{a}_{b d}} -> @(dGamma03)$,repeat=True)
+substitute (dRabcd04,$A^{c}A^{b}A^{e}\partial_{c e}{\Gamma^{a}_{d b}} -> @(dGamma02)$,repeat=True)
+substitute (dRabcd04,$A^{c}A^{b}A^{e}\partial_{c e}{\Gamma^{a}_{b d}} -> @(dGamma02)$,repeat=True)
+substitute (dRabcd04,$A^{c}A^{b}\partial_{c}{\Gamma^{a}_{d b}} -> @(dGamma01)$,repeat=True)
+substitute (dRabcd04,$A^{c}A^{b}\partial_{c}{\Gamma^{a}_{b d}} -> @(dGamma01)$,repeat=True)
+distribute (dRabcd04)
+sort_product   (dRabcd04)
+rename_dummies (dRabcd04)
+
+substitute (dRabcd05,$A^{c}A^{b}A^{e}A^{f}A^{g}\partial_{c e f g}{\Gamma^{a}_{d b}} -> @(dGamma04)$,repeat=True)
+substitute (dRabcd05,$A^{c}A^{b}A^{e}A^{f}A^{g}\partial_{c e f g}{\Gamma^{a}_{b d}} -> @(dGamma04)$,repeat=True)
+substitute (dRabcd05,$A^{c}A^{b}A^{e}A^{f}\partial_{c e f}{\Gamma^{a}_{d b}} -> @(dGamma03)$,repeat=True)
+substitute (dRabcd05,$A^{c}A^{b}A^{e}A^{f}\partial_{c e f}{\Gamma^{a}_{b d}} -> @(dGamma03)$,repeat=True)
+substitute (dRabcd05,$A^{c}A^{b}A^{e}\partial_{c e}{\Gamma^{a}_{d b}} -> @(dGamma02)$,repeat=True)
+substitute (dRabcd05,$A^{c}A^{b}A^{e}\partial_{c e}{\Gamma^{a}_{b d}} -> @(dGamma02)$,repeat=True)
+substitute (dRabcd05,$A^{c}A^{b}\partial_{c}{\Gamma^{a}_{d b}} -> @(dGamma01)$,repeat=True)
+substitute (dRabcd05,$A^{c}A^{b}\partial_{c}{\Gamma^{a}_{b d}} -> @(dGamma01)$,repeat=True)
+distribute (dRabcd05)
+sort_product   (dRabcd05)
+rename_dummies (dRabcd05)
+
+end_stage_5 = time.time()
+
+# now eliminate remaining partial derivs of Rabcd by substitution from the lower order dRabcd
+
+# note that
+#   dRabcd01 = R^a_{cdb,e} A^c A^d A^e
+#   dRabcd02 = R^a_{cdb,ef} A^c A^d A^e A^f
+#   dRabcd03 = R^a_{cdb,efg} A^c A^d A^e A^f A^g
+
+# thus we can use
+#   dRabcd01 to eliminate 1st partial derivs of R in dRabcd03, dRabcd04, etc.
+#   dRabcd02 to eliminate 2nd partial derivs of R in dRabcd04, dRabcd05, etc.
+#   dRabcd03 to eliminate 3rd partial derivs of R in dRabcd05, dRabcd06, etc.
+
+beg_stage_6 = time.time()
+
+substitute (dRabcd03,$A^{c}A^{d}A^{e}\partial_{e}{R^{a}_{c d b}} -> @(dRabcd01)$,repeat=True)
+distribute (dRabcd03)
+
+# note: dRabcd04 and dRabcd05 unused in this code (or any other code)
+
+substitute (dRabcd04,$A^{c}A^{d}A^{e}A^{f}\partial_{e f}{R^{a}_{c d b}} -> @(dRabcd02)$,repeat=True)
+substitute (dRabcd04,$A^{c}A^{d}A^{e}\partial_{e}{R^{a}_{c d b}} -> @(dRabcd01)$,repeat=True)
+distribute (dRabcd04)
+
+substitute (dRabcd05,$A^{c}A^{d}A^{e}A^{f}A^{g}\partial_{e f g}{R^{a}_{c d b}} -> @(dRabcd03)$,repeat=True)
+substitute (dRabcd05,$A^{c}A^{d}A^{e}A^{f}\partial_{e f}{R^{a}_{c d b}} -> @(dRabcd02)$,repeat=True)
+substitute (dRabcd05,$A^{c}A^{d}A^{e}\partial_{e}{R^{a}_{c d b}} -> @(dRabcd01)$,repeat=True)
+distribute (dRabcd05)
+
+end_stage_6 = time.time()
+
+beg_stage_7 = time.time()
+
+dRabcd01 = flatten_Rabcd (dRabcd01)
+dRabcd02 = flatten_Rabcd (dRabcd02)
+dRabcd03 = flatten_Rabcd (dRabcd03)
+dRabcd04 = flatten_Rabcd (dRabcd04)
+dRabcd05 = flatten_Rabcd (dRabcd05)
+
+canonicalise (dRabcd01)
+canonicalise (dRabcd02)
+canonicalise (dRabcd03)
+canonicalise (dRabcd04)
+canonicalise (dRabcd05)
+
+end_stage_7 = time.time()
+
+print ("Stage 1: {:7.1f} secs\\hfill\\break".format(end_stage_1-beg_stage_1))
+print ("Stage 2: {:7.1f} secs\\hfill\\break".format(end_stage_2-beg_stage_2))
+print ("Stage 3: {:7.1f} secs\\hfill\\break".format(end_stage_3-beg_stage_3))
+print ("Stage 4: {:7.1f} secs\\hfill\\break".format(end_stage_4-beg_stage_4))
+print ("Stage 5: {:7.1f} secs\\hfill\\break".format(end_stage_5-beg_stage_5))
+print ("Stage 6: {:7.1f} secs\\hfill\\break".format(end_stage_6-beg_stage_6))
+print ("Stage 7: {:7.1f} secs".format(end_stage_7-beg_stage_7))
+
+
+cdblib.create ('dRabcd.json')
+
+cdblib.put ('dRabcd01',dRabcd01,'dRabcd.json')
+cdblib.put ('dRabcd02',dRabcd02,'dRabcd.json')
+cdblib.put ('dRabcd03',dRabcd03,'dRabcd.json')
+cdblib.put ('dRabcd04',dRabcd04,'dRabcd.json')
+cdblib.put ('dRabcd05',dRabcd05,'dRabcd.json')
+
+
+# note: keeping numbering as is (out of order) to ensure R appears before \nabla R etc.
+def product_sort (obj):
+    substitute (obj,$ A^{a}                            -> A001^{a}               $)
+    substitute (obj,$ x^{a}                            -> A002^{a}               $)
+    substitute (obj,$ g^{a b}                          -> A003^{a b}             $)
+    substitute (obj,$ \nabla_{e f g h}{R_{a b c d}}    -> A008_{a b c d e f g h} $)
+    substitute (obj,$ \nabla_{e f g}{R_{a b c d}}      -> A007_{a b c d e f g}   $)
+    substitute (obj,$ \nabla_{e f}{R_{a b c d}}        -> A006_{a b c d e f}     $)
+    substitute (obj,$ \nabla_{e}{R_{a b c d}}          -> A005_{a b c d e}       $)
+    substitute (obj,$ R_{a b c d}                      -> A004_{a b c d}         $)
+    sort_product   (obj)
+    rename_dummies (obj)
+    substitute (obj,$ A001^{a}                  -> A^{a}                         $)
+    substitute (obj,$ A002^{a}                  -> x^{a}                         $)
+    substitute (obj,$ A003^{a b}                -> g^{a b}                       $)
+    substitute (obj,$ A004_{a b c d}            -> R_{a b c d}                   $)
+    substitute (obj,$ A005_{a b c d e}          -> \nabla_{e}{R_{a b c d}}       $)
+    substitute (obj,$ A006_{a b c d e f}        -> \nabla_{e f}{R_{a b c d}}     $)
+    substitute (obj,$ A007_{a b c d e f g}      -> \nabla_{e f g}{R_{a b c d}}   $)
+    substitute (obj,$ A008_{a b c d e f g h}    -> \nabla_{e f g h}{R_{a b c d}} $)
+
+    return obj
+
+def reformat (obj,scale):
+    foo  = Ex(str(scale))
+    bah := @(foo) @(obj).
+    distribute     (bah)
+    bah = product_sort (bah)
+    rename_dummies (bah)
+    canonicalise   (bah)
+    factor_out     (bah,$A^{a?}$)
+    ans := @(bah).
+    return ans
+
+scaled1 = reformat (dRabcd01, 1)
+scaled2 = reformat (dRabcd02, 1)
+scaled3 = reformat (dRabcd03,-2)
+scaled4 = reformat (dRabcd04,-5)
+scaled5 = reformat (dRabcd05,-3)
+
+
+substitute (scaled1,$A^{a}->1$)
+substitute (scaled2,$A^{a}->1$)
+substitute (scaled3,$A^{a}->1$)
+substitute (scaled4,$A^{a}->1$)
+substitute (scaled5,$A^{a}->1$)
+
+cdblib.create ('dRabcd.export')
+
+# 6th order dRabcd, scaled
+cdblib.put ('dRabcd61scaled',scaled1,'dRabcd.export')
+cdblib.put ('dRabcd62scaled',scaled2,'dRabcd.export')
+cdblib.put ('dRabcd63scaled',scaled3,'dRabcd.export')
+cdblib.put ('dRabcd64scaled',scaled4,'dRabcd.export')
+cdblib.put ('dRabcd65scaled',scaled5,'dRabcd.export')
+
+checkpoint.append (scaled1)
+checkpoint.append (scaled2)
+checkpoint.append (scaled3)
+checkpoint.append (scaled4)
+checkpoint.append (scaled5)
+
+
+for i in range( len(checkpoint) ):
+   cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+

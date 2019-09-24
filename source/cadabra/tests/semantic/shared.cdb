@@ -1,0 +1,88 @@
+from cadabra2_defaults import *
+__cdbkernel__ = cadabra2.__cdbkernel__
+
+{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+\Gamma^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+
+D{#}::Derivative.
+\nabla{#}::Derivative.
+\partial{#}::PartialDerivative.
+
+g_{a b}::Metric.
+g^{a b}::InverseMetric.
+
+R_{a b c d}::RiemannTensor.
+
+R^{a}_{b c d}::RiemannTensor.
+# R_{a b c}^{d}::RiemannTensor.
+R^{a}_{b c d}::RiemannTensor.
+R^{a}_{b}^{d}_{c}::RiemannTensor.
+
+# note: this function only covers the cases that I have seen
+#       I want to keep this as short as possible
+def standard_indices (obj):
+    # single upstairs index on Rabcd
+    substitute (obj,$R_{a}^{b}_{c d}   -> - R^{b}_{a c d}$)
+    substitute (obj,$R_{a b}^{c}_{d}   ->   R^{c}_{d a b}$)
+    substitute (obj,$R_{a b c}^{d}     -> - R^{d}_{c a b}$)
+    # double upstairs index on Rabcd
+    substitute (obj,$R_{a}^{b}_{c}^{d} ->   R^{b}_{a}^{d}_{c}$)
+    substitute (obj,$R^{a}_{b c}^{d}   -> - R^{a}_{b}^{d}_{c}$)
+
+    return obj
+
+# note: keeping numbering as is (out of order) to ensure R appears before \nabla R etc.
+def product_sort (obj):
+    substitute (obj,$ A^{a}                             -> A001^{a}                  $)
+    substitute (obj,$ x^{a}                             -> A002^{a}                  $)
+    substitute (obj,$ g_{a b}                           -> A003_{a b}                $)
+    substitute (obj,$ g^{a b}                           -> A004^{a b}                $)
+    substitute (obj,$ \nabla_{e f g h}{R_{a b c d}}     -> A011_{a b c d e f g h}    $)
+    substitute (obj,$ \nabla_{e f g}{R_{a b c d}}       -> A010_{a b c d e f g}      $)
+    substitute (obj,$ \nabla_{e f}{R_{a b c d}}         -> A009_{a b c d e f}        $)
+    substitute (obj,$ \nabla_{e}{R_{a b c d}}           -> A008_{a b c d e}          $)
+    substitute (obj,$ \partial_{e f g h}{R_{a b c d}}   -> A015_{a b c d e f g h}    $)
+    substitute (obj,$ \partial_{e f g}{R_{a b c d}}     -> A014_{a b c d e f g}      $)
+    substitute (obj,$ \partial_{e f}{R_{a b c d}}       -> A013_{a b c d e f}        $)
+    substitute (obj,$ \partial_{e}{R_{a b c d}}         -> A012_{a b c d e}          $)
+    substitute (obj,$ \partial_{e f g h}{R^{a}_{b c d}} -> A019^{a}_{b c d e f g h}  $)
+    substitute (obj,$ \partial_{e f g}{R^{a}_{b c d}}   -> A018^{a}_{b c d e f g}    $)
+    substitute (obj,$ \partial_{e f}{R^{a}_{b c d}}     -> A017^{a}_{b c d e f}      $)
+    substitute (obj,$ \partial_{e}{R^{a}_{b c d}}       -> A016^{a}_{b c d e}        $)
+    substitute (obj,$ R_{a b c d}                       -> A005_{a b c d}            $)
+    substitute (obj,$ R^{a}_{b c d}                     -> A006^{a}_{b c d}          $)
+    substitute (obj,$ R^{a}_{b}^{c}_{d}                 -> A007^{a}_{b}^{c}_{d}      $)
+    sort_product   (obj)
+    rename_dummies (obj)
+    substitute (obj,$ A001^{a}                  -> A^{a}                             $)
+    substitute (obj,$ A002^{a}                  -> x^{a}                             $)
+    substitute (obj,$ A003_{a b}                -> g_{a b}                           $)
+    substitute (obj,$ A004^{a b}                -> g^{a b}                           $)
+    substitute (obj,$ A005_{a b c d}            -> R_{a b c d}                       $)
+    substitute (obj,$ A006^{a}_{b c d}          -> R^{a}_{b c d}                     $)
+    substitute (obj,$ A007^{a}_{b}^{c}_{d}      -> R^{a}_{b}^{c}_{d}                 $)
+    substitute (obj,$ A008_{a b c d e}          -> \nabla_{e}{R_{a b c d}}           $)
+    substitute (obj,$ A009_{a b c d e f}        -> \nabla_{e f}{R_{a b c d}}         $)
+    substitute (obj,$ A010_{a b c d e f g}      -> \nabla_{e f g}{R_{a b c d}}       $)
+    substitute (obj,$ A011_{a b c d e f g h}    -> \nabla_{e f g h}{R_{a b c d}}     $)
+    substitute (obj,$ A012_{a b c d e}          -> \partial_{e}{R_{a b c d}}         $)
+    substitute (obj,$ A013_{a b c d e f}        -> \partial_{e f}{R_{a b c d}}       $)
+    substitute (obj,$ A014_{a b c d e f g}      -> \partial_{e f g}{R_{a b c d}}     $)
+    substitute (obj,$ A015_{a b c d e f g h}    -> \partial_{e f g h}{R_{a b c d}}   $)
+    substitute (obj,$ A016^{a}_{b c d e}        -> \partial_{e}{R^{a}_{b c d}}       $)
+    substitute (obj,$ A017^{a}_{b c d e f}      -> \partial_{e f}{R^{a}_{b c d}}     $)
+    substitute (obj,$ A018^{a}_{b c d e f g}    -> \partial_{e f g}{R^{a}_{b c d}}   $)
+    substitute (obj,$ A019^{a}_{b c d e f g h}  -> \partial_{e f g h}{R^{a}_{b c d}} $)
+
+    return obj
+
+def check (objA,objB):
+    tmp := @(objA) - @(objB).
+    distribute         (tmp)
+    tmp = standard_indices (tmp)
+    tmp = product_sort (tmp)
+    rename_dummies     (tmp)
+    canonicalise       (tmp)
+
+    return tmp

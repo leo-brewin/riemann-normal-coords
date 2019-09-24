@@ -1,0 +1,278 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+% =================================================================================================
+% create checkpoint file
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   import cdblib
+   checkpoint_file = 'tests/semantic/output/rnc2rnc.json'
+   cdblib.create (checkpoint_file)
+   checkpoint = []
+\end{cadabra}
+\egroup
+
+% =================================================================================================
+\section*{From one RNC to another}
+
+Consider an RNC frame with RNC cooridnates $x^{a}$.
+
+In the {\tts geodesic-bvp} code the two point boundary value problem (for the geodesic connecting
+two points) was solved. There is a bonus in that calculation -- it can be trivaly adapted to the
+case of transforming form one RNC into another.
+
+The starting point is the basic equation for the geodesic connecting $P$ (with coordinaties
+$x^{a}$) to Q (with coordinates $x^{a} + Dx^{a}$)
+\begin{equation*}
+   x^a(s) = x^a_i + s y^a - \sum_{k=2}^\infty\>\frac{1}{k!}\>\Gamma^{a}{}_{\ubk}y^{.\ubk} s^k
+\end{equation*}
+The affine parameter $s$ varies form 0 (at $P$) to 1 (at $Q$).
+
+A new RNC frame, with origin at $P$, can be defined via the $y^{a}$ with the coordinates of $Q$ in
+the new RNC frame defined by $y^{a}$ (since $s=1$ at $Q$). Recall that in an RNC all geodesics
+through the origin are described by $y^{a}(s) = s y^{a}$. Thus the transformation from $x^a$ to
+$y^a$ satisfies
+\begin{equation*}
+   x^a = x^a_i + y^a - \sum_{k=2}^\infty\>\frac{1}{k!}\>\Gamma^{a}{}_{\ubk}y^{.\ubk}
+\end{equation*}
+where the $\Gamma^{a}{}_{\ubk}$ are the generalised connections of the $x^a$ frame evaluated at
+$x^a=0$. This equation can be inverted to express $y^a$ in terms of $x^a$. This computation is
+done in the {\tts geodesic-bvp} code -- we only quote the results here (at the end).
+
+The new $y^a$ frame has origin at $P$. Its coordinate axes are aligned with those (at $P$) of the
+origianl RNC frame. To see this just note that $\partial x^a/\partial y^b = \delta^a_b$ at $P$.
+Thus the metric at $P$ in the new frame has values $g_{ab}(x)$ (i.e., exactly those of the
+original RNC frame). Note that this means that the coordinate axes of the new frame are not
+ncessarily orthogonal.
+
+The calculations in this code are trivial. It uses the $y^{a}$ found in {\tts geodesic-bvp} as
+the basis of the transformation from $x^{a}$ to $y^{a}$. Most of the code involves reformatting
+the $y^{a}$.
+
+\clearpage
+
+\begin{cadabra}
+   {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+   \nabla{#}::Derivative.
+
+   g_{a b}::Metric.
+   g^{a b}::InverseMetric.
+
+   R_{a b c d}::RiemannTensor.
+   R^{a}_{b c d}::RiemannTensor.
+
+   # Dx{#}::LaTeXForm{"{\Dx}"}.  # LCB: currently causes a bug, it kills ::KeepWeight for Dx
+
+   import cdblib
+
+   Y5 = cdblib.get ('y5','geodesic-bvp.json')
+
+   Y50 = cdblib.get ('y50','geodesic-bvp.json')
+   Y52 = cdblib.get ('y52','geodesic-bvp.json')
+   Y53 = cdblib.get ('y53','geodesic-bvp.json')
+   Y54 = cdblib.get ('y54','geodesic-bvp.json')
+   Y55 = cdblib.get ('y55','geodesic-bvp.json')
+
+   # this copies y5* from geodesic-bvp.json to rnc2rnc.json
+
+   cdblib.create ('rnc2rnc.json')
+
+   cdblib.put ('rnc2rnc',Y5,'rnc2rnc.json')
+
+   cdblib.put ('rnc2rnc0',Y50,'rnc2rnc.json')
+   cdblib.put ('rnc2rnc2',Y52,'rnc2rnc.json')
+   cdblib.put ('rnc2rnc3',Y53,'rnc2rnc.json')
+   cdblib.put ('rnc2rnc4',Y54,'rnc2rnc.json')
+   cdblib.put ('rnc2rnc5',Y55,'rnc2rnc.json')
+
+\end{cadabra}
+
+% =================================================================================================
+% the remaining code is just for pretty printing
+
+\clearpage
+
+\begin{cadabra}
+   # note: keeping numbering as is (out of order) to ensure R appears before \nabla R etc.
+   def product_sort (obj):
+       substitute (obj,$ x^{a}                            -> A001^{a}               $)
+       substitute (obj,$ Dx^{a}                           -> A002^{a}               $)
+       substitute (obj,$ g^{a b}                          -> A003^{a b}             $)
+       substitute (obj,$ \nabla_{e f g h}{R_{a b c d}}    -> A008_{a b c d e f g h} $)
+       substitute (obj,$ \nabla_{e f g}{R_{a b c d}}      -> A007_{a b c d e f g}   $)
+       substitute (obj,$ \nabla_{e f}{R_{a b c d}}        -> A006_{a b c d e f}     $)
+       substitute (obj,$ \nabla_{e}{R_{a b c d}}          -> A005_{a b c d e}       $)
+       substitute (obj,$ R_{a b c d}                      -> A004_{a b c d}         $)
+       sort_product   (obj)
+       rename_dummies (obj)
+       substitute (obj,$ A001^{a}                  -> x^{a}                         $)
+       substitute (obj,$ A002^{a}                  -> Dx^{a}                        $)
+       substitute (obj,$ A003^{a b}                -> g^{a b}                       $)
+       substitute (obj,$ A004_{a b c d}            -> R_{a b c d}                   $)
+       substitute (obj,$ A005_{a b c d e}          -> \nabla_{e}{R_{a b c d}}       $)
+       substitute (obj,$ A006_{a b c d e f}        -> \nabla_{e f}{R_{a b c d}}     $)
+       substitute (obj,$ A007_{a b c d e f g}      -> \nabla_{e f g}{R_{a b c d}}   $)
+       substitute (obj,$ A008_{a b c d e f g h}    -> \nabla_{e f g h}{R_{a b c d}} $)
+
+       return obj
+
+   def get_xDxterm (obj,n,m):
+
+       x^{a}::Weight(label=numx,value=1).
+       Dx^{a}::Weight(label=numDx,value=1).
+
+       tmp := @(obj).
+       distribute  (tmp)
+
+       foo = Ex("numx = " + str(n))
+       bah = Ex("numDx = " + str(m))
+       keep_weight (tmp, foo)
+       keep_weight (tmp, bah)
+
+       return tmp
+
+   def reformat (obj,scale):
+       foo  = Ex(str(scale))
+       bah := @(foo) @(obj).
+       distribute     (bah)
+       bah = product_sort (bah)
+       rename_dummies (bah)
+       canonicalise   (bah)
+       substitute     (bah,$Dx^{b}->zzz^{b}$)
+       factor_out     (bah,$x^{a?},zzz^{b?}$)
+       substitute     (bah,$zzz^{b}->Dx^{b}$)
+       ans := @(bah) / @(foo).
+       return ans
+
+   def rescale (obj,scale):
+       foo  = Ex(str(scale))
+       bah := @(foo) @(obj).
+       distribute  (bah)
+       substitute  (bah,$Dx^{b}->zzz^{b}$)
+       factor_out  (bah,$x^{a?},zzz^{b?}$)
+       substitute  (bah,$zzz^{b}->Dx^{b}$)
+       return bah
+
+   term0 := @(Y50).  # cdb (term0.101,term0)
+   term2 := @(Y52).  # cdb (term2.101,term2)
+   term3 := @(Y53).  # cdb (term3.101,term3)
+   term4 := @(Y54).  # cdb (term4.101,term4)
+   term5 := @(Y55).  # cdb (term5.101,term5)
+
+   term0 = reformat (term0,1)  # cdb (term0.102,term0)
+   term2 = reformat (term2,1)  # cdb (term2.102,term2)
+   term3 = reformat (term3,1)  # cdb (term3.102,term3)
+   term4 = reformat (term4,1)  # cdb (term4.102,term4)
+   term5 = reformat (term5,1)  # cdb (term5.102,term5)
+
+   xDxterm12 = get_xDxterm (term2,1,2)   # cdb(xDxterm12.101,xDxterm12)
+
+   xDxterm13 = get_xDxterm (term3,1,3)   # cdb(xDxterm13.101,xDxterm13)
+   xDxterm22 = get_xDxterm (term3,2,2)   # cdb(xDxterm22.101,xDxterm22)
+
+   xDxterm14 = get_xDxterm (term4,1,4)   # cdb(xDxterm14.101,xDxterm14)
+   xDxterm23 = get_xDxterm (term4,2,3)   # cdb(xDxterm23.101,xDxterm23)
+   xDxterm32 = get_xDxterm (term4,3,2)   # cdb(xDxterm32.101,xDxterm32)
+
+   xDxterm15 = get_xDxterm (term5,1,5)   # cdb(xDxterm15.101,xDxterm15)
+   xDxterm24 = get_xDxterm (term5,2,4)   # cdb(xDxterm24.101,xDxterm24)
+   xDxterm33 = get_xDxterm (term5,3,3)   # cdb(xDxterm33.101,xDxterm33)
+   xDxterm42 = get_xDxterm (term5,4,2)   # cdb(xDxterm42.101,xDxterm42)
+
+
+   xDxterm12 = rescale ( reformat (xDxterm12,    3),     3 )   # cdb(xDxterm12.102,xDxterm12)
+
+   xDxterm13 = rescale ( reformat (xDxterm13,   12),   -12 )   # cdb(xDxterm13.102,xDxterm13)
+   xDxterm22 = rescale ( reformat (xDxterm22,   24),   -24 )   # cdb(xDxterm22.102,xDxterm22)
+
+   xDxterm14 = rescale ( reformat (xDxterm14,  180),  -180 )   # cdb(xDxterm14.102,xDxterm14)
+   xDxterm23 = rescale ( reformat (xDxterm23,  720),  -720 )   # cdb(xDxterm23.102,xDxterm23)
+   xDxterm32 = rescale ( reformat (xDxterm32,  720),  -720 )   # cdb(xDxterm32.102,xDxterm32)
+
+   xDxterm15 = rescale ( reformat (xDxterm15,  360),  -360 )   # cdb(xDxterm15.102,xDxterm15)
+   xDxterm24 = rescale ( reformat (xDxterm24, 2160), -2160 )   # cdb(xDxterm24.102,xDxterm24)
+   xDxterm33 = rescale ( reformat (xDxterm33, 1080), -1080 )   # cdb(xDxterm33.102,xDxterm33)
+   xDxterm42 = rescale ( reformat (xDxterm42,  360),  -360 )   # cdb(xDxterm42.102,xDxterm42)
+
+   checkpoint.append (term0)
+   checkpoint.append (term2)
+   checkpoint.append (term3)
+   checkpoint.append (term4)
+   checkpoint.append (term5)
+
+\end{cadabra}
+
+\clearpage
+
+% =================================================================================================
+\section*{Tranformation between two RNC frames}
+
+\begin{align*}
+     y^{a} = \ny{0}^{a} + \ny{2}^{a} + \ny{3}^{a} + \ny{4}^{a} + \ny{5}^{a} + \BigO{\eps^6}
+\end{align*}
+
+\begin{dgroup*}
+   \begin{dmath*} \ny{0}^{a} = \cdb{term0.102} \end{dmath*}
+   \begin{dmath*} \ny{2}^{a} = \cdb{term2.102} \end{dmath*}
+   \begin{dmath*} \ny{3}^{a} = \cdb{term3.102} \end{dmath*}
+   \begin{dmath*} \ny{4}^{a} = \cdb{term4.102} \end{dmath*}
+   \begin{dmath*} \ny{5}^{a} = \cdb{term5.102} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
+\section*{Tranformation between two RNC frames}
+
+Same as before but with an improved format (maybe) for the expressions.
+
+\begin{align}
+   y^{a} = \ny{0}^{a} + \ny{2}^{a} + \ny{3}^{a} + \ny{4}^{a} + \ny{5}^{a} + \BigO{\eps^6}
+\end{align}
+
+\begin{dgroup}
+   \begin{dmath} \ny{0}^{a} = Dx^{a} \end{dmath}
+\end{dgroup}
+
+\begin{dgroup}
+   \begin{dmath} \ny{2}^{a} = \ny{2}^{a}_1 \end{dmath}
+   \begin{dmath}   3 \ny{2}^{a}_1 = \cdb{xDxterm12.102} \end{dmath}
+\end{dgroup}
+
+\begin{dgroup}
+   \begin{dmath} \ny{3}^{a} = \ny{3}^{a}_1 + \ny{3}^{a}_2 \end{dmath}
+   \begin{dmath} -12 \ny{3}^{a}_1 = \cdb{xDxterm13.102} \end{dmath}
+   \begin{dmath} -24 \ny{3}^{a}_2 = \cdb{xDxterm22.102} \end{dmath}
+\end{dgroup}
+
+\begin{dgroup}
+   \begin{dmath} \ny{4}^{a} = \ny{4}^{a}_1 + \ny{4}^{a}_2 + \ny{4}^{a}_3 \end{dmath}
+   \begin{dmath} -180 \ny{4}^{a}_1 = \cdb{xDxterm14.102} \end{dmath}
+   \begin{dmath} -720 \ny{4}^{a}_2 = \cdb{xDxterm23.102} \end{dmath}
+   \begin{dmath} -720 \ny{4}^{a}_3 = \cdb{xDxterm32.102} \end{dmath}
+\end{dgroup}
+
+\begin{dgroup}
+   \begin{dmath} \ny{5}^{a} = \ny{5}^{a}_1 + \ny{5}^{a}_2 + \ny{5}^{a}_3 + \ny{5}^{a}_4 \end{dmath}
+   \begin{dmath}  -360 \ny{5}^{a}_1 = \cdb{xDxterm15.102} \end{dmath}
+   \begin{dmath} -2160 \ny{5}^{a}_2 = \cdb{xDxterm24.102} \end{dmath}
+   \begin{dmath} -1080 \ny{5}^{a}_3 = \cdb{xDxterm33.102} \end{dmath}
+   \begin{dmath}  -360 \ny{5}^{a}_4 = \cdb{xDxterm42.102} \end{dmath}
+\end{dgroup}
+
+% =================================================================================================
+% export checkpoints in json format
+
+\bgroup
+\CdbSetup{action=hide}
+\begin{cadabra}
+   for i in range( len(checkpoint) ):
+      cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+\end{cadabra}
+\egroup
+
+\end{document}

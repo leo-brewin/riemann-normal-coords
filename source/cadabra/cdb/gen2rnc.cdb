@@ -1,0 +1,547 @@
+import cdblib
+checkpoint_file = 'tests/semantic/output/gen2rnc.json'
+cdblib.create (checkpoint_file)
+checkpoint = []
+
+import time
+
+{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w#}::Indices(position=independent).
+
+D{#}::Derivative.
+\nabla{#}::Derivative.
+\partial{#}::PartialDerivative.
+
+g_{a b}::Metric.
+g^{a b}::InverseMetric.
+g_{a}^{b}::KroneckerDelta.
+g^{a}_{b}::KroneckerDelta.
+\delta^{a}_{b}::KroneckerDelta.
+\delta_{a}^{b}::KroneckerDelta.
+
+R_{a b c d}::RiemannTensor.
+R^{a}_{b c d}::RiemannTensor.
+R_{a b c}^{d}::RiemannTensor.
+
+A^{a}::Depends(\partial{#}).
+
+g_{a b}::Depends(\partial{#}).
+R_{a b c d}::Depends(\partial{#}).
+R^{a}_{b c d}::Depends(\partial{#}).
+
+\Gamma^{a}_{b c}::Depends(\partial{#}).
+
+\Gamma^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+\Gamma^{a}_{b c d}::TableauSymmetry(shape={3}, indices={1,2,3}).
+\Gamma^{a}_{b c d e}::TableauSymmetry(shape={4}, indices={1,2,3,4}).
+\Gamma^{a}_{b c d e f}::TableauSymmetry(shape={5}, indices={1,2,3,4,5}).
+\Gamma^{a}_{b c d e f g}::TableauSymmetry(shape={6}, indices={1,2,3,4,5,6}).
+
+\Gamma^{p}_{a b}::Weight(label=numG,value=1).
+\Gamma^{p}_{a b c}::Weight(label=numG,value=2).
+\Gamma^{p}_{a b c d}::Weight(label=numG,value=3).
+\Gamma^{p}_{a b c d e}::Weight(label=numG,value=4).
+\Gamma^{p}_{a b c d e f}::Weight(label=numG,value=5).
+
+def product_sort (obj):
+    substitute (obj,$ A^{a}                     -> A001^{a}                 $)
+    substitute (obj,$ x^{a}                     -> A002^{a}                 $)
+    substitute (obj,$ g^{a b}                   -> A003^{a b}               $)
+    substitute (obj,$ \Gamma^{p}_{a b}          -> A004^{p}_{a b}           $)
+    substitute (obj,$ \Gamma^{p}_{a b c}        -> A005^{p}_{a b c}         $)
+    substitute (obj,$ \Gamma^{p}_{a b c d}      -> A006^{p}_{a b c d}       $)
+    substitute (obj,$ \Gamma^{p}_{a b c d e}    -> A007^{p}_{a b c d e}     $)
+    substitute (obj,$ \Gamma^{p}_{a b c d e f}  -> A008^{p}_{a b c d e f}   $)
+    sort_product   (obj)
+    rename_dummies (obj)
+    substitute (obj,$ A001^{a}                  -> A^{a}                    $)
+    substitute (obj,$ A002^{a}                  -> x^{a}                    $)
+    substitute (obj,$ A003^{a b}                -> g^{a b}                  $)
+    substitute (obj,$ A004^{p}_{a b}            -> \Gamma^{p}_{a b}         $)
+    substitute (obj,$ A005^{p}_{a b c}          -> \Gamma^{p}_{a b c}       $)
+    substitute (obj,$ A006^{p}_{a b c d}        -> \Gamma^{p}_{a b c d}     $)
+    substitute (obj,$ A007^{p}_{a b c d e}      -> \Gamma^{p}_{a b c d e}   $)
+    substitute (obj,$ A008^{p}_{a b c d e f}    -> \Gamma^{p}_{a b c d e f} $)
+
+    return obj
+
+def truncateGam (obj,n):
+
+    ans = Ex(0)
+
+    for i in range (0,n+1):
+       foo := @(obj).
+       bah  = Ex("numG = " + str(i))
+       keep_weight (foo, bah)
+       ans = ans + foo
+
+    return ans
+
+beg_stage_1 = time.time()
+
+# note that we use A^{a} in place of dx^a/ds
+
+Gamma := \Gamma^{d}_{a b} A^{a} A^{b}.
+
+# the geodesic equation
+
+dAds  := A^{c} \partial_{c}{A^{d}} -> - @(Gamma).
+
+# eq0, eq1, eq2 ... are the the successive derivates of Gamma
+# thus they are the generalised gamma's dotted into (multiple copies of) A^{a} = dx^a/ds
+
+# =============================================================
+eq0 := @(Gamma).
+
+# =============================================================
+eq1 := A^{c} \partial_{c}{@(eq0)}.
+
+distribute      (eq1)
+unwrap          (eq1)
+product_rule    (eq1)
+distribute      (eq1)
+substitute      (eq1,dAds)
+distribute      (eq1)
+eq1 = truncateGam (eq1,5)
+sort_product    (eq1)
+rename_dummies  (eq1)
+canonicalise    (eq1)
+
+# =============================================================
+eq2 := A^{c} \partial_{c}{@(eq1)}.
+
+distribute      (eq2)
+unwrap          (eq2)
+product_rule    (eq2)
+distribute      (eq2)
+substitute      (eq2,dAds)
+distribute      (eq2)
+eq2 = truncateGam (eq2,5)
+sort_product    (eq2)
+rename_dummies  (eq2)
+canonicalise    (eq2)
+
+# =============================================================
+eq3 := A^{c} \partial_{c}{@(eq2)}.
+
+distribute      (eq3)
+unwrap          (eq3)
+product_rule    (eq3)
+distribute      (eq3)
+substitute      (eq3,dAds)
+distribute      (eq3)
+eq3 = truncateGam (eq3,5)
+sort_product    (eq3)
+rename_dummies  (eq3)
+canonicalise    (eq3)
+
+# =============================================================
+eq4 := A^{c} \partial_{c}{@(eq3)}.
+
+distribute      (eq4)
+unwrap          (eq4)
+product_rule    (eq4)
+distribute      (eq4)
+substitute      (eq4,dAds)
+distribute      (eq4)
+eq4 = truncateGam (eq4,5)
+sort_product    (eq4)
+rename_dummies  (eq4)
+canonicalise    (eq4)
+
+end_stage_1 = time.time()
+
+
+{x^{a}}::Weight(label=eps,value=0).
+
+{y00^{a},y10^{a},y20^{a},y30^{a},y40^{a}}::Weight(label=eps,value=0).
+{y11^{a},y21^{a},y31^{a},y41^{a}}::Weight(label=eps,value=1).
+{y22^{a},y32^{a},y42^{a}}::Weight(label=eps,value=2).
+{y33^{a},y43^{a}}::Weight(label=eps,value=3).
+{y44^{a}}::Weight(label=eps,value=4).
+
+{Gam11^{a}_{b c}}::Weight(label=eps,value=1).
+{Gam22^{a}_{b c d}}::Weight(label=eps,value=2).
+{Gam33^{a}_{b c d e}}::Weight(label=eps,value=3).
+{Gam44^{a}_{b c d e f}}::Weight(label=eps,value=4).
+{Gam55^{a}_{b c d e f g}}::Weight(label=eps,value=5).
+
+Gam11^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+Gam22^{a}_{b c d}::TableauSymmetry(shape={3}, indices={1,2,3}).
+Gam33^{a}_{b c d e}::TableauSymmetry(shape={4}, indices={1,2,3,4}).
+Gam44^{a}_{b c d e f}::TableauSymmetry(shape={5}, indices={1,2,3,4,5}).
+Gam55^{a}_{b c d e f g}::TableauSymmetry(shape={6}, indices={1,2,3,4,5,6}).
+
+y00{#}::LaTeXForm ("\ny{00}").
+y10{#}::LaTeXForm ("\ny{10}").
+y20{#}::LaTeXForm ("\ny{20}").
+y30{#}::LaTeXForm ("\ny{30}").
+y40{#}::LaTeXForm ("\ny{40}").
+y11{#}::LaTeXForm ("\ny{11}").
+y21{#}::LaTeXForm ("\ny{21}").
+y31{#}::LaTeXForm ("\ny{31}").
+y41{#}::LaTeXForm ("\ny{41}").
+y22{#}::LaTeXForm ("\ny{22}").
+y32{#}::LaTeXForm ("\ny{32}").
+y42{#}::LaTeXForm ("\ny{42}").
+y33{#}::LaTeXForm ("\ny{33}").
+y43{#}::LaTeXForm ("\ny{43}").
+y44{#}::LaTeXForm ("\ny{44}").
+
+Gam11{#}::LaTeXForm ("\nGamma{11}").
+Gam22{#}::LaTeXForm ("\nGamma{22}").
+Gam33{#}::LaTeXForm ("\nGamma{33}").
+Gam44{#}::LaTeXForm ("\nGamma{44}").
+Gam55{#}::LaTeXForm ("\nGamma{55}").
+
+def get_term (obj,n):
+
+    foo := @(obj).
+    bah = Ex("eps = " + str(n))
+    distribute  (foo)
+    keep_weight (foo, bah)
+
+    return foo
+
+def truncateEps (obj,n):
+
+    ans = Ex(0)
+
+    for i in range (0,n+1):
+       foo := @(obj).
+       bah = Ex("eps = " + str(i))
+       keep_weight (foo, bah)
+       ans = ans + foo
+
+    return ans
+
+def substitute_eps (obj):
+    substitute         (obj,epsy0)
+    substitute         (obj,epsy1)
+    substitute         (obj,epsy2)
+    substitute         (obj,epsy3)
+    substitute         (obj,epsy4)
+    substitute         (obj,epsGam1)
+    substitute         (obj,epsGam2)
+    substitute         (obj,epsGam3)
+    substitute         (obj,epsGam4)
+    substitute         (obj,epsGam5)
+    distribute         (obj)
+    obj = truncateEps  (obj,4)
+    obj = product_sort (obj)
+    rename_dummies     (obj)
+    canonicalise       (obj)
+
+    return obj
+
+def tidy (obj):
+    obj = product_sort (obj)
+    rename_dummies (obj)
+    canonicalise   (obj)
+    return obj
+
+beg_stage_2 = time.time()
+
+y0 := x^{a}.
+y1 := x^{a} +   (1/2) Gam^{a}_{b c} y0^{b} y0^{c}.
+y2 := x^{a} +   (1/2) Gam^{a}_{b c} y1^{b} y1^{c}
+            +   (1/6) Gam^{a}_{b c d} y0^{b} y0^{c} y0^{d}.
+y3 := x^{a} +   (1/2) Gam^{a}_{b c} y2^{b} y2^{c}
+            +   (1/6) Gam^{a}_{b c d} y1^{b} y1^{c} y1^{d}
+            +  (1/24) Gam^{a}_{b c d e} y0^{b} y0^{c} y0^{d} y0^{e}.
+y4 := x^{a} +   (1/2) Gam^{a}_{b c} y3^{b} y3^{c}
+            +   (1/6) Gam^{a}_{b c d} y2^{b} y2^{c} y2^{d}
+            +  (1/24) Gam^{a}_{b c d e} y1^{b} y1^{c} y1^{d} y1^{e}
+            + (1/120) Gam^{a}_{b c d e f} y0^{b} y0^{c} y0^{d} y0^{e} y0^{f}.
+
+# note that:
+#   y00 = y10 = y20 = y30 = y40
+#   y11 = y21 = y31 = y41
+#   y22 = y32 = y42
+#   y33 = y43
+#   y44
+
+# expand each y in powers of eps
+
+epsy0 := y0^{a} -> y00^{a}.
+epsy1 := y1^{a} -> y10^{a}+y11^{a}.
+epsy2 := y2^{a} -> y20^{a}+y21^{a}+y22^{a}.
+epsy3 := y3^{a} -> y30^{a}+y31^{a}+y32^{a}+y33^{a}.
+epsy4 := y4^{a} -> y40^{a}+y41^{a}+y42^{a}+y43^{a}+y44^{a}.
+
+epsGam1 := Gam^{a}_{b c} -> Gam11^{a}_{b c}.
+epsGam2 := Gam^{a}_{b c d} -> Gam22^{a}_{b c d}.
+epsGam3 := Gam^{a}_{b c d e} -> Gam33^{a}_{b c d e}.
+epsGam4 := Gam^{a}_{b c d e f} -> Gam44^{a}_{b c d e f}.
+epsGam5 := Gam^{a}_{b c d e f g} -> Gam55^{a}_{b c d e f g}.
+
+y0 = substitute_eps (y0)
+y1 = substitute_eps (y1)
+y2 = substitute_eps (y2)
+y3 = substitute_eps (y3)
+y4 = substitute_eps (y4)
+
+defy0 := y0^{a} -> @(y0).
+defy1 := y1^{a} -> @(y1).
+defy2 := y2^{a} -> @(y2).
+defy3 := y3^{a} -> @(y3).
+defy4 := y4^{a} -> @(y4).
+
+# -----------------------------------
+# y0
+
+y00 := @(y0).
+
+defy00 := y00^{a} -> @(y00).
+
+# -----------------------------------
+# y1
+
+substitute (y1,defy00)
+
+distribute (y1)
+
+y10 = get_term (y1,0)
+y11 = get_term (y1,1)
+
+defy10 := y10^{a} -> @(y10).
+defy11 := y11^{a} -> @(y11).
+
+# -----------------------------------
+# y2
+
+substitute (y2,defy00)
+
+substitute (y2,defy10)
+substitute (y2,defy11)
+
+distribute (y2)
+
+y20 = get_term (y2,0)
+y21 = get_term (y2,1)
+y22 = get_term (y2,2)
+
+y20 = tidy (y20)
+y21 = tidy (y21)
+y22 = tidy (y22)
+
+defy20 := y20^{a} -> @(y20).
+defy21 := y21^{a} -> @(y21).
+defy22 := y22^{a} -> @(y22).
+
+# -----------------------------------
+# y3
+
+substitute (y3,defy00)
+
+substitute (y3,defy10)
+substitute (y3,defy11)
+
+substitute (y3,defy20)
+substitute (y3,defy21)
+substitute (y3,defy22)
+
+distribute (y3)
+
+y30 = get_term (y3,0)
+y31 = get_term (y3,1)
+y32 = get_term (y3,2)
+y33 = get_term (y3,3)
+
+y30 = tidy (y30)
+y31 = tidy (y31)
+y32 = tidy (y32)
+y33 = tidy (y33)
+
+defy30 := y30^{a} -> @(y30).
+defy31 := y31^{a} -> @(y31).
+defy32 := y32^{a} -> @(y32).
+defy33 := y33^{a} -> @(y33).
+
+# -----------------------------------
+# y4
+
+substitute (y4,defy00)
+
+substitute (y4,defy10)
+substitute (y4,defy11)
+
+substitute (y4,defy20)
+substitute (y4,defy21)
+substitute (y4,defy22)
+
+substitute (y4,defy30)
+substitute (y4,defy31)
+substitute (y4,defy32)
+substitute (y4,defy33)
+
+distribute (y4)
+
+y40 = get_term (y4,0)
+y41 = get_term (y4,1)
+y42 = get_term (y4,2)
+y43 = get_term (y4,3)
+y44 = get_term (y4,4)
+
+y40 = tidy (y40)
+y41 = tidy (y41)
+y42 = tidy (y42)
+y43 = tidy (y43)
+y44 = tidy (y44)
+
+defy40 := y40^{a} -> @(y40).
+defy41 := y41^{a} -> @(y41).
+defy42 := y42^{a} -> @(y42).
+defy43 := y43^{a} -> @(y43).
+defy44 := y44^{a} -> @(y44).
+
+end_stage_2 = time.time()
+
+
+def substitute_gam (obj):
+    substitute     (obj,defGam11)
+    substitute     (obj,defGam22)
+    substitute     (obj,defGam33)
+    substitute     (obj,defGam44)
+    substitute     (obj,defGam55)
+    distribute     (obj)
+
+    return obj
+
+beg_stage_3 = time.time()
+
+Gam11 := @(eq0).
+Gam22 := @(eq1).
+Gam33 := @(eq2).
+Gam44 := @(eq3).
+Gam55 := @(eq4).
+
+# peel off the A^{a}, must then symmetrise over revealed indices
+
+substitute (Gam11,$A^{a}->1$)
+substitute (Gam22,$A^{a}->1$)
+substitute (Gam33,$A^{a}->1$)
+substitute (Gam44,$A^{a}->1$)
+substitute (Gam55,$A^{a}->1$)
+
+# now symmetrise
+
+sym (Gam11,$_{a},_{b}$)
+sym (Gam22,$_{a},_{b},_{c}$)
+sym (Gam33,$_{a},_{b},_{c},_{e}$)
+sym (Gam44,$_{a},_{b},_{c},_{e},_{f}$)
+sym (Gam55,$_{a},_{b},_{c},_{e},_{f},_{g}$)
+
+defGam11 := Gam11^{d}_{a b} -> @(Gam11).
+defGam22 := Gam22^{d}_{a b c} -> @(Gam22).
+defGam33 := Gam33^{d}_{a b c e} -> @(Gam33).
+defGam44 := Gam44^{d}_{a b c e f} -> @(Gam44).
+defGam55 := Gam55^{d}_{a b c e f g} -> @(Gam55).
+
+y31 = substitute_gam (y31)
+y32 = substitute_gam (y32)
+y33 = substitute_gam (y33)
+
+y31 = tidy (y31)
+y32 = tidy (y32)
+y33 = tidy (y33)
+
+y3 := @(y30) + @(y31) + @(y32) + @(y33).
+
+y41 = substitute_gam (y41)
+y42 = substitute_gam (y42)
+y43 = substitute_gam (y43)
+y44 = substitute_gam (y44)
+
+y41 = tidy (y41)
+y42 = tidy (y42)
+y43 = tidy (y43)
+y44 = tidy (y44)
+
+y4 := @(y40) + @(y41) + @(y42) + @(y43) + @(y44).
+
+end_stage_3 = time.time()
+
+{x^{a}}::Weight(label=numx).
+\Gamma^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+
+def reformat (obj,scale):
+
+    bah  = Ex(str(scale))
+    tmp := @(bah) @(obj).
+    distribute         (tmp)
+    tmp = product_sort (tmp)
+    rename_dummies     (tmp)
+    canonicalise       (tmp)
+    factor_out         (tmp,$x^{a?}$)
+
+    return tmp
+
+def get_term (obj,n):
+
+    tmp := @(obj).
+    foo = Ex("numx = " + str(n))
+    distribute  (tmp)
+    keep_weight (tmp, foo)
+
+    return tmp
+
+beg_stage_4 = time.time()
+
+rnc := x^{a}
+     + @(y41)
+     + @(y42)
+     + @(y43)
+     + @(y44).
+
+# substitute (rnc,$A^{a}->x^{a}$)
+
+rnc1 = get_term (rnc,1)
+rnc2 = get_term (rnc,2)
+rnc3 = get_term (rnc,3)
+rnc4 = get_term (rnc,4)
+rnc5 = get_term (rnc,5)
+
+scaled1 = reformat (rnc1,   1)
+scaled2 = reformat (rnc2,   2)
+scaled3 = reformat (rnc3,   6)
+scaled4 = reformat (rnc4,  24)
+scaled5 = reformat (rnc5, 360)
+
+import cdblib
+
+cdblib.create ('gen2rnc.json')
+
+cdblib.put ('rnc',rnc,'gen2rnc.json')
+
+cdblib.put ('rnc1',rnc1,'gen2rnc.json')
+cdblib.put ('rnc2',rnc2,'gen2rnc.json')
+cdblib.put ('rnc3',rnc3,'gen2rnc.json')
+cdblib.put ('rnc4',rnc4,'gen2rnc.json')
+cdblib.put ('rnc5',rnc5,'gen2rnc.json')
+
+end_stage_4 = time.time()
+
+print ("Stage 1: {:7.1f} secs\\hfill\\break".format(end_stage_1-beg_stage_1))
+print ("Stage 2: {:7.1f} secs\\hfill\\break".format(end_stage_2-beg_stage_2))
+print ("Stage 3: {:7.1f} secs\\hfill\\break".format(end_stage_3-beg_stage_3))
+print ("Stage 4: {:7.1f} secs".format(end_stage_4-beg_stage_4))
+
+cdblib.create ('gen2rnc.export')
+
+# 6th order terms, scaled
+cdblib.put ('rnc61scaled',scaled1,'gen2rnc.export')
+cdblib.put ('rnc62scaled',scaled2,'gen2rnc.export')
+cdblib.put ('rnc63scaled',scaled3,'gen2rnc.export')
+cdblib.put ('rnc64scaled',scaled4,'gen2rnc.export')
+cdblib.put ('rnc65scaled',scaled5,'gen2rnc.export')
+
+checkpoint.append (scaled1)
+checkpoint.append (scaled2)
+checkpoint.append (scaled3)
+checkpoint.append (scaled4)
+checkpoint.append (scaled5)
+
+
+for i in range( len(checkpoint) ):
+   cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
+
