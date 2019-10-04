@@ -1,0 +1,13 @@
+chmod u+x ./build.sh
+
+chmod u+x ./source/build.sh
+chmod u+x ./source/cadabra/tests-semantic.sh
+chmod u+x ./source/cadabra/tests-text.sh
+chmod u+x ./source/cadabra/tests.sh
+
+chmod u+x ./hybrid-latex/scripts/cdbclean.sh
+chmod u+x ./hybrid-latex/scripts/cdbcopy.py
+chmod u+x ./hybrid-latex/scripts/cdblatex.sh
+chmod u+x ./hybrid-latex/scripts/cdbpostproc.py
+chmod u+x ./hybrid-latex/scripts/cdbpreproc.py
+chmod u+x ./hybrid-latex/scripts/merge-tex.py
