@@ -15,7 +15,6 @@
 *.cdblog
 *.cdbtxt
 *.synctex.gz
-*.hide.txt
 .example*
 .exercises*
 .ex-*
@@ -24,6 +23,5 @@
 private
 sync.sh
 diff.sh
-sync-exclude
 TO-DO.txt
 __pycache__
