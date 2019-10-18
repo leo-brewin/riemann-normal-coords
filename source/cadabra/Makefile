@@ -10,12 +10,13 @@ TARGETS = \
 		geodesic-bvp geodesic-ivp\
 		rnc2rnc gen2rnc rnc2gen\
 		geodesic-lsq geodesic-lsq-midpt\
-		detg2 sqrt-detg\
+		detg2\
 		export
 #-------------------------------------------------------------------------------
 all:
 	@ mkdir -p cdb pdf lib tests/output tests/expected tests/semantic/output tests/semantic/expected
 	@ for file in $(TARGETS); do make .$${file}; done;
+	@ # make sqrt-detg # requires pylatex.sh and friends from https://github.com/leo-brewin/hybrid-latex
 	@ make summary
 	@ make collection
 #-------------------------------------------------------------------------------
@@ -47,10 +48,17 @@ all:
 	@ make rnc2gen
 .detg2: detg2.tex config.sty .metric
 	@ make detg2
-.sqrt-detg: sqrt-detg.tex config.sty
-	@ make sqrt-detg
 .export: dRabcd.export detg2.export gen2rnc.export genGamma.export geodesic-bvp.export geodesic-ivp.export geodesic-lsq.export metric-inv.export metric.export
 	@ make export
+#-------------------------------------------------------------------------------
+sqrt-detg:
+	@ make .sqrt-detg
+.sqrt-detg: sqrt-detg.tex config.sty
+	@ echo "pylatex.sh sqrt-detg ..."
+	@ pylatex.sh -sx -i sqrt-detg &> sqrt-detg.pylog
+	@ pdflatex -halt-on-error -interaction=batchmode sqrt-detg &> /dev/null
+	@ cp -f sqrt-detg.pdf pdf/.
+	@ touch .sqrt-detg
 #-------------------------------------------------------------------------------
 summary:
 	@ make .summary
@@ -75,7 +83,7 @@ collection:
 %:
 	@ echo "cdblatex.sh $@ ..."
 	@ cdblatex.sh -T -sx -i $@ &> $@.cdblog
-	@ # echo " -->"`cdbstats -i $@.cdblog`
+	@ echo " -->"`cdbstats -i $@.cdblog`
 	@ pdflatex -halt-on-error -interaction=batchmode $@ &> /dev/null
 	@ pdflatex -halt-on-error -interaction=batchmode $@ &> /dev/null
 	@ cp -f $@.pdf    pdf/.
@@ -94,7 +102,7 @@ tests:
 	@ tests.sh
 #-------------------------------------------------------------------------------
 rm-dot:
-	@ for file in $(TARGETS) summary collection; \
+	@ for file in $(TARGETS) summary collection sqrt-detg; \
 	  do \
 	     rm -rf .$${file}; \
 	  done
@@ -118,7 +126,7 @@ rm-expected:
 	@ rm -rf tests/semantic/expected/*
 #-------------------------------------------------------------------------------
 clean:
-	@ for file in $(TARGETS) summary collection; \
+	@ for file in $(TARGETS) summary collection sqrt-detg; \
 	  do \
 	     rm -rf $${file}.aux $${file}.log $${file}.out $${file}.synctex.gz; \
 	  done
@@ -130,7 +138,7 @@ veryclean:
 		  rm -rf $${file}.pdf; \
 	     rm -rf $${file}.cdb $${file}_.cdb; \
 		  rm -rf $${file}.cdbidx $${file}.cdbtxt $${file}.cdblog; \
-		  rm -rf $${file}.py; \
+		  rm -rf $${file}.py $${file}.pylog; \
 	  done
 #-------------------------------------------------------------------------------
 pristine:
@@ -139,11 +147,12 @@ pristine:
 	@ make rm-expected
 	@ make veryclean
 	@ (cd tests/semantic; make pristine)
-	@ for file in $(TARGETS) summary collection; \
+	@ for file in $(TARGETS) summary collection sqrt-detg; \
 	  do \
 	     rm -rf $${file}.pdf; \
 		  rm -rf $${file}.json $${file}*.c; \
 		  rm -rf $${file}.cdbtex $${file}*.cdbcopy; \
+		  rm -rf $${file}.pytex; \
 	  done
 #-------------------------------------------------------------------------------
 # prepare files for github

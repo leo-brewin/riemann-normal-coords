@@ -9,9 +9,9 @@ Expand $\sqrt{g}$ in powers of $R,\nabla R$ etc.
 
    eps, a, b, c, d = symbols('\epsilon a b c d')
 
-   ans = sqrt(1+a*eps**2+b*eps**3+c*eps**4+d*eps**5)   # py(ans.001,ans)
-   ans = ans.series(eps, 0, 6)                         # py(ans.002,ans)
-   ans = simplify(ans)                                 # py(ans.003,ans)
+   ans = sqrt(1+a*eps**2+b*eps**3+c*eps**4+d*eps**5)   # py (ans.001,ans)
+   ans = ans.series(eps, 0, 6)                         # py (ans.002,ans)
+   ans = simplify(ans)                                 # py (ans.003,ans)
 
 \end{python}
 
@@ -28,9 +28,9 @@ And while we're here, let's also expand $\log(g)$ in powers of $R,\nabla R$ etc.
 
    eps, a, b, c, d = symbols('\epsilon a b c d')
 
-   ans = log(1+a*eps**2+b*eps**3+c*eps**4+d*eps**5)    # py(ans.101,ans)
-   ans = ans.series(eps, 0, 6)                         # py(ans.102,ans)
-   ans = simplify(ans)                                 # py(ans.103,ans)
+   ans = log(1+a*eps**2+b*eps**3+c*eps**4+d*eps**5)    # py (ans.101,ans)
+   ans = ans.series(eps, 0, 6)                         # py (ans.102,ans)
+   ans = simplify(ans)                                 # py (ans.103,ans)
 
 \end{python}
 
