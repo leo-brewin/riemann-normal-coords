@@ -1,8 +1,5 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage{cdblatex}
-% \usepackage{amsmath}% part of cdblatex
-% \usepackage{amssymb}% ditto
-% \usepackage{breqn}%   ditto
 \usepackage{hyperref}
 \usepackage{geometry}
 \usepackage{summary}
@@ -39,7 +36,7 @@ In terms of $\nabla$ the above MTW definition of $R^{a}{}_{bcd}$ can written as
 
 % -------------------------------------------------------------------------------------------------
 \subsection*{Symmetrisation}
-\input{dGamma.cdbtex}
+\input{lib/dGamma.cdbtex}
 
 In the following pages there will be frequent constructions of the form
 \begin{dgroup*}
@@ -51,13 +48,13 @@ The vector $A^{a}$ has no special meaning. Its purpose is to indicate that the
 associciated tensor is symmetric over a selection of its indices. If the $A^{a}$ were not included
 then the right hand side would either need to be spelt out in full or some other device would
 be needed to denote the symmetries. The symmetrisation brackets are included on the left hand
-side though they are redundant (in the presence of the $A{a}$).
+side though they are redundant (in the presence of the $A^{a}$).
 
 \clearpage
 
 % =================================================================================================
 \section*{The metric in RNC}
-\input{metric.cdbtex}
+\input{lib/metric.cdbtex}
 
 \begin{dgroup*}
    \begin{dmath*} g_{a b}(x) = \cdb{Metric.601}+\BigO{\eps^6} \end{dmath*}
@@ -85,7 +82,7 @@ side though they are redundant (in the presence of the $A{a}$).
 
 % =================================================================================================
 \section*{The inverse metric in RNC}
-\input{metric-inv.cdbtex}
+\input{lib/metric-inv.cdbtex}
 
 \begin{dgroup*}
    \begin{dmath*} g^{a b}(x) = \cdb{Metric.601}+\BigO{\eps^6} \end{dmath*}
@@ -113,31 +110,31 @@ side though they are redundant (in the presence of the $A{a}$).
 
 % =================================================================================================
 \section*{The metric determinant in RNC}
-\input{detg2.cdbtex}
+\input{lib/detg2.cdbtex}
 
 \begin{dgroup*}
-   \begin{dmath*} -\det g(x) = \cdb{Ndetg.701}+\BigO{\eps^5} \end{dmath*}
+   \Dmath*{-\det g(x) = \cdb{Ndetg.701}+\BigO{\eps^6}}
 \end{dgroup*}
 
 % =================================================================================================
 \section*{The metric Jacobian in RNC}
 
 \begin{dgroup*}
-   \begin{dmath*} \sqrt{-\det g(x)} = \cdb{sqrtNdetg.801}+\BigO{\eps^5} \end{dmath*}
+   \Dmath*{\sqrt{-\det g(x)} = \cdb{sqrtNdetg.801}+\BigO{\eps^6}}
 \end{dgroup*}
 
 % =================================================================================================
 \section*{The log of detg in RNC}
 
 \begin{dgroup*}
-   \begin{dmath*} \log{-\det g(x)\vert} = \cdb{logNdetg.901}+\BigO{\eps^5} \end{dmath*}
+   \Dmath*{\log\left(-\det g(x)\right) = \cdb{logNdetg.901}+\BigO{\eps^6}}
 \end{dgroup*}
 
 \clearpage
 
 % =================================================================================================
 \section*{The connection in RNC}
-\input{connection.cdbtex}
+\input{lib/connection.cdbtex}
 
 \begin{dgroup*}
    \begin{dmath*} A^a A^b \Gamma^{d}_{a b} = \cdb{Gamma.301} \end{dmath*}
@@ -169,7 +166,7 @@ side though they are redundant (in the presence of the $A{a}$).
 
 % =================================================================================================
 \section*{Symmetrised partial derivatives of the connection}
-\input{dGamma.cdbtex}
+\input{lib/dGamma.cdbtex}
 
 \begin{dgroup*}
    \begin{dmath*}   3 A^b A^c\Gamma^a{}_{d(b,c)} = \cdb{scaled1.002} \end{dmath*}
@@ -183,7 +180,7 @@ side though they are redundant (in the presence of the $A{a}$).
 
 % =================================================================================================
 \section*{Symmetrised partial derivatives of $R^a{}_{bcd}$}
-\input{dRabcd.cdbtex}
+\input{lib/dRabcd.cdbtex}
 
 \begin{dgroup*}
    \begin{dmath*}    A^c A^d A^e R^a{}_{cdb,e} = \cdb{scaled1.601} \end{dmath*}
@@ -197,7 +194,7 @@ side though they are redundant (in the presence of the $A{a}$).
 
 % =================================================================================================
 \section*{The generalised connection in RNC}
-\input{genGamma.cdbtex}
+\input{lib/genGamma.cdbtex}
 
 \begin{dgroup*}
    \begin{dmath*} A^b A^c \Gamma^{a}_{b c} = \cdb{genGamma0.000} \end{dmath*}
@@ -224,7 +221,7 @@ This is the same as the previous page but with a small change in the format to a
 
 % =================================================================================================
 \section*{Convert from generic (x) to local RNC coords (y)}
-\input{gen2rnc.cdbtex}
+\input{lib/gen2rnc.cdbtex}
 
 \begin{align*}
    y^a = \ny{0}^{a} + \ny{1}^{a} + \ny{2}^{a} + \ny{3}^{a} + \ny{4}^{a}
@@ -242,7 +239,7 @@ This is the same as the previous page but with a small change in the format to a
 
 % =================================================================================================
 \section*{The geodesic ivp}
-\input{geodesic-ivp.cdbtex}
+\input{lib/geodesic-ivp.cdbtex}
 
 \begin{align*}
    x^{d}(s) = x^{d}
@@ -264,7 +261,7 @@ This is the same as the previous page but with a small change in the format to a
 
 % =================================================================================================
 \section*{Geodesic boundary value problem to terms linear in $R$}
-\input{geodesic-bvp.cdbtex}
+\input{lib/geodesic-bvp.cdbtex}
 
 \begin{dgroup*}
    \begin{dmath*} x^{a}(s) = \cdb{bvp.601} + \BigO{s^3,\eps^3} \end{dmath*}
@@ -393,7 +390,7 @@ The geodesic that connects the points with RNC coordinates $x^a$ and $x^a+Dx^a$ 
 
 % =================================================================================================
 \section*{Geodesic arc-length}
-\input{geodesic-lsq.cdbtex}
+\input{lib/geodesic-lsq.cdbtex}
 
 \begin{dgroup*}[spread=5pt]
    % LCB: which of these is correct?
@@ -426,7 +423,7 @@ The geodesic that connects the points with RNC coordinates $x^a$ and $x^a+Dx^a$ 
 
 % =================================================================================================
 \section*{Tranformation between two RNC frames}
-\input{rnc2rnc.cdbtex}
+\input{lib/rnc2rnc.cdbtex}
 
 \begin{align*}
    y^{a} = \ny{0}^{a} + \ny{2}^{a} + \ny{3}^{a} + \ny{4}^{a} + \ny{5}^{a} + \BigO{\eps^6}
