@@ -6,13 +6,13 @@ This repository provides all the LaTeX and Cadabra sources used in preparing the
 
 [Cadabra][3] is an open access program ideally suited to complex tensor commutations in General Relativity. Tensor expressions are written in LaTeX while an enhanced version of Python is used to control the computations. For an introduction to Cadabra see [A tutorial on Cadabra][4].
 
-All of the sources on this repository are written with the Cadabra source embedded in a LaTeX documents. Simple tools are used to extract and execute the embedded Cadabra source while also capturing the output and making it available elsewhere in the LaTeX document. These tools have been cloned from the [hybrid-latex][5] project and can be found in the `hybrid-latex/` directory. A copy of the documentation for the Hybrid-LaTeX project is included in the `pdf/` directory.
+All of the sources on this repository are written with the Cadabra source embedded in LaTeX documents. Simple tools are used to extract and execute the embedded Cadabra source while also capturing the output and making it available elsewhere in the LaTeX document. These tools have been cloned from the [hybrid-latex][5] repository and can be found in the `hybrid-latex/` directory. A copy of the documentation for the Hybrid-LaTeX project is included in the `pdf/` directory.
 
-Note that the hybrid LaTeX tools are not essential in order to work through the project. The raw Cadabra files (stripped bare of any of the Hybrid-Latex markup) are also included, see the files in `source/cadabra/cdb/`. These can be run either at the command line (as described below) or copied into the Cadabra2 gui. Though taking this approach does mean that the formatting of the Cadabra output will not appear exactly as shown in the tutorial's pdf files (in `pdf/`).
+Note that the hybrid LaTeX tools are not essential in order to work through the files in this repository. The raw Cadabra files (stripped bare of any of the Hybrid-Latex markup) are also included, see the files in `source/cadabra/cdb/`. These can be run either at the command line (as described below) or copied into the Cadabra2 gui. Though taking this approach does mean that the formatting of the Cadabra output will not appear exactly as shown in the tutorial's pdf files (in `pdf/`).
 
 ## Documentation
 
-The directory `pdf/` contains all of the output generated from the hybrid sources. The main document is `pdf/paper.pdf`. This describes the underlying mathematics (the definitions and algorithms for Riemann normal coordinates) as well as containing selected results. A summary of all of the results can be found in `pdf/summary.pdf` while the complete listing for all of the codes can found in `pdf/collection.pdf`. The file `pdf/hybrid.pdf` is the main documentation for the [Hybrid LaTeX][5] project.
+The directory `pdf/` contains all of the output generated from the hybrid sources. The main document is `pdf/paper.pdf`. This describes the underlying mathematics (the definitions and algorithms for Riemann normal coordinates) as well as containing selected results. A summary of all of the results can be found in `pdf/summary.pdf` while the complete listing for all of the codes can found in `pdf/collection.pdf`. The file `hybrid-latex/hybrid.pdf` is the main documentation for the [Hybrid LaTeX][5] repository.
 
 ## Installation
 
@@ -35,19 +35,19 @@ To build everything from scratch just run
 
 form the top directory. This will run Cadabra and LaTeX on each of the sources in `source/cadabra/` and `source/tex/`. Some of the Cadabra codes will take a few minutes to run (see `source/cadabra/TIME.txt` for a list of approximate times).
 
-Makefiles are also provided so you can build individual codes, for example `source/cadabra/metric`, using
+Makefiles are also provided so you can build individual codes, for example `source/cadabra/dGamma`, using
 
     $ cd source/cadabra
-    $ make metric
+    $ make dGamma
 
 There are strict dependencies amongst the codes. These dependencies are included in the Makefiles. See `source/cadabra/SEQUENCE.txt` for a list of the dependencies and the required order of execution.
 
-You can also compile `source/cadabra/metric` without using `make` by executing
+You can also compile `source/cadabra/dGamma` without using `make` by executing
 
     $ cd source/cadabra
-    $ cdblatex.sh -i metric
+    $ cdblatex.sh -i dGamma
 
-This should generate the `metric.pdf` file (along with a few other support files). A list of the command line options for `cdblatex.sh` can be found using
+This should generate the `dGamma.pdf` file (along with a few other support files). A list of the command line options for `cdblatex.sh` can be found using
 
     $ cdblatex.sh -h
 
@@ -58,12 +58,12 @@ The `cdblatex.sh` script will attempt to open the pdf file. You may need to edit
 If you are not using the Hybrid-LaTeX tools then you would type
 
     $ cd source/cadabra/cdb
-    $ cadabra2python metric.cdb metric.py
-    $ cadabra2 metric.py
+    $ cadabra2python dGamma.cdb dGamma.py
+    $ cadabra2 dGamma.py
 
 This will produce plain text output.
 
-You could also copy and paste `metric.cdb` into the Cadabra2 gui.
+You could also copy and paste `dGamma.cdb` into the Cadabra2 gui.
 
 ## Testing
 
@@ -71,7 +71,7 @@ You can check your installation by running (from the command line)
 
     $ cd source/cadabra/
     $ make
-    $ tests.sh
+    $ make tests
 
 If all goes well then you should see a few lines like
 
@@ -80,7 +80,7 @@ If all goes well then you should see a few lines like
     > diff gen2rnc.cdbtex
     > diff genGamma.cdbtex
 
-There will be more lines (from the other examples). The key thing to observe is that each `diff` command produces no output. There are also some tests that do not use the `diff` command. These tests are run by Cadabra. It reads in the expected results and compares them with the actual results printing out any differences (this allows for non-important differences in expressions to be ignored, for example reordering a sum). The results of those (semantic) tests are recorded in `source/cadabra/tests/semantic/summary.pdf`.
+There will be more lines (from the other examples). The key thing to observe is that each `diff` command produces no output (apart from a few lines that record execution times as these may vary slightly from one run to the next). There are also some tests that do not use the `diff` command. These tests are run by Cadabra. It reads in the expected results and compares them with the actual results printing out any differences (this allows for non-important differences in expressions to be ignored, for example reordering a sum). The results of those (semantic) tests are recorded in `source/cadabra/tests/semantic/summary.pdf`.
 
 ## License
 

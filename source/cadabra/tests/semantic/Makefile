@@ -27,7 +27,7 @@ all:
 	@ touch .$*
 #-------------------------------------------------------------------------------
 shared:
-	@ cadabra2python shared.cdb shared.py
+	@ cadabra2python cdb/shared.cdb shared.py
 #-------------------------------------------------------------------------------
 summary:
 	@ make .summary
