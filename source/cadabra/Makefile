@@ -173,3 +173,5 @@ github:
 		  if [[ -e $${file}.cdbcopy ]]; then mv -f $${file}.cdbcopy lib/.; fi ; \
 		  if [[ -e $${file}.export ]];  then mv -f $${file}.export  lib/.; fi ; \
 	  done
+	@ cp -rf pdf/summary.pdf ../../pdf/.
+	@ cp -rf pdf/collection.pdf ../../pdf/.

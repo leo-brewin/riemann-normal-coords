@@ -6,20 +6,31 @@ SHELL = /bin/bash
 TARGETS = $(patsubst %.tex,%,$(wildcard paper.tex))
 #-------------------------------------------------------------------------------
 all:
-	@ for file in $(TARGETS); do make .$${file}; done;
+	@ version.sh
+	@ for file in $(TARGETS); \
+	  do \
+	     if ! [[ -e $${file}.aux ]]; then \
+		     touch $${file}.aux $${file}.tex; \
+		  fi; \
+	     make .$${file}; \
+	  done
 #-------------------------------------------------------------------------------
 %:
 	@ make .$*
 .%:	%.tex
-	@ echo "pdflatex.sh $* ..."
+	@ echo "pdflatex $* ..."
 	@ touch $*.aux
 	@ rm -rf $*.bbl $*.bcf
-	@ pdflatex -halt-on-error -interaction=batchmode $* &> $*.cdblog
-	@ # pick just one, bibtex or biber
-	@ # bibtex $* &> $*.cdblog
-	@ biber --decodecharsset=null $* &> $*.cdblog
-	@ pdflatex -halt-on-error -interaction=batchmode $* &> $*.cdblog
-	@ pdflatex -halt-on-error -interaction=batchmode $* &> $*.cdblog
+	@ pdflatex -halt-on-error -interaction=batchmode $* &> $*.tmplog
+	@ # pick just one, bibtex or biber, must alter source.tex to suit
+	@ # echo "bibtex $* ..."
+	@ # bibtex $* &> $*.biblog
+	@ echo "biber $* ..."
+	@ biber --decodecharsset=null $* &> $*.biblog
+	@ echo "pdflatex $* ..."
+	@ pdflatex -halt-on-error -interaction=batchmode $* &> $*.tmplog
+	@ echo "pdflatex $* ..."
+	@ pdflatex -halt-on-error -interaction=batchmode $* &> $*.tmplog
 	@ touch .$*
 #-------------------------------------------------------------------------------
 rm-dot:
@@ -32,16 +43,16 @@ rm-dot:
 clean:
 	@ for file in $(TARGETS); \
 	  do \
-	     rm -rf $${file}.log $${file}.out $${file}.synctex.gz; \
+	     rm -rf $${file}.out $${file}.toc $${file}.synctex.gz; \
+	     rm -rf $${file}.log $${file}.biblog $${file}.tmplog; \
 		  rm -rf $${file}.bcf $${file}.blg $${file}.run.xml; \
-	     rm -rf $${file}.errors $${file}.exnum $${file}.lstnum $${file}.blg; \
+	     rm -rf $${file}.errors $${file}.exnum $${file}.itnum $${file}.lstnum; \
 	  done
 #-------------------------------------------------------------------------------
 veryclean:
 	@ make clean
 	@ for file in $(TARGETS); \
 	  do \
-	     rm -rf $${file}.aux $${file}.bbl; \
 		  rm -rf $${file}.cdb $${file}_.cdb; \
 		  rm -rf $${file}.cdbidx $${file}.cdbtxt $${file}.cdblog; \
 		  rm -rf $${file}.py $${file}.pytxt $${file}.pylog; \
@@ -60,3 +71,4 @@ github:
 	@ make pristine
 	@ make all
 	@ make veryclean
+	@ cp -rf paper.pdf ../../pdf/.

@@ -1,6 +1,8 @@
 %-------------------------------------------------------------------------------
 \parindent=0pt
 \parskip=8pt plus 2pt minus 1pt
+% --------------------------------------------------------------------------------------------
+\IfFileExists{version.tex}{\input{version.tex}}{}
 %-------------------------------------------------------------------------------
 \def\One{{\cal O}(1)}
 %-------------------------------------------------------------------------------
@@ -60,7 +62,6 @@
 \def\ui{{\underline{\rule[-0.5pt]{0pt}{0pt}i}}}
 \def\us{{\underline{\rule[-0.5pt]{0pt}{0pt}s}}}
 %-------------------------------------------------------------------------------
-\definecolor{cdbverbatim}{named}{RoyalBlue}
 \def\verbatim@font{\color{blue}\normalfont\ttfamily\small}% for use with \verb
 \def\cdbverb#1{{\color{blue}\texttt{\small\detokenize{#1}}}}% for inline Cadabra verbatim, fails with # in arg.
 %-------------------------------------------------------------------------------
@@ -101,5 +102,3 @@
 \def\dotx{{\Dot x}}
 \def\lam{\lambda}
 \def\tts{\tt\small}
-%-------------------------------------------------------------------------------
-\input{../cadabra/lib/export.cdbtex}% pulls in all the Cadabra results

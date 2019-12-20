@@ -1,34 +1,49 @@
+\pdfoutput=1% forces arxiv to use pdflatex
+% --------------------------------------------------------------------------------------------
+\def\Title{Riemann Normal Coordinate expansions using Cadabra.}
+\def\Author{Leo Brewin}
+% --------------------------------------------------------------------------------------------
 \documentclass[a4paper,12pt]{article}
-\usepackage[style=numeric,
-            sorting=none,
-            sortcites=true]{biblatex}
-% \usepackage[style=numeric,
-%             sorting=none,
-%             sortcites=true,
-%             bibencoding=ascii,
-%             backend=biber]{biblatex}
+%
+% biber will replace LaTeX accented characters like \'{e} with utf-8 characters.
+% The utf-8 characters are written to the .bbl and this causes problems with pdflatex.
+%    First  solution use: biber tutorial and \usepackage[latin1]{inputenc}
+%    Second solution use: biber --decodecharsset=null tutorial
+\usepackage[style=numeric, sorting=none, sortcites=true]{biblatex}
 \addbibresource{bibdata.bib}
-\usepackage[dvipsnames]{xcolor}
-\usepackage{listings}
-\usepackage{amsmath}
-\usepackage{breqn}
-% \usepackage[colorlinks=false]{hyperref}% for journals
-\usepackage[colorlinks=true,citecolor=red]{hyperref}% for me
+%
 % \usepackage{showlabels}
 % \usepackage{showkeys}
 \usepackage{cdblatex}
+\usepackage{hyperref}
 \usepackage{geometry}
 \usepackage{paper}
 
 \geometry{a4paper,portrait,margin=2cm}
 
+% \usepackage[colorlinks=false]{hyperref}% for journals
+% \usepackage[colorlinks=true,citecolor=red]{hyperref}% for me
+\hypersetup{colorlinks=true,
+            citecolor=blue,
+            linkcolor=red,
+            pdfauthor= \Author,
+            pdftitle = \Title}
+
 \numberwithin{equation}{section}
 
+% ============================================================================================
 \begin{document}
 
-\title{\bfseries Riemann Normal Coordinate expansions using Cadabra}
-\author{%
-Leo Brewin\\[10pt]%
+\input{../cadabra/lib/export.cdbtex}% pulls in all the Cadabra results
+
+\CdbSetup{action=verbatim}% we won't be processing any Cadabra code,
+                          % just listing code from other sources
+
+\lstset{numbers=left,gobble=2,basicstyle=\ttfamily\small,escapechar=|}
+
+% ============================================================================================
+\title{\Title}
+\author{\Author\\[10pt]%
 School of Mathematical Sciences\\%
 Monash University, 3800\\%
 Australia}
@@ -39,7 +54,7 @@ Australia}
 % \date{09-Jul-2009}% minor grammatical corrections in response to 1st referee
 % \date{12-Aug-2009}% small corrections arising from proofs received from CQG
 \date{12-Aug-2009 (v1)\\
-      19-Apr-2019 (v2)}% major changes to correct errors in 4th and higher order terms,
+      10-Dec-2019 (v2)}% major changes to correct errors in 4th and higher order terms,
                        % all code will be available on github
 \reference{Preprint: arXiv:0903.2087\\[5pt]
            Journal: {\it Class.Quantum.Grav.} {\bf 26} 175017 (2009)}
@@ -59,14 +74,15 @@ fifth-order in the curvature and were obtained using the computer algebra packag
 The first version of this paper was written in 2009. This second version (written in 2019)
 differs from the first in a number of important ways. First, the discussion on Cadabra has
 been completely rewritten to account for the revised syntax introduced in the latest version
-of Cadabra (itself updated in 2016). Second, and more importantly, a significant
-computational error in the first version has been corrected. Though the algorithms given in
-the first version were correct their implementation in Cadabra (by this author) was
-incorrect. This lead to errors first in the cubic and higher order terms in the generalised
-connections and then, down the line, to computations built upon the generalised connections
-(e.g., the initial and boundary value problem and the arc-length equations). The Cadabra
-codes have been corrected and thoroughly cross-checked. A number of minor typographical
-errors have also been corrected.
+of Cadabra (itself updated in 2016)\footnote{The Cadabra results in this paper are based on
+\CdbVersion}. Second, and more importantly, a significant computational error in the first
+version (of this paper) has been corrected. Though the algorithms given in the first version
+were correct their implementation in Cadabra (by this author) was incorrect. This lead to
+errors first in the quartic and higher order terms in the generalised connections and then,
+down the line, to computations built upon the generalised connections (e.g., the initial and
+boundary value problem and the arc-length equations). The Cadabra codes have been corrected
+and thoroughly cross-checked. A number of minor typographical errors have also been
+corrected.
 \EndNote
 
 % ============================================================================================
@@ -892,10 +908,10 @@ this paper.
 
 All of the $\BigO{\eps^6}$ Cadabra programs were not overly demanding on computational
 resources, taking between 0.5 second and 12 minutes to run and requiring
-between 40 and 360 Mbyte of memory (on a Mac Pro running macOS 10.14.4).
+between 40 and 360 Mbyte of memory (on a Mac Pro (2013) running macOS 10.14.4).
 
 The Cadabra codes and several support scripts are available from the author's GitHub site
-\ \url{https://github.com/leo-brewin/cadabra-riemann-coords}.
+\ \url{https://github.com/leo-brewin/riemann-normal-coords}.
 
 Some of the following expansions can be compared directly with results obtained by
 traditional methods. In particular the expansions for the metric and its inverse, equations
@@ -936,9 +952,9 @@ side (as per the discussion in section \ref{sec:Notation}).
 \mysubsection{The metric determinant}
 
 \begin{dgroup*}[compact,spread={3pt}]
-   \dMath{11.3a}{-g(x)        = \cdb{Ndetg}     + \BigO{\eps^6}}{eqn:detg}{\hskip 1cm\hfill}
-   \dMath{11.3b}{\sqrt{-g(x)} = \cdb{sqrtNdetg} + \BigO{\eps^6}}{eqn:sqrtdetg}{\hskip 1cm\hfill}
-   \dMath{11.3c}{\log{-g(x)}  = \cdb{logNdetg}  + \BigO{\eps^6}}{eqn:logdetg}{\hfill}
+   \dMath{11.3a}{-g(x)         = \cdb{Ndetg}     + \BigO{\eps^6}}{eqn:detg}{\hskip 1cm\hfill}
+   \dMath{11.3b}{\sqrt{-g(x)}  = \cdb{sqrtNdetg} + \BigO{\eps^6}}{eqn:sqrtdetg}{\hskip 1cm\hfill}
+   \dMath{11.3c}{\log{(-g(x))} = \cdb{logNdetg}  + \BigO{\eps^6}}{eqn:logdetg}{\hfill}
 \end{dgroup*}
 
 \clearpage
@@ -1086,7 +1102,7 @@ $R^{a}{}_{(bc{\Dot d};\ue)}$ are always of the form $\Gamma^{p}{}_{q(r,\us)}$.
 \section{Source}
 
 All of the Cadabra files used in preparing this paper are available at the GitHub repository
-\ \url{https://github.com/leo-brewin/cadabra-riemann-coords}
+\ \url{https://github.com/leo-brewin/riemann-normal-coords}
 
 % ============================================================================================
 \section{Acknowledgements}

@@ -336,10 +336,10 @@ A^{c} A^{d} A^{e} A^{f} \nabla_{c d}{R_{b e f g}} g^{a g}%
 Stage 1:     2.4 secs\hfill\break%
 Stage 2:     6.3 secs\hfill\break%
 Stage 3:     0.5 secs\hfill\break%
-Stage 4:   179.3 secs\hfill\break%
-Stage 5:   194.8 secs\hfill\break%
-Stage 6:   232.1 secs\hfill\break%
-Stage 7:     7.9 secs%
+Stage 4:   177.4 secs\hfill\break%
+Stage 5:   195.4 secs\hfill\break%
+Stage 6:   241.7 secs\hfill\break%
+Stage 7:     8.4 secs%
 }
 \cdbtag{scaled1.601}{%
 A^{c} A^{d} A^{e} g^{a f} \nabla_{c}{R_{b d e f}}%

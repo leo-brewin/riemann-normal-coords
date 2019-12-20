@@ -1,0 +1,503 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.9 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global}
+    \entry{brewin:2009-02}{article}{}
+      \name{author}{1}{}{%
+        {{hash=88bf9b772ddd6aee4a5d5f641a10ad46}{%
+           family={Brewin},
+           familyi={B\bibinitperiod},
+           given={Leo},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{88bf9b772ddd6aee4a5d5f641a10ad46}
+      \strng{fullhash}{88bf9b772ddd6aee4a5d5f641a10ad46}
+      \strng{bibnamehash}{88bf9b772ddd6aee4a5d5f641a10ad46}
+      \strng{authorbibnamehash}{88bf9b772ddd6aee4a5d5f641a10ad46}
+      \strng{authornamehash}{88bf9b772ddd6aee4a5d5f641a10ad46}
+      \strng{authorfullhash}{88bf9b772ddd6aee4a5d5f641a10ad46}
+      \field{sortinit}{1}
+      \field{sortinithash}{2174f786c6195e7fe2ee1c229b416e29}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computer Physics Communications}
+      \field{title}{{A brief introduction to Cadabra: a tool for tensor computations in General Relativity}}
+      \field{volume}{181}
+      \field{year}{2010}
+      \field{pages}{489\bibrangedash 498}
+      \range{pages}{10}
+      \verb{eprint}
+      \verb arXiv:0903.2085
+      \endverb
+      \verb{urlraw}
+      \verb http://users.monash.edu.au/~leo/research/papers/files/lcb09-02.html
+      \endverb
+      \verb{url}
+      \verb http://users.monash.edu.au/~leo/research/papers/files/lcb09-02.html
+      \endverb
+      \keyw{lcb,cadabra}
+    \endentry
+    \entry{peeters:2007-02}{article}{}
+      \name{author}{1}{}{%
+        {{hash=81f35a1e9a9b50a3bc9cd968b7bd4ccb}{%
+           family={Peeters},
+           familyi={P\bibinitperiod},
+           given={Kasper},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{fullhash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{bibnamehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{authorbibnamehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{authornamehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{authorfullhash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \field{sortinit}{2}
+      \field{sortinithash}{cbff857e587bcb4635511624d773949e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{Introducing Cadabra: a symbolic computer algebra system for field theory problems}}
+      \field{year}{2007}
+      \verb{eprint}
+      \verb arXiv:hep-th/0701238
+      \endverb
+      \keyw{cadabra,computer-algebra}
+    \endentry
+    \entry{peeters:2018-01}{article}{}
+      \name{author}{1}{}{%
+        {{hash=81f35a1e9a9b50a3bc9cd968b7bd4ccb}{%
+           family={Peeters},
+           familyi={P\bibinitperiod},
+           given={Kasper},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{fullhash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{bibnamehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{authorbibnamehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{authornamehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{authorfullhash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \field{sortinit}{3}
+      \field{sortinithash}{a4b52e5432884761f50fb9571273b93e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{{Journal of Open Source Software.}}
+      \field{number}{32}
+      \field{title}{{Cadabra2: computer algebra for field theory revisited.}}
+      \field{volume}{3}
+      \field{year}{2018}
+      \field{pages}{1118}
+      \range{pages}{1}
+      \keyw{cadabra,computer-algebra}
+    \endentry
+    \entry{peeters:2017-01}{webpage}{}
+      \name{author}{1}{}{%
+        {{hash=81f35a1e9a9b50a3bc9cd968b7bd4ccb}{%
+           family={Peeters},
+           familyi={P\bibinitperiod},
+           given={Kasper},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{fullhash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{bibnamehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{authorbibnamehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{authornamehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{authorfullhash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \field{sortinit}{4}
+      \field{sortinithash}{11cdaee3b18e01d77f3f428b13c1fc76}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{The Cadabra v2.x home page}}
+      \field{year}{2017}
+      \verb{urlraw}
+      \verb https://cadabra.science/index.html
+      \endverb
+      \verb{url}
+      \verb https://cadabra.science/index.html
+      \endverb
+      \keyw{cadabra,computer-algebra}
+    \endentry
+    \entry{peeters:2017-02}{webpage}{}
+      \name{author}{1}{}{%
+        {{hash=81f35a1e9a9b50a3bc9cd968b7bd4ccb}{%
+           family={Peeters},
+           familyi={P\bibinitperiod},
+           given={Kasper},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{fullhash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{bibnamehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{authorbibnamehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{authornamehash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \strng{authorfullhash}{81f35a1e9a9b50a3bc9cd968b7bd4ccb}
+      \field{sortinit}{5}
+      \field{sortinithash}{3c19c3776b658b3558e9e2e4840c01e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{The Cadabra2 GitHub reporistory}}
+      \field{year}{2017}
+      \verb{urlraw}
+      \verb https://github.com/kpeeters/cadabra2
+      \endverb
+      \verb{url}
+      \verb https://github.com/kpeeters/cadabra2
+      \endverb
+      \keyw{cadabra,computer-algebra}
+    \endentry
+    \entry{hatzinikitas:2000-01}{article}{}
+      \name{author}{1}{}{%
+        {{hash=f34b1f9398593d11623f80a38bfe756a}{%
+           family={Hatzinikitas},
+           familyi={H\bibinitperiod},
+           given={Agapitos},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{f34b1f9398593d11623f80a38bfe756a}
+      \strng{fullhash}{f34b1f9398593d11623f80a38bfe756a}
+      \strng{bibnamehash}{f34b1f9398593d11623f80a38bfe756a}
+      \strng{authorbibnamehash}{f34b1f9398593d11623f80a38bfe756a}
+      \strng{authornamehash}{f34b1f9398593d11623f80a38bfe756a}
+      \strng{authorfullhash}{f34b1f9398593d11623f80a38bfe756a}
+      \field{sortinit}{6}
+      \field{sortinithash}{57e57fb8451e7fcfa45d1e069f6d3136}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{A note on Riemann normal coordinates}}
+      \field{year}{2000}
+      \verb{eprint}
+      \verb arXiv:hep-th/0001078v1
+      \endverb
+      \keyw{rnc}
+    \endentry
+    \entry{higashijima:2002-01}{article}{}
+      \name{author}{3}{}{%
+        {{hash=7bbbb5744f531d267fd212276c9b1343}{%
+           family={Higashijima},
+           familyi={H\bibinitperiod},
+           given={Kiyoshi},
+           giveni={K\bibinitperiod}}}%
+        {{hash=b6b5cb8f64bc79785adabdd798f89873}{%
+           family={Itou},
+           familyi={I\bibinitperiod},
+           given={Etsuko},
+           giveni={E\bibinitperiod}}}%
+        {{hash=1972f5e4b54f9f14c73023ff764b2347}{%
+           family={Nitta},
+           familyi={N\bibinitperiod},
+           given={Muneto},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{895dbfbea3f64827424900c52481ae71}
+      \strng{fullhash}{895dbfbea3f64827424900c52481ae71}
+      \strng{bibnamehash}{895dbfbea3f64827424900c52481ae71}
+      \strng{authorbibnamehash}{895dbfbea3f64827424900c52481ae71}
+      \strng{authornamehash}{895dbfbea3f64827424900c52481ae71}
+      \strng{authorfullhash}{895dbfbea3f64827424900c52481ae71}
+      \field{sortinit}{7}
+      \field{sortinithash}{c818dd9105a2852444fc9f5e145c294e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Prog.Theor.Phys.}
+      \field{title}{{Normal Coordinates in Kahler Manifolds and the Background Field Method}}
+      \field{volume}{108}
+      \field{year}{2002}
+      \field{pages}{185\bibrangedash 202}
+      \range{pages}{18}
+      \verb{eprint}
+      \verb arXiv:hep-th/0203081v3
+      \endverb
+      \keyw{rnc}
+    \endentry
+    \entry{yamashita:1984-01}{article}{}
+      \name{author}{1}{}{%
+        {{hash=1cf3a3b1031585dd3c2e13cf1efad24a}{%
+           family={Yamashita},
+           familyi={Y\bibinitperiod},
+           given={Yoshiyuki},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{1cf3a3b1031585dd3c2e13cf1efad24a}
+      \strng{fullhash}{1cf3a3b1031585dd3c2e13cf1efad24a}
+      \strng{bibnamehash}{1cf3a3b1031585dd3c2e13cf1efad24a}
+      \strng{authorbibnamehash}{1cf3a3b1031585dd3c2e13cf1efad24a}
+      \strng{authornamehash}{1cf3a3b1031585dd3c2e13cf1efad24a}
+      \strng{authorfullhash}{1cf3a3b1031585dd3c2e13cf1efad24a}
+      \field{sortinit}{8}
+      \field{sortinithash}{07edf88d4ea82509b9c4b4d13f41c452}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{General Relativity and Gravitation}
+      \field{number}{2}
+      \field{title}{Computer Calculation of Tensors in Riemann Normal Coordinates}
+      \field{volume}{16}
+      \field{year}{1984}
+      \field{pages}{99\bibrangedash 110}
+      \range{pages}{12}
+      \keyw{rnc}
+    \endentry
+    \entry{muller:1997-01}{article}{}
+      \name{author}{3}{}{%
+        {{hash=f93bfa77598491171e7cbea217f522e6}{%
+           family={M{\"u}ller},
+           familyi={M\bibinitperiod},
+           given={Uwe},
+           giveni={U\bibinitperiod}}}%
+        {{hash=690a35cb0b12d564df70c3dca21d3c4e}{%
+           family={Schubert},
+           familyi={S\bibinitperiod},
+           given={Christian},
+           giveni={C\bibinitperiod}}}%
+        {{hash=b65f0d2ed8de1e8b8962a46f5809d3ec}{%
+           family={Ven},
+           familyi={V\bibinitperiod},
+           given={Anton\bibnamedelima E.M.},
+           giveni={A\bibinitperiod\bibinitdelim E\bibinitperiod},
+           prefix={van\bibnamedelima de},
+           prefixi={v\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+      }
+      \strng{namehash}{fdd7abf13d0d3a3431f4f4218bb12e85}
+      \strng{fullhash}{fdd7abf13d0d3a3431f4f4218bb12e85}
+      \strng{bibnamehash}{fdd7abf13d0d3a3431f4f4218bb12e85}
+      \strng{authorbibnamehash}{fdd7abf13d0d3a3431f4f4218bb12e85}
+      \strng{authornamehash}{fdd7abf13d0d3a3431f4f4218bb12e85}
+      \strng{authorfullhash}{fdd7abf13d0d3a3431f4f4218bb12e85}
+      \field{sortinit}{9}
+      \field{sortinithash}{1dd72ab054147731c9d824b49aba0534}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Gen.Rel.Grav}
+      \field{title}{{A Closed Formula for the Riemann Normal Coordinate Expansion}}
+      \field{volume}{31}
+      \field{year}{1999}
+      \field{pages}{1759\bibrangedash 1768}
+      \range{pages}{10}
+      \verb{eprint}
+      \verb arXiv:gr-qc/9712092v2
+      \endverb
+      \keyw{rnc}
+    \endentry
+    \entry{chern-chen-lam:2000-01}{book}{}
+      \name{author}{3}{}{%
+        {{hash=c2a5c820e3ae9fcd9d2d4a0312333801}{%
+           family={Chern},
+           familyi={C\bibinitperiod},
+           given={S.S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=f9ef416f20f22aec36965b507d5e91bd}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={W.H.},
+           giveni={W\bibinitperiod}}}%
+        {{hash=feb6a65a3a9a6f463303c18b1bba332b}{%
+           family={Lam},
+           familyi={L\bibinitperiod},
+           given={K.S.},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {World Scientific, Singapore}%
+      }
+      \strng{namehash}{5ae76dc2585c2332cf54a35c42df911d}
+      \strng{fullhash}{5ae76dc2585c2332cf54a35c42df911d}
+      \strng{bibnamehash}{5ae76dc2585c2332cf54a35c42df911d}
+      \strng{authorbibnamehash}{5ae76dc2585c2332cf54a35c42df911d}
+      \strng{authornamehash}{5ae76dc2585c2332cf54a35c42df911d}
+      \strng{authorfullhash}{5ae76dc2585c2332cf54a35c42df911d}
+      \field{sortinit}{1}
+      \field{sortinithash}{2174f786c6195e7fe2ee1c229b416e29}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{Lectures on Differential Geometry}}
+      \field{year}{2000}
+      \keyw{book,rnc}
+    \endentry
+    \entry{chavel:2006-01}{book}{}
+      \name{author}{1}{}{%
+        {{hash=850225858e7c82a40b63bae166d5c8df}{%
+           family={Chavel},
+           familyi={C\bibinitperiod},
+           given={Isaac},
+           giveni={I\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press, Cambridge.}%
+      }
+      \strng{namehash}{850225858e7c82a40b63bae166d5c8df}
+      \strng{fullhash}{850225858e7c82a40b63bae166d5c8df}
+      \strng{bibnamehash}{850225858e7c82a40b63bae166d5c8df}
+      \strng{authorbibnamehash}{850225858e7c82a40b63bae166d5c8df}
+      \strng{authornamehash}{850225858e7c82a40b63bae166d5c8df}
+      \strng{authorfullhash}{850225858e7c82a40b63bae166d5c8df}
+      \field{sortinit}{1}
+      \field{sortinithash}{2174f786c6195e7fe2ee1c229b416e29}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{Riemannian Geometry. A modern introduction, 2nd ed.}}
+      \field{year}{2006}
+      \keyw{book,rnc,geodesic-variation}
+    \endentry
+    \entry{eisenhart:1926-01}{book}{}
+      \name{author}{1}{}{%
+        {{hash=88e915ba2134bef88c1a78973be887f4}{%
+           family={Eisenhart},
+           familyi={E\bibinitperiod},
+           given={Luther\bibnamedelima Pfahler},
+           giveni={L\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Princeton University Press, Princeton}%
+      }
+      \strng{namehash}{88e915ba2134bef88c1a78973be887f4}
+      \strng{fullhash}{88e915ba2134bef88c1a78973be887f4}
+      \strng{bibnamehash}{88e915ba2134bef88c1a78973be887f4}
+      \strng{authorbibnamehash}{88e915ba2134bef88c1a78973be887f4}
+      \strng{authornamehash}{88e915ba2134bef88c1a78973be887f4}
+      \strng{authorfullhash}{88e915ba2134bef88c1a78973be887f4}
+      \field{sortinit}{1}
+      \field{sortinithash}{2174f786c6195e7fe2ee1c229b416e29}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{annotation}{RNC : Sec. 18 and Appx. 3}
+      \field{title}{Riemannian Geometry}
+      \field{year}{1926}
+      \keyw{book,rnc}
+    \endentry
+    \entry{gray:1973-01}{article}{}
+      \name{author}{1}{}{%
+        {{hash=41c8eb9bbb1e97ce07720390bcf4e913}{%
+           family={Gray},
+           familyi={G\bibinitperiod},
+           given={Alfred},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{41c8eb9bbb1e97ce07720390bcf4e913}
+      \strng{fullhash}{41c8eb9bbb1e97ce07720390bcf4e913}
+      \strng{bibnamehash}{41c8eb9bbb1e97ce07720390bcf4e913}
+      \strng{authorbibnamehash}{41c8eb9bbb1e97ce07720390bcf4e913}
+      \strng{authornamehash}{41c8eb9bbb1e97ce07720390bcf4e913}
+      \strng{authorfullhash}{41c8eb9bbb1e97ce07720390bcf4e913}
+      \field{sortinit}{1}
+      \field{sortinithash}{2174f786c6195e7fe2ee1c229b416e29}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Michigan.Math.J.}
+      \field{title}{{The volume of a small geodesic ball of a Riemannian manifold}}
+      \field{volume}{20}
+      \field{year}{1973}
+      \field{pages}{329\bibrangedash 344}
+      \range{pages}{16}
+      \keyw{rnc}
+    \endentry
+    \entry{willmore:1996-01}{book}{}
+      \name{author}{1}{}{%
+        {{hash=d2945be038e877294fd8e32e21ea452b}{%
+           family={Willmore},
+           familyi={W\bibinitperiod},
+           given={T.J.},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford University Press, Oxford}%
+      }
+      \strng{namehash}{d2945be038e877294fd8e32e21ea452b}
+      \strng{fullhash}{d2945be038e877294fd8e32e21ea452b}
+      \strng{bibnamehash}{d2945be038e877294fd8e32e21ea452b}
+      \strng{authorbibnamehash}{d2945be038e877294fd8e32e21ea452b}
+      \strng{authornamehash}{d2945be038e877294fd8e32e21ea452b}
+      \strng{authorfullhash}{d2945be038e877294fd8e32e21ea452b}
+      \field{sortinit}{1}
+      \field{sortinithash}{2174f786c6195e7fe2ee1c229b416e29}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Riemannian Geometry}
+      \field{year}{1996}
+      \keyw{book,rnc}
+    \endentry
+    \entry{brewin:2019-01}{webpage}{}
+      \name{author}{1}{}{%
+        {{hash=88bf9b772ddd6aee4a5d5f641a10ad46}{%
+           family={Brewin},
+           familyi={B\bibinitperiod},
+           given={Leo},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{88bf9b772ddd6aee4a5d5f641a10ad46}
+      \strng{fullhash}{88bf9b772ddd6aee4a5d5f641a10ad46}
+      \strng{bibnamehash}{88bf9b772ddd6aee4a5d5f641a10ad46}
+      \strng{authorbibnamehash}{88bf9b772ddd6aee4a5d5f641a10ad46}
+      \strng{authornamehash}{88bf9b772ddd6aee4a5d5f641a10ad46}
+      \strng{authorfullhash}{88bf9b772ddd6aee4a5d5f641a10ad46}
+      \field{sortinit}{1}
+      \field{sortinithash}{2174f786c6195e7fe2ee1c229b416e29}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{A tutorial on Cadabra}}
+      \field{urlyear}{2019}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://github.com/leo-brewin/cadabra-tutorial
+      \endverb
+      \verb{url}
+      \verb https://github.com/leo-brewin/cadabra-tutorial
+      \endverb
+      \keyw{lcb}
+    \endentry
+    \entry{calzetta:1988-01}{article}{}
+      \name{author}{3}{}{%
+        {{hash=018724912e34beb683506f49df8480b1}{%
+           family={Calzetta},
+           familyi={C\bibinitperiod},
+           given={E.},
+           giveni={E\bibinitperiod}}}%
+        {{hash=189f16e8da82b288b7e21a276dff1e76}{%
+           family={Habib},
+           familyi={H\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=1f45e01fe46d2ce324a78cc099f76d7f}{%
+           family={Hu},
+           familyi={H\bibinitperiod},
+           given={B.L.},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{8a7aa144b7bc66ce4d46d41597a10b42}
+      \strng{fullhash}{8a7aa144b7bc66ce4d46d41597a10b42}
+      \strng{bibnamehash}{8a7aa144b7bc66ce4d46d41597a10b42}
+      \strng{authorbibnamehash}{8a7aa144b7bc66ce4d46d41597a10b42}
+      \strng{authornamehash}{8a7aa144b7bc66ce4d46d41597a10b42}
+      \strng{authorfullhash}{8a7aa144b7bc66ce4d46d41597a10b42}
+      \field{sortinit}{1}
+      \field{sortinithash}{2174f786c6195e7fe2ee1c229b416e29}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Phys. Rev. D}
+      \field{number}{10}
+      \field{title}{{Quantum kinetic field theory in curved spacetime: Covariant Wigner function and Liouville-Vlasov equations}}
+      \field{volume}{37}
+      \field{year}{1988}
+      \field{pages}{2901\bibrangedash 2919}
+      \range{pages}{19}
+      \keyw{rnc}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

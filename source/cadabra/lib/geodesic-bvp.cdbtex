@@ -337,10 +337,10 @@ Dx^{a} - \frac{1}{3}x^{b} Dx^{c} Dx^{d} g^{a e} R_{b c d e} - \frac{1}{12}x^{b} 
  - \frac{1}{120}x^{b} Dx^{c} Dx^{d} Dx^{e} Dx^{f} Dx^{g} g^{a h} g^{i j} R_{c h d i} \nabla_{e}{R_{b f g j}} - \frac{1}{360}x^{b} Dx^{c} Dx^{d} Dx^{e} Dx^{f} Dx^{g} g^{a h} \nabla_{c d e}{R_{b f g h}}%
 }
 \cdbtag{timing}{%
-Stage 1:      5.4 secs\hfill\break%
-Stage 2a:    65.3 secs\hfill\break%
-Stage 2b:    64.0 secs\hfill\break%
-Stage 3:     13.1 secs\hfill\break%
+Stage 1:      5.8 secs\hfill\break%
+Stage 2a:    69.4 secs\hfill\break%
+Stage 2b:    67.5 secs\hfill\break%
+Stage 3:     13.7 secs\hfill\break%
 }
 \cdbtag{tmp2.001}{%
 8Dx^{c} Dx^{d} x^{b} g^{a e} R_{b c d e}+Dx^{d} Dx^{e} x^{b} x^{c} \left(2g^{a f} \nabla_{d}{R_{b e c f}}+4g^{a f} \nabla_{b}{R_{c d e f}}-g^{a f} \nabla_{f}{R_{b d c e}}\right)%
