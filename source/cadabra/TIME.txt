@@ -1,3 +1,23 @@
+-- 18 Feb 2020 --------------------------------------------
+
+Cadabra 2.2.7 (build 2268.ba747e0b49 dated 2019-12-01)
+
+dGamma              -->         23.6 secs and  45 Mbytes
+dRabcd              --> 11 mins  7.3 secs and 236 Mbytes
+metric              -->  1 min  49.9 secs and  48 Mbytes
+metric-inv          -->  1 min  56.7 secs and  52 Mbytes
+connection          -->         11.6 secs and  48 Mbytes
+genGamma            -->  7 mins  6.7 secs and 186 Mbytes
+geodesic-bvp        -->  2 mins 36.7 secs and  65 Mbytes
+geodesic-ivp        -->          1.3 secs and  46 Mbytes
+rnc2rnc             -->         11.6 secs and  50 Mbytes
+gen2rnc             -->  7 mins 53.9 secs and 367 Mbytes
+rnc2gen             -->         18.8 secs and  61 Mbytes
+geodesic-lsq        -->         24.2 secs and  52 Mbytes
+geodesic-lsq-midpt  -->         30.9 secs and  51 Mbytes
+detg2               -->          8.2 secs and  49 Mbytes
+export              -->          1.4 secs and  44 Mbytes
+
 -- 23 Sep 2019 --------------------------------------------
 
 Cadabra 2.2.7 (build 2166.d9aace25f4 dated 2019-09-21)
