@@ -49,19 +49,24 @@ We can then construct the Taylor series solution for $x^{a}(s)$
 
    import cdblib
 
-   sterm21 = cdblib.get ('genGamma01','genGamma.json')
-   sterm22 = cdblib.get ('genGamma02','genGamma.json')
-   sterm23 = cdblib.get ('genGamma03','genGamma.json')
-   sterm24 = cdblib.get ('genGamma04','genGamma.json')
+   # change signs to account for - sign in front of the sum for x^a(s), see above preamble
 
-   sterm31 = cdblib.get ('genGamma11','genGamma.json')
-   sterm32 = cdblib.get ('genGamma12','genGamma.json')
-   sterm33 = cdblib.get ('genGamma13','genGamma.json')
+   def flip_sign (obj):
+       return Ex(0) - obj
 
-   sterm41 = cdblib.get ('genGamma21','genGamma.json')
-   sterm42 = cdblib.get ('genGamma22','genGamma.json')
+   sterm21 = flip_sign (cdblib.get ('genGamma01','genGamma.json'))
+   sterm22 = flip_sign (cdblib.get ('genGamma02','genGamma.json'))
+   sterm23 = flip_sign (cdblib.get ('genGamma03','genGamma.json'))
+   sterm24 = flip_sign (cdblib.get ('genGamma04','genGamma.json'))
 
-   sterm51 = cdblib.get ('genGamma31','genGamma.json')
+   sterm31 = flip_sign (cdblib.get ('genGamma11','genGamma.json'))
+   sterm32 = flip_sign (cdblib.get ('genGamma12','genGamma.json'))
+   sterm33 = flip_sign (cdblib.get ('genGamma13','genGamma.json'))
+
+   sterm41 = flip_sign (cdblib.get ('genGamma21','genGamma.json'))
+   sterm42 = flip_sign (cdblib.get ('genGamma22','genGamma.json'))
+
+   sterm51 = flip_sign (cdblib.get ('genGamma31','genGamma.json'))
 
    sterm2 := @(sterm21) + @(sterm22) + @(sterm23) + @(sterm24).  # cdb (sterm2.000,sterm2)
    sterm3 := @(sterm31) + @(sterm32) + @(sterm33).               # cdb (sterm3.000,sterm3)

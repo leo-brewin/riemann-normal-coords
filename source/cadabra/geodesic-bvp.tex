@@ -55,7 +55,7 @@ loose contributions to the curvature terms of order $\BigO{\eps^{n+1}}$ and high
 consistent we must truncate all terms of the partial sum to order $\BigO{\eps^n}$ (i.e., exclude
 any contributions from terms $\BigO{\eps^{n+1}}$ and higher, these are the terms that would
 couple with the terms that we excluded when truncating the original infinite series). Let
-$\nT{k}$ the operator that truncates its argument to contain terms no higher than
+$\nT{k}$ be the operator that truncates its argument to contain terms no higher than
 $\BigO{\eps^n}$. Then we have the following modified version of the equation for $\ny{n}^a$
 \begin{align*}
    \ny{n}^a = \Dx^a
@@ -85,11 +85,11 @@ and so on. Note that there are no $\ny{1}^a$ terms.
 This is the final stage -- it introduces the generalised connecstion after the
 completion of the fixed point scheme.
 
-All that needs be done is to substitute our expression for $y^a$ into
-\begin{align}
-   \label{eq:solBVP}
-   x^a(s) = x^a_i + s y^a - \sum_{k=2}^\infty\>\frac{1}{k!}\>\Gamma^{a}{}_{\ubk} y^{.\ubk} s^k
-\end{align}
+All that needs be done is to substitute our expression for $y^a$ into \eqref{eq:solBVP}
+% \begin{align}
+%    \label{eq:solBVP}
+%    x^a(s) = x^a_i + s y^a - \sum_{k=2}^\infty\>\frac{1}{k!}\>\Gamma^{a}{}_{\ubk} y^{.\ubk} s^k
+% \end{align}
 to obtain the desired solution to the two point boundary value problem.
 
 The generalised connections $\Gamma^{a}{}_{\ubk}$ are taken from the results of the
@@ -429,21 +429,21 @@ The generalised connections $\Gamma^{a}{}_{\ubk}$ are taken from the results of 
 \begin{cadabra}
    def substitute_gam (obj):
 
-       substitute     (obj,defGam22)
-       substitute     (obj,defGam23)
-       substitute     (obj,defGam24)
-       substitute     (obj,defGam25)
+       substitute (obj,defGam22)
+       substitute (obj,defGam23)
+       substitute (obj,defGam24)
+       substitute (obj,defGam25)
 
-       substitute     (obj,defGam33)
-       substitute     (obj,defGam34)
-       substitute     (obj,defGam35)
+       substitute (obj,defGam33)
+       substitute (obj,defGam34)
+       substitute (obj,defGam35)
 
-       substitute     (obj,defGam44)
-       substitute     (obj,defGam45)
+       substitute (obj,defGam44)
+       substitute (obj,defGam45)
 
-       substitute     (obj,defGam55)
+       substitute (obj,defGam55)
 
-       distribute     (obj)
+       distribute (obj)
        return obj
 
    import cdblib

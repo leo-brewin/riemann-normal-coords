@@ -274,21 +274,21 @@ end_stage_1 = time.time()
 
 def substitute_gam (obj):
 
-    substitute     (obj,defGam22)
-    substitute     (obj,defGam23)
-    substitute     (obj,defGam24)
-    substitute     (obj,defGam25)
+    substitute (obj,defGam22)
+    substitute (obj,defGam23)
+    substitute (obj,defGam24)
+    substitute (obj,defGam25)
 
-    substitute     (obj,defGam33)
-    substitute     (obj,defGam34)
-    substitute     (obj,defGam35)
+    substitute (obj,defGam33)
+    substitute (obj,defGam34)
+    substitute (obj,defGam35)
 
-    substitute     (obj,defGam44)
-    substitute     (obj,defGam45)
+    substitute (obj,defGam44)
+    substitute (obj,defGam45)
 
-    substitute     (obj,defGam55)
+    substitute (obj,defGam55)
 
-    distribute     (obj)
+    distribute (obj)
     return obj
 
 import cdblib
