@@ -83,7 +83,7 @@ collection:
 %:
 	@ echo "cdblatex.sh $@ ..."
 	@ cdblatex.sh -T -sx -i $@ &> $@.cdblog
-	@ echo " -->"`cdbstats -i $@.cdblog`
+	@ echo " -->"`cputime -i $@.cdblog`
 	@ pdflatex -halt-on-error -interaction=batchmode $@ &> /dev/null
 	@ pdflatex -halt-on-error -interaction=batchmode $@ &> /dev/null
 	@ cp -f $@.pdf    pdf/.

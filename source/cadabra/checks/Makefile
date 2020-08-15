@@ -13,7 +13,7 @@ all:
 .%:	%.tex
 	@ echo "cdblatex.sh $@ ..."
 	@ cdblatex.sh -T -s -i $@ &> $@.cdblog
-	@ echo " -->"`cdbstats -i $*.cdblog`
+	@ echo " -->"`cputime -i $*.cdblog`
 #-------------------------------------------------------------------------------
 rm-dot:
 	@ rm .[a-z]*.lb
