@@ -2,5 +2,5 @@
 
 mkdir -p ../pdf
 
-(cd cadabra; make github)
-(cd tex; make github)
+(cd cadabra; make; make veryclean)
+(cd tex; make; make veryclean)

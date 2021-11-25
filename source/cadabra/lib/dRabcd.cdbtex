@@ -333,13 +333,13 @@ A^{c} A^{d} A^{e} A^{f} \nabla_{c d}{R_{b e f g}} g^{a g}%
 -2A^{c} A^{d} A^{e} A^{f} A^{g} A^{h} A^{i} \nabla_{c}{R_{b d e j}} \nabla_{f g}{R_{h k i l}} g^{a k} g^{j l}+2A^{c} A^{d} A^{e} A^{f} A^{g} A^{h} A^{i} \nabla_{c}{R_{d j e k}} \nabla_{f g}{R_{b h i l}} g^{a j} g^{k l} - \frac{8}{3}A^{c} A^{d} A^{e} A^{f} A^{g} A^{h} A^{i} R_{b c d j} \nabla_{e f g}{R_{h k i l}} g^{a k} g^{j l}+\frac{8}{3}A^{c} A^{d} A^{e} A^{f} A^{g} A^{h} A^{i} R_{c j d k} \nabla_{e f g}{R_{b h i l}} g^{a j} g^{k l}+\frac{1}{3}A^{c} A^{d} A^{e} A^{f} A^{g} A^{h} A^{i} R_{b c d j} R_{e k f l} \nabla_{g}{R_{h m i n}} g^{a m} g^{j k} g^{l n}+A^{c} A^{d} A^{e} A^{f} A^{g} A^{h} A^{i} R_{c j d k} R_{e l f m} \nabla_{g}{R_{b h i n}} g^{a j} g^{k l} g^{m n} - \frac{4}{3}A^{c} A^{d} A^{e} A^{f} A^{g} A^{h} A^{i} R_{b c d j} R_{e k f l} \nabla_{g}{R_{h m i n}} g^{a k} g^{j m} g^{l n}+A^{c} A^{d} A^{e} A^{f} A^{g} A^{h} A^{i} \nabla_{c d e f g}{R_{b h i j}} g^{a j}%
 }
 \cdbtag{timing}{%
-Stage 1:     2.5 secs\hfill\break%
-Stage 2:     6.5 secs\hfill\break%
-Stage 3:     0.5 secs\hfill\break%
-Stage 4:   177.0 secs\hfill\break%
-Stage 5:   186.0 secs\hfill\break%
-Stage 6:   227.2 secs\hfill\break%
-Stage 7:     7.8 secs%
+Stage 1:     3.0 secs\hfill\break%
+Stage 2:     8.5 secs\hfill\break%
+Stage 3:     1.1 secs\hfill\break%
+Stage 4:   203.8 secs\hfill\break%
+Stage 5:   224.9 secs\hfill\break%
+Stage 6:   263.6 secs\hfill\break%
+Stage 7:     8.8 secs%
 }
 \cdbtag{scaled1.601}{%
 A^{c} A^{d} A^{e} g^{a f} \nabla_{c}{R_{b d e f}}%

@@ -4,31 +4,31 @@
 Dx^{a}%
 }
 \cdbtag{y2.001}{%
-Dx^{a}+\frac{1}{2}Gam22^{a}{}_{b c} y00^{b} y00^{c}+\frac{1}{2}Gam23^{a}{}_{b c} y00^{b} y00^{c}+\frac{1}{2}Gam24^{a}{}_{b c} y00^{b} y00^{c}+\frac{1}{2}Gam25^{a}{}_{b c} y00^{b} y00^{c}%
+Dx^{a}+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} {y_{00}}^{b} {y_{00}}^{c}+\frac{1}{2}{Gam_{23}}^{a}{}_{b c} {y_{00}}^{b} {y_{00}}^{c}+\frac{1}{2}{Gam_{24}}^{a}{}_{b c} {y_{00}}^{b} {y_{00}}^{c}+\frac{1}{2}{Gam_{25}}^{a}{}_{b c} {y_{00}}^{b} {y_{00}}^{c}%
 }
 \cdbtag{y3.001}{%
-Dx^{a}+\frac{1}{2}Gam22^{a}{}_{b c} y20^{b} y20^{c}+\frac{1}{2}Gam23^{a}{}_{b c} y20^{b} y20^{c}+\frac{1}{6}Gam33^{a}{}_{b c d} y00^{b} y00^{c} y00^{d}+Gam22^{a}{}_{b c} y20^{b} y22^{c}+\frac{1}{2}Gam24^{a}{}_{b c} y20^{b} y20^{c}+\frac{1}{6}Gam34^{a}{}_{b c d} y00^{b} y00^{c} y00^{d}+Gam23^{a}{}_{b c} y20^{b} y22^{c}+\frac{1}{2}Gam25^{a}{}_{b c} y20^{b} y20^{c}+\frac{1}{6}Gam35^{a}{}_{b c d} y00^{b} y00^{c} y00^{d}%
+Dx^{a}+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} {y_{20}}^{b} {y_{20}}^{c}+\frac{1}{2}{Gam_{23}}^{a}{}_{b c} {y_{20}}^{b} {y_{20}}^{c}+\frac{1}{6}{Gam_{33}}^{a}{}_{b c d} {y_{00}}^{b} {y_{00}}^{c} {y_{00}}^{d}+{Gam_{22}}^{a}{}_{b c} {y_{20}}^{b} {y_{22}}^{c}+\frac{1}{2}{Gam_{24}}^{a}{}_{b c} {y_{20}}^{b} {y_{20}}^{c}+\frac{1}{6}{Gam_{34}}^{a}{}_{b c d} {y_{00}}^{b} {y_{00}}^{c} {y_{00}}^{d}+{Gam_{23}}^{a}{}_{b c} {y_{20}}^{b} {y_{22}}^{c}+\frac{1}{2}{Gam_{25}}^{a}{}_{b c} {y_{20}}^{b} {y_{20}}^{c}+\frac{1}{6}{Gam_{35}}^{a}{}_{b c d} {y_{00}}^{b} {y_{00}}^{c} {y_{00}}^{d}%
 }
 \cdbtag{y4.001}{%
-Dx^{a}+\frac{1}{2}Gam22^{a}{}_{b c} y30^{b} y30^{c}+\frac{1}{2}Gam23^{a}{}_{b c} y30^{b} y30^{c}+\frac{1}{6}Gam33^{a}{}_{b c d} y20^{b} y20^{c} y20^{d}+Gam22^{a}{}_{b c} y30^{b} y32^{c}+\frac{1}{2}Gam24^{a}{}_{b c} y30^{b} y30^{c}+\frac{1}{6}Gam34^{a}{}_{b c d} y20^{b} y20^{c} y20^{d}+\frac{1}{24}Gam44^{a}{}_{b c d e} y00^{b} y00^{c} y00^{d} y00^{e}+Gam22^{a}{}_{b c} y30^{b} y33^{c}+Gam23^{a}{}_{b c} y30^{b} y32^{c}+\frac{1}{2}Gam25^{a}{}_{b c} y30^{b} y30^{c}+\frac{1}{2}Gam33^{a}{}_{b c d} y20^{b} y20^{c} y22^{d}+\frac{1}{6}Gam35^{a}{}_{b c d} y20^{b} y20^{c} y20^{d}+\frac{1}{24}Gam45^{a}{}_{b c d e} y00^{b} y00^{c} y00^{d} y00^{e}%
+Dx^{a}+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} {y_{30}}^{b} {y_{30}}^{c}+\frac{1}{2}{Gam_{23}}^{a}{}_{b c} {y_{30}}^{b} {y_{30}}^{c}+\frac{1}{6}{Gam_{33}}^{a}{}_{b c d} {y_{20}}^{b} {y_{20}}^{c} {y_{20}}^{d}+{Gam_{22}}^{a}{}_{b c} {y_{30}}^{b} {y_{32}}^{c}+\frac{1}{2}{Gam_{24}}^{a}{}_{b c} {y_{30}}^{b} {y_{30}}^{c}+\frac{1}{6}{Gam_{34}}^{a}{}_{b c d} {y_{20}}^{b} {y_{20}}^{c} {y_{20}}^{d}+\frac{1}{24}{Gam_{44}}^{a}{}_{b c d e} {y_{00}}^{b} {y_{00}}^{c} {y_{00}}^{d} {y_{00}}^{e}+{Gam_{22}}^{a}{}_{b c} {y_{30}}^{b} {y_{33}}^{c}+{Gam_{23}}^{a}{}_{b c} {y_{30}}^{b} {y_{32}}^{c}+\frac{1}{2}{Gam_{25}}^{a}{}_{b c} {y_{30}}^{b} {y_{30}}^{c}+\frac{1}{2}{Gam_{33}}^{a}{}_{b c d} {y_{20}}^{b} {y_{20}}^{c} {y_{22}}^{d}+\frac{1}{6}{Gam_{35}}^{a}{}_{b c d} {y_{20}}^{b} {y_{20}}^{c} {y_{20}}^{d}+\frac{1}{24}{Gam_{45}}^{a}{}_{b c d e} {y_{00}}^{b} {y_{00}}^{c} {y_{00}}^{d} {y_{00}}^{e}%
 }
 \cdbtag{y5.001}{%
-Dx^{a}+\frac{1}{2}Gam22^{a}{}_{b c} y40^{b} y40^{c}+\frac{1}{2}Gam23^{a}{}_{b c} y40^{b} y40^{c}+\frac{1}{6}Gam33^{a}{}_{b c d} y30^{b} y30^{c} y30^{d}+Gam22^{a}{}_{b c} y40^{b} y42^{c}+\frac{1}{2}Gam24^{a}{}_{b c} y40^{b} y40^{c}+\frac{1}{6}Gam34^{a}{}_{b c d} y30^{b} y30^{c} y30^{d}+\frac{1}{24}Gam44^{a}{}_{b c d e} y20^{b} y20^{c} y20^{d} y20^{e}+Gam22^{a}{}_{b c} y40^{b} y43^{c}+Gam23^{a}{}_{b c} y40^{b} y42^{c}+\frac{1}{2}Gam25^{a}{}_{b c} y40^{b} y40^{c}+\frac{1}{2}Gam33^{a}{}_{b c d} y30^{b} y30^{c} y32^{d}+\frac{1}{6}Gam35^{a}{}_{b c d} y30^{b} y30^{c} y30^{d}+\frac{1}{24}Gam45^{a}{}_{b c d e} y20^{b} y20^{c} y20^{d} y20^{e}+\frac{1}{120}Gam55^{a}{}_{b c d e f} y00^{b} y00^{c} y00^{d} y00^{e} y00^{f}%
+Dx^{a}+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} {y_{40}}^{b} {y_{40}}^{c}+\frac{1}{2}{Gam_{23}}^{a}{}_{b c} {y_{40}}^{b} {y_{40}}^{c}+\frac{1}{6}{Gam_{33}}^{a}{}_{b c d} {y_{30}}^{b} {y_{30}}^{c} {y_{30}}^{d}+{Gam_{22}}^{a}{}_{b c} {y_{40}}^{b} {y_{42}}^{c}+\frac{1}{2}{Gam_{24}}^{a}{}_{b c} {y_{40}}^{b} {y_{40}}^{c}+\frac{1}{6}{Gam_{34}}^{a}{}_{b c d} {y_{30}}^{b} {y_{30}}^{c} {y_{30}}^{d}+\frac{1}{24}{Gam_{44}}^{a}{}_{b c d e} {y_{20}}^{b} {y_{20}}^{c} {y_{20}}^{d} {y_{20}}^{e}+{Gam_{22}}^{a}{}_{b c} {y_{40}}^{b} {y_{43}}^{c}+{Gam_{23}}^{a}{}_{b c} {y_{40}}^{b} {y_{42}}^{c}+\frac{1}{2}{Gam_{25}}^{a}{}_{b c} {y_{40}}^{b} {y_{40}}^{c}+\frac{1}{2}{Gam_{33}}^{a}{}_{b c d} {y_{30}}^{b} {y_{30}}^{c} {y_{32}}^{d}+\frac{1}{6}{Gam_{35}}^{a}{}_{b c d} {y_{30}}^{b} {y_{30}}^{c} {y_{30}}^{d}+\frac{1}{24}{Gam_{45}}^{a}{}_{b c d e} {y_{20}}^{b} {y_{20}}^{c} {y_{20}}^{d} {y_{20}}^{e}+\frac{1}{120}{Gam_{55}}^{a}{}_{b c d e f} {y_{00}}^{b} {y_{00}}^{c} {y_{00}}^{d} {y_{00}}^{e} {y_{00}}^{f}%
 }
 \cdbtag{y0.002}{%
 Dx^{a}%
 }
 \cdbtag{y2.002}{%
-Dx^{a}+\frac{1}{2}Gam22^{a}{}_{b c} y00^{b} y00^{c}%
+Dx^{a}+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} {y_{00}}^{b} {y_{00}}^{c}%
 }
 \cdbtag{y3.002}{%
-Dx^{a}+\frac{1}{2}Gam22^{a}{}_{b c} y20^{b} y20^{c}+\frac{1}{2}Gam23^{a}{}_{b c} y20^{b} y20^{c}+\frac{1}{6}Gam33^{a}{}_{b c d} y00^{b} y00^{c} y00^{d}%
+Dx^{a}+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} {y_{20}}^{b} {y_{20}}^{c}+\frac{1}{2}{Gam_{23}}^{a}{}_{b c} {y_{20}}^{b} {y_{20}}^{c}+\frac{1}{6}{Gam_{33}}^{a}{}_{b c d} {y_{00}}^{b} {y_{00}}^{c} {y_{00}}^{d}%
 }
 \cdbtag{y4.002}{%
-Dx^{a}+\frac{1}{2}Gam22^{a}{}_{b c} y30^{b} y30^{c}+\frac{1}{2}Gam23^{a}{}_{b c} y30^{b} y30^{c}+\frac{1}{6}Gam33^{a}{}_{b c d} y20^{b} y20^{c} y20^{d}+Gam22^{a}{}_{b c} y30^{b} y32^{c}+\frac{1}{2}Gam24^{a}{}_{b c} y30^{b} y30^{c}+\frac{1}{6}Gam34^{a}{}_{b c d} y20^{b} y20^{c} y20^{d}+\frac{1}{24}Gam44^{a}{}_{b c d e} y00^{b} y00^{c} y00^{d} y00^{e}%
+Dx^{a}+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} {y_{30}}^{b} {y_{30}}^{c}+\frac{1}{2}{Gam_{23}}^{a}{}_{b c} {y_{30}}^{b} {y_{30}}^{c}+\frac{1}{6}{Gam_{33}}^{a}{}_{b c d} {y_{20}}^{b} {y_{20}}^{c} {y_{20}}^{d}+{Gam_{22}}^{a}{}_{b c} {y_{30}}^{b} {y_{32}}^{c}+\frac{1}{2}{Gam_{24}}^{a}{}_{b c} {y_{30}}^{b} {y_{30}}^{c}+\frac{1}{6}{Gam_{34}}^{a}{}_{b c d} {y_{20}}^{b} {y_{20}}^{c} {y_{20}}^{d}+\frac{1}{24}{Gam_{44}}^{a}{}_{b c d e} {y_{00}}^{b} {y_{00}}^{c} {y_{00}}^{d} {y_{00}}^{e}%
 }
 \cdbtag{y5.002}{%
-Dx^{a}+\frac{1}{2}Gam22^{a}{}_{b c} y40^{b} y40^{c}+\frac{1}{2}Gam23^{a}{}_{b c} y40^{b} y40^{c}+\frac{1}{6}Gam33^{a}{}_{b c d} y30^{b} y30^{c} y30^{d}+Gam22^{a}{}_{b c} y40^{b} y42^{c}+\frac{1}{2}Gam24^{a}{}_{b c} y40^{b} y40^{c}+\frac{1}{6}Gam34^{a}{}_{b c d} y30^{b} y30^{c} y30^{d}+\frac{1}{24}Gam44^{a}{}_{b c d e} y20^{b} y20^{c} y20^{d} y20^{e}+Gam22^{a}{}_{b c} y40^{b} y43^{c}+Gam23^{a}{}_{b c} y40^{b} y42^{c}+\frac{1}{2}Gam25^{a}{}_{b c} y40^{b} y40^{c}+\frac{1}{2}Gam33^{a}{}_{b c d} y30^{b} y30^{c} y32^{d}+\frac{1}{6}Gam35^{a}{}_{b c d} y30^{b} y30^{c} y30^{d}+\frac{1}{24}Gam45^{a}{}_{b c d e} y20^{b} y20^{c} y20^{d} y20^{e}+\frac{1}{120}Gam55^{a}{}_{b c d e f} y00^{b} y00^{c} y00^{d} y00^{e} y00^{f}%
+Dx^{a}+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} {y_{40}}^{b} {y_{40}}^{c}+\frac{1}{2}{Gam_{23}}^{a}{}_{b c} {y_{40}}^{b} {y_{40}}^{c}+\frac{1}{6}{Gam_{33}}^{a}{}_{b c d} {y_{30}}^{b} {y_{30}}^{c} {y_{30}}^{d}+{Gam_{22}}^{a}{}_{b c} {y_{40}}^{b} {y_{42}}^{c}+\frac{1}{2}{Gam_{24}}^{a}{}_{b c} {y_{40}}^{b} {y_{40}}^{c}+\frac{1}{6}{Gam_{34}}^{a}{}_{b c d} {y_{30}}^{b} {y_{30}}^{c} {y_{30}}^{d}+\frac{1}{24}{Gam_{44}}^{a}{}_{b c d e} {y_{20}}^{b} {y_{20}}^{c} {y_{20}}^{d} {y_{20}}^{e}+{Gam_{22}}^{a}{}_{b c} {y_{40}}^{b} {y_{43}}^{c}+{Gam_{23}}^{a}{}_{b c} {y_{40}}^{b} {y_{42}}^{c}+\frac{1}{2}{Gam_{25}}^{a}{}_{b c} {y_{40}}^{b} {y_{40}}^{c}+\frac{1}{2}{Gam_{33}}^{a}{}_{b c d} {y_{30}}^{b} {y_{30}}^{c} {y_{32}}^{d}+\frac{1}{6}{Gam_{35}}^{a}{}_{b c d} {y_{30}}^{b} {y_{30}}^{c} {y_{30}}^{d}+\frac{1}{24}{Gam_{45}}^{a}{}_{b c d e} {y_{20}}^{b} {y_{20}}^{c} {y_{20}}^{d} {y_{20}}^{e}+\frac{1}{120}{Gam_{55}}^{a}{}_{b c d e f} {y_{00}}^{b} {y_{00}}^{c} {y_{00}}^{d} {y_{00}}^{e} {y_{00}}^{f}%
 }
 \cdbtag{y00.101}{%
 Dx^{a}%
@@ -37,85 +37,85 @@ Dx^{a}%
 Dx^{a}%
 }
 \cdbtag{y22.101}{%
-\frac{1}{2}Gam22^{a}{}_{b c} Dx^{b} Dx^{c}%
+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} Dx^{b} Dx^{c}%
 }
 \cdbtag{y20.201}{%
 Dx^{a}%
 }
 \cdbtag{y22.201}{%
-\frac{1}{2}Dx^{b} Dx^{c} Gam22^{a}{}_{b c}%
+\frac{1}{2}Dx^{b} Dx^{c} {Gam_{22}}^{a}{}_{b c}%
 }
 \cdbtag{y30.101}{%
 Dx^{a}%
 }
 \cdbtag{y32.101}{%
-\frac{1}{2}Gam22^{a}{}_{b c} Dx^{b} Dx^{c}%
+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} Dx^{b} Dx^{c}%
 }
 \cdbtag{y33.101}{%
-\frac{1}{2}Gam23^{a}{}_{b c} Dx^{b} Dx^{c}+\frac{1}{6}Gam33^{a}{}_{b c d} Dx^{b} Dx^{c} Dx^{d}%
+\frac{1}{2}{Gam_{23}}^{a}{}_{b c} Dx^{b} Dx^{c}+\frac{1}{6}{Gam_{33}}^{a}{}_{b c d} Dx^{b} Dx^{c} Dx^{d}%
 }
 \cdbtag{y30.201}{%
 Dx^{a}%
 }
 \cdbtag{y32.201}{%
-\frac{1}{2}Dx^{b} Dx^{c} Gam22^{a}{}_{b c}%
+\frac{1}{2}Dx^{b} Dx^{c} {Gam_{22}}^{a}{}_{b c}%
 }
 \cdbtag{y33.201}{%
-\frac{1}{2}Dx^{b} Dx^{c} Gam23^{a}{}_{b c}+\frac{1}{6}Dx^{b} Dx^{c} Dx^{d} Gam33^{a}{}_{b c d}%
+\frac{1}{2}Dx^{b} Dx^{c} {Gam_{23}}^{a}{}_{b c}+\frac{1}{6}Dx^{b} Dx^{c} Dx^{d} {Gam_{33}}^{a}{}_{b c d}%
 }
 \cdbtag{y40.101}{%
 Dx^{a}%
 }
 \cdbtag{y42.101}{%
-\frac{1}{2}Gam22^{a}{}_{b c} Dx^{b} Dx^{c}%
+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} Dx^{b} Dx^{c}%
 }
 \cdbtag{y43.101}{%
-\frac{1}{2}Gam23^{a}{}_{b c} Dx^{b} Dx^{c}+\frac{1}{6}Gam33^{a}{}_{b c d} Dx^{b} Dx^{c} Dx^{d}%
+\frac{1}{2}{Gam_{23}}^{a}{}_{b c} Dx^{b} Dx^{c}+\frac{1}{6}{Gam_{33}}^{a}{}_{b c d} Dx^{b} Dx^{c} Dx^{d}%
 }
 \cdbtag{y44.101}{%
-\frac{1}{2}Gam22^{a}{}_{b c} Dx^{b} Dx^{d} Dx^{e} Gam22^{c}{}_{d e}+\frac{1}{2}Gam24^{a}{}_{b c} Dx^{b} Dx^{c}+\frac{1}{6}Gam34^{a}{}_{b c d} Dx^{b} Dx^{c} Dx^{d}+\frac{1}{24}Gam44^{a}{}_{b c d e} Dx^{b} Dx^{c} Dx^{d} Dx^{e}%
+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} Dx^{b} Dx^{d} Dx^{e} {Gam_{22}}^{c}{}_{d e}+\frac{1}{2}{Gam_{24}}^{a}{}_{b c} Dx^{b} Dx^{c}+\frac{1}{6}{Gam_{34}}^{a}{}_{b c d} Dx^{b} Dx^{c} Dx^{d}+\frac{1}{24}{Gam_{44}}^{a}{}_{b c d e} Dx^{b} Dx^{c} Dx^{d} Dx^{e}%
 }
 \cdbtag{y40.201}{%
 Dx^{a}%
 }
 \cdbtag{y42.201}{%
-\frac{1}{2}Dx^{b} Dx^{c} Gam22^{a}{}_{b c}%
+\frac{1}{2}Dx^{b} Dx^{c} {Gam_{22}}^{a}{}_{b c}%
 }
 \cdbtag{y43.201}{%
-\frac{1}{2}Dx^{b} Dx^{c} Gam23^{a}{}_{b c}+\frac{1}{6}Dx^{b} Dx^{c} Dx^{d} Gam33^{a}{}_{b c d}%
+\frac{1}{2}Dx^{b} Dx^{c} {Gam_{23}}^{a}{}_{b c}+\frac{1}{6}Dx^{b} Dx^{c} Dx^{d} {Gam_{33}}^{a}{}_{b c d}%
 }
 \cdbtag{y44.201}{%
-\frac{1}{2}Dx^{b} Dx^{c} Dx^{d} Gam22^{a}{}_{b e} Gam22^{e}{}_{c d}+\frac{1}{2}Dx^{b} Dx^{c} Gam24^{a}{}_{b c}+\frac{1}{6}Dx^{b} Dx^{c} Dx^{d} Gam34^{a}{}_{b c d}+\frac{1}{24}Dx^{b} Dx^{c} Dx^{d} Dx^{e} Gam44^{a}{}_{b c d e}%
+\frac{1}{2}Dx^{b} Dx^{c} Dx^{d} {Gam_{22}}^{a}{}_{b e} {Gam_{22}}^{e}{}_{c d}+\frac{1}{2}Dx^{b} Dx^{c} {Gam_{24}}^{a}{}_{b c}+\frac{1}{6}Dx^{b} Dx^{c} Dx^{d} {Gam_{34}}^{a}{}_{b c d}+\frac{1}{24}Dx^{b} Dx^{c} Dx^{d} Dx^{e} {Gam_{44}}^{a}{}_{b c d e}%
 }
 \cdbtag{y50.101}{%
 Dx^{a}%
 }
 \cdbtag{y52.101}{%
-\frac{1}{2}Gam22^{a}{}_{b c} Dx^{b} Dx^{c}%
+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} Dx^{b} Dx^{c}%
 }
 \cdbtag{y53.101}{%
-\frac{1}{2}Gam23^{a}{}_{b c} Dx^{b} Dx^{c}+\frac{1}{6}Gam33^{a}{}_{b c d} Dx^{b} Dx^{c} Dx^{d}%
+\frac{1}{2}{Gam_{23}}^{a}{}_{b c} Dx^{b} Dx^{c}+\frac{1}{6}{Gam_{33}}^{a}{}_{b c d} Dx^{b} Dx^{c} Dx^{d}%
 }
 \cdbtag{y54.101}{%
-\frac{1}{2}Gam22^{a}{}_{b c} Dx^{b} Dx^{d} Dx^{e} Gam22^{c}{}_{d e}+\frac{1}{2}Gam24^{a}{}_{b c} Dx^{b} Dx^{c}+\frac{1}{6}Gam34^{a}{}_{b c d} Dx^{b} Dx^{c} Dx^{d}+\frac{1}{24}Gam44^{a}{}_{b c d e} Dx^{b} Dx^{c} Dx^{d} Dx^{e}%
+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} Dx^{b} Dx^{d} Dx^{e} {Gam_{22}}^{c}{}_{d e}+\frac{1}{2}{Gam_{24}}^{a}{}_{b c} Dx^{b} Dx^{c}+\frac{1}{6}{Gam_{34}}^{a}{}_{b c d} Dx^{b} Dx^{c} Dx^{d}+\frac{1}{24}{Gam_{44}}^{a}{}_{b c d e} Dx^{b} Dx^{c} Dx^{d} Dx^{e}%
 }
 \cdbtag{y55.101}{%
-\frac{1}{2}Gam22^{a}{}_{b c} Dx^{b} Dx^{e} Dx^{f} Gam23^{c}{}_{e f}+\frac{1}{6}Gam22^{a}{}_{b c} Dx^{b} Dx^{e} Dx^{f} Dx^{d} Gam33^{c}{}_{e f d}+\frac{1}{2}Gam23^{a}{}_{b c} Dx^{b} Dx^{d} Dx^{e} Gam22^{c}{}_{d e}+\frac{1}{2}Gam25^{a}{}_{b c} Dx^{b} Dx^{c}+\frac{1}{4}Gam33^{a}{}_{b c d} Dx^{b} Dx^{c} Dx^{e} Dx^{f} Gam22^{d}{}_{e f}+\frac{1}{6}Gam35^{a}{}_{b c d} Dx^{b} Dx^{c} Dx^{d}+\frac{1}{24}Gam45^{a}{}_{b c d e} Dx^{b} Dx^{c} Dx^{d} Dx^{e}+\frac{1}{120}Gam55^{a}{}_{b c d e f} Dx^{b} Dx^{c} Dx^{d} Dx^{e} Dx^{f}%
+\frac{1}{2}{Gam_{22}}^{a}{}_{b c} Dx^{b} Dx^{e} Dx^{f} {Gam_{23}}^{c}{}_{e f}+\frac{1}{6}{Gam_{22}}^{a}{}_{b c} Dx^{b} Dx^{e} Dx^{f} Dx^{d} {Gam_{33}}^{c}{}_{e f d}+\frac{1}{2}{Gam_{23}}^{a}{}_{b c} Dx^{b} Dx^{d} Dx^{e} {Gam_{22}}^{c}{}_{d e}+\frac{1}{2}{Gam_{25}}^{a}{}_{b c} Dx^{b} Dx^{c}+\frac{1}{4}{Gam_{33}}^{a}{}_{b c d} Dx^{b} Dx^{c} Dx^{e} Dx^{f} {Gam_{22}}^{d}{}_{e f}+\frac{1}{6}{Gam_{35}}^{a}{}_{b c d} Dx^{b} Dx^{c} Dx^{d}+\frac{1}{24}{Gam_{45}}^{a}{}_{b c d e} Dx^{b} Dx^{c} Dx^{d} Dx^{e}+\frac{1}{120}{Gam_{55}}^{a}{}_{b c d e f} Dx^{b} Dx^{c} Dx^{d} Dx^{e} Dx^{f}%
 }
 \cdbtag{y50.201}{%
 Dx^{a}%
 }
 \cdbtag{y52.201}{%
-\frac{1}{2}Dx^{b} Dx^{c} Gam22^{a}{}_{b c}%
+\frac{1}{2}Dx^{b} Dx^{c} {Gam_{22}}^{a}{}_{b c}%
 }
 \cdbtag{y53.201}{%
-\frac{1}{2}Dx^{b} Dx^{c} Gam23^{a}{}_{b c}+\frac{1}{6}Dx^{b} Dx^{c} Dx^{d} Gam33^{a}{}_{b c d}%
+\frac{1}{2}Dx^{b} Dx^{c} {Gam_{23}}^{a}{}_{b c}+\frac{1}{6}Dx^{b} Dx^{c} Dx^{d} {Gam_{33}}^{a}{}_{b c d}%
 }
 \cdbtag{y54.201}{%
-\frac{1}{2}Dx^{b} Dx^{c} Dx^{d} Gam22^{a}{}_{b e} Gam22^{e}{}_{c d}+\frac{1}{2}Dx^{b} Dx^{c} Gam24^{a}{}_{b c}+\frac{1}{6}Dx^{b} Dx^{c} Dx^{d} Gam34^{a}{}_{b c d}+\frac{1}{24}Dx^{b} Dx^{c} Dx^{d} Dx^{e} Gam44^{a}{}_{b c d e}%
+\frac{1}{2}Dx^{b} Dx^{c} Dx^{d} {Gam_{22}}^{a}{}_{b e} {Gam_{22}}^{e}{}_{c d}+\frac{1}{2}Dx^{b} Dx^{c} {Gam_{24}}^{a}{}_{b c}+\frac{1}{6}Dx^{b} Dx^{c} Dx^{d} {Gam_{34}}^{a}{}_{b c d}+\frac{1}{24}Dx^{b} Dx^{c} Dx^{d} Dx^{e} {Gam_{44}}^{a}{}_{b c d e}%
 }
 \cdbtag{y55.201}{%
-\frac{1}{2}Dx^{b} Dx^{c} Dx^{d} Gam22^{a}{}_{b e} Gam23^{e}{}_{c d}+\frac{1}{6}Dx^{b} Dx^{c} Dx^{d} Dx^{e} Gam22^{a}{}_{b f} Gam33^{f}{}_{c d e}+\frac{1}{2}Dx^{b} Dx^{c} Dx^{d} Gam22^{e}{}_{b c} Gam23^{a}{}_{d e}+\frac{1}{2}Dx^{b} Dx^{c} Gam25^{a}{}_{b c}+\frac{1}{4}Dx^{b} Dx^{c} Dx^{d} Dx^{e} Gam22^{f}{}_{b c} Gam33^{a}{}_{d e f}+\frac{1}{6}Dx^{b} Dx^{c} Dx^{d} Gam35^{a}{}_{b c d}+\frac{1}{24}Dx^{b} Dx^{c} Dx^{d} Dx^{e} Gam45^{a}{}_{b c d e}+\frac{1}{120}Dx^{b} Dx^{c} Dx^{d} Dx^{e} Dx^{f} Gam55^{a}{}_{b c d e f}%
+\frac{1}{2}Dx^{b} Dx^{c} Dx^{d} {Gam_{22}}^{a}{}_{b e} {Gam_{23}}^{e}{}_{c d}+\frac{1}{6}Dx^{b} Dx^{c} Dx^{d} Dx^{e} {Gam_{22}}^{a}{}_{b f} {Gam_{33}}^{f}{}_{c d e}+\frac{1}{2}Dx^{b} Dx^{c} Dx^{d} {Gam_{22}}^{e}{}_{b c} {Gam_{23}}^{a}{}_{d e}+\frac{1}{2}Dx^{b} Dx^{c} {Gam_{25}}^{a}{}_{b c}+\frac{1}{4}Dx^{b} Dx^{c} Dx^{d} Dx^{e} {Gam_{22}}^{f}{}_{b c} {Gam_{33}}^{a}{}_{d e f}+\frac{1}{6}Dx^{b} Dx^{c} Dx^{d} {Gam_{35}}^{a}{}_{b c d}+\frac{1}{24}Dx^{b} Dx^{c} Dx^{d} Dx^{e} {Gam_{45}}^{a}{}_{b c d e}+\frac{1}{120}Dx^{b} Dx^{c} Dx^{d} Dx^{e} Dx^{f} {Gam_{55}}^{a}{}_{b c d e f}%
 }
 \cdbtag{y22.301}{%
  - \frac{1}{3}x^{b} Dx^{c} Dx^{d} g^{a e} R_{b c d e}%
@@ -171,16 +171,16 @@ Dx^{a} - \frac{1}{3}x^{b} Dx^{c} Dx^{d} g^{a e} R_{b c d e} - \frac{1}{12}x^{b} 
  - \frac{1}{120}x^{b} Dx^{c} Dx^{d} Dx^{e} Dx^{f} Dx^{g} g^{a h} g^{i j} R_{c h d i} \nabla_{e}{R_{b f g j}} - \frac{1}{360}x^{b} Dx^{c} Dx^{d} Dx^{e} Dx^{f} Dx^{g} g^{a h} \nabla_{c d e}{R_{b f g h}}%
 }
 \cdbtag{term2.401}{%
-Gam22^{a}{}_{b c} y40^{b} y40^{c}+Gam23^{a}{}_{b c} y40^{b} y40^{c}+2Gam22^{a}{}_{b c} y40^{b} y42^{c}+Gam24^{a}{}_{b c} y40^{b} y40^{c}+2Gam22^{a}{}_{b c} y40^{b} y43^{c}+2Gam23^{a}{}_{b c} y40^{b} y42^{c}+Gam25^{a}{}_{b c} y40^{b} y40^{c}%
+{Gam_{22}}^{a}{}_{b c} {y_{40}}^{b} {y_{40}}^{c}+{Gam_{23}}^{a}{}_{b c} {y_{40}}^{b} {y_{40}}^{c}+2{Gam_{22}}^{a}{}_{b c} {y_{40}}^{b} {y_{42}}^{c}+{Gam_{24}}^{a}{}_{b c} {y_{40}}^{b} {y_{40}}^{c}+2{Gam_{22}}^{a}{}_{b c} {y_{40}}^{b} {y_{43}}^{c}+2{Gam_{23}}^{a}{}_{b c} {y_{40}}^{b} {y_{42}}^{c}+{Gam_{25}}^{a}{}_{b c} {y_{40}}^{b} {y_{40}}^{c}%
 }
 \cdbtag{term3.401}{%
-Gam33^{a}{}_{b c d} y30^{b} y30^{c} y30^{d}+Gam34^{a}{}_{b c d} y30^{b} y30^{c} y30^{d}+3Gam33^{a}{}_{b c d} y30^{b} y30^{c} y32^{d}+Gam35^{a}{}_{b c d} y30^{b} y30^{c} y30^{d}%
+{Gam_{33}}^{a}{}_{b c d} {y_{30}}^{b} {y_{30}}^{c} {y_{30}}^{d}+{Gam_{34}}^{a}{}_{b c d} {y_{30}}^{b} {y_{30}}^{c} {y_{30}}^{d}+3{Gam_{33}}^{a}{}_{b c d} {y_{30}}^{b} {y_{30}}^{c} {y_{32}}^{d}+{Gam_{35}}^{a}{}_{b c d} {y_{30}}^{b} {y_{30}}^{c} {y_{30}}^{d}%
 }
 \cdbtag{term4.401}{%
-Gam44^{a}{}_{b c d e} y20^{b} y20^{c} y20^{d} y20^{e}+Gam45^{a}{}_{b c d e} y20^{b} y20^{c} y20^{d} y20^{e}%
+{Gam_{44}}^{a}{}_{b c d e} {y_{20}}^{b} {y_{20}}^{c} {y_{20}}^{d} {y_{20}}^{e}+{Gam_{45}}^{a}{}_{b c d e} {y_{20}}^{b} {y_{20}}^{c} {y_{20}}^{d} {y_{20}}^{e}%
 }
 \cdbtag{term5.401}{%
-Gam55^{a}{}_{b c d e f} y00^{b} y00^{c} y00^{d} y00^{e} y00^{f}%
+{Gam_{55}}^{a}{}_{b c d e f} {y_{00}}^{b} {y_{00}}^{c} {y_{00}}^{d} {y_{00}}^{e} {y_{00}}^{f}%
 }
 \cdbtag{term2.501}{%
  - \frac{2}{3}x^{b} Dx^{c} Dx^{d} g^{a e} R_{b c d e} - \frac{1}{6}x^{b} x^{c} Dx^{d} Dx^{e} g^{a f} \nabla_{d}{R_{b e c f}} - \frac{1}{3}x^{b} x^{c} Dx^{d} Dx^{e} g^{a f} \nabla_{b}{R_{c d e f}}+\frac{1}{12}x^{b} x^{c} Dx^{d} Dx^{e} g^{a f} \nabla_{f}{R_{b d c e}} - \frac{2}{9}x^{b} x^{c} Dx^{d} Dx^{e} Dx^{f} g^{a g} g^{h i} R_{b d e h} R_{c f g i}+\frac{2}{9}x^{b} x^{c} Dx^{d} Dx^{e} Dx^{f} g^{a g} g^{h i} R_{b d e h} R_{c i f g} - \frac{8}{45}x^{b} x^{c} x^{d} Dx^{e} Dx^{f} g^{a g} g^{h i} R_{b e f h} R_{c g d i}+\frac{4}{45}x^{b} x^{c} x^{d} Dx^{e} Dx^{f} g^{a g} g^{h i} R_{b e c h} R_{d i f g}+\frac{2}{45}x^{b} x^{c} x^{d} Dx^{e} Dx^{f} g^{a g} g^{h i} R_{b e c h} R_{d g f i} - \frac{1}{20}x^{b} x^{c} x^{d} Dx^{e} Dx^{f} g^{a g} \nabla_{e b}{R_{c f d g}} - \frac{1}{20}x^{b} x^{c} x^{d} Dx^{e} Dx^{f} g^{a g} \nabla_{b e}{R_{c f d g}} - \frac{1}{10}x^{b} x^{c} x^{d} Dx^{e} Dx^{f} g^{a g} \nabla_{b c}{R_{d e f g}} - \frac{2}{45}x^{b} x^{c} x^{d} Dx^{e} Dx^{f} g^{a g} g^{h i} R_{b e c h} R_{d f g i}+\frac{1}{40}x^{b} x^{c} x^{d} Dx^{e} Dx^{f} g^{a g} \nabla_{g b}{R_{c e d f}}+\frac{1}{40}x^{b} x^{c} x^{d} Dx^{e} Dx^{f} g^{a g} \nabla_{b g}{R_{c e d f}} - \frac{1}{18}x^{b} x^{c} x^{d} Dx^{e} Dx^{f} Dx^{g} g^{a h} g^{i j} R_{b e h i} \nabla_{f}{R_{c g d j}} - \frac{1}{9}x^{b} x^{c} x^{d} Dx^{e} Dx^{f} Dx^{g} g^{a h} g^{i j} R_{b e h i} \nabla_{c}{R_{d f g j}}+\frac{1}{36}x^{b} x^{c} x^{d} Dx^{e} Dx^{f} Dx^{g} g^{a h} g^{i j} R_{b e h i} \nabla_{j}{R_{c f d g}}+\frac{1}{18}x^{b} x^{c} x^{d} Dx^{e} Dx^{f} Dx^{g} g^{a h} g^{i j} R_{b i e h} \nabla_{f}{R_{c g d j}}%%
@@ -337,10 +337,10 @@ Dx^{a} - \frac{1}{3}x^{b} Dx^{c} Dx^{d} g^{a e} R_{b c d e} - \frac{1}{12}x^{b} 
  - \frac{1}{120}x^{b} Dx^{c} Dx^{d} Dx^{e} Dx^{f} Dx^{g} g^{a h} g^{i j} R_{c h d i} \nabla_{e}{R_{b f g j}} - \frac{1}{360}x^{b} Dx^{c} Dx^{d} Dx^{e} Dx^{f} Dx^{g} g^{a h} \nabla_{c d e}{R_{b f g h}}%
 }
 \cdbtag{timing}{%
-Stage 1:      6.0 secs\hfill\break%
-Stage 2a:    68.9 secs\hfill\break%
-Stage 2b:    67.2 secs\hfill\break%
-Stage 3:     13.3 secs\hfill\break%
+Stage 1:      5.7 secs\hfill\break%
+Stage 2a:   106.3 secs\hfill\break%
+Stage 2b:   101.4 secs\hfill\break%
+Stage 3:     19.9 secs\hfill\break%
 }
 \cdbtag{tmp2.001}{%
 8Dx^{c} Dx^{d} x^{b} g^{a e} R_{b c d e}+Dx^{d} Dx^{e} x^{b} x^{c} \left(2g^{a f} \nabla_{d}{R_{b e c f}}+4g^{a f} \nabla_{b}{R_{c d e f}}-g^{a f} \nabla_{f}{R_{b d c e}}\right)%

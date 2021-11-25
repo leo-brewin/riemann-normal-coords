@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 SHELL = /bin/bash
 #-------------------------------------------------------------------------------
-.PHONY: all tests
+.PHONY: all expected tests
 #-------------------------------------------------------------------------------
 TARGETS = \
 		dGamma dRabcd\
@@ -65,8 +65,11 @@ summary:
 .summary: summary.tex summary.sty .redo-summary
 	@ echo "pdflatex summary ..."
 	@ pdflatex -halt-on-error -interaction=batchmode summary &> /dev/null
-	@ cp -f summary.pdf pdf/.
-	@ touch .summary
+	@ if [[ -e summary.pdf ]]; then \
+	      cp -f summary.pdf pdf/.; \
+	      cp -f summary.pdf ../../pdf/.; \
+			touch .summary; \
+	  fi
 .redo-summary:
 	@ touch .redo-summary
 #-------------------------------------------------------------------------------
@@ -75,19 +78,23 @@ collection:
 .collection: collection.tex collection.sty .redo-collection
 	@ echo "pdflatex collection ..."
 	@ pdflatex -halt-on-error -interaction=batchmode collection &> /dev/null
-	@ cp -f collection.pdf pdf/.
-	@ touch .collection
+	@ if [[ -e collection.pdf ]]; then \
+	      cp -f collection.pdf pdf/.; \
+	      cp -f collection.pdf ../../pdf/.; \
+			touch .collection; \
+	  fi
 .redo-collection:
 	@ touch .redo-collection
 #-------------------------------------------------------------------------------
 %:
 	@ echo "cdblatex.sh $@ ..."
 	@ cdblatex.sh -T -sx -i $@ &> $@.cdblog
-	@ echo " -->"`cputime -i $@.cdblog`
+	@ # echo " -->"`cputime -i $@.cdblog`
 	@ pdflatex -halt-on-error -interaction=batchmode $@ &> /dev/null
 	@ pdflatex -halt-on-error -interaction=batchmode $@ &> /dev/null
 	@ cp -f $@.pdf    pdf/.
 	@ cp -f $@.cdb    cdb/.
+	@ cp -f $*.cdbtex lib/.
 	@ cp -f $@.cdbtex tests/output/.
 	@ if [[ -e $@.json ]]; then cp -f $@.json tests/output/.; fi
 	@ touch .redo-summary
@@ -111,13 +118,7 @@ rm-dot:
 	@ rm -rf .summary .redo-summary
 	@ rm -rf .collection .redo-collection
 #-------------------------------------------------------------------------------
-rm-tests-output:
-	@ rm -rf tests/output/*
-	@ rm -rf tests/semantic/output/*
-#-------------------------------------------------------------------------------
 rm-output:
-	@ rm -rf cdb/*
-	@ rm -rf pdf/*
 	@ rm -rf tests/output/*
 	@ rm -rf tests/semantic/output/*
 #-------------------------------------------------------------------------------
@@ -146,6 +147,7 @@ pristine:
 	@ make rm-output
 	@ make rm-expected
 	@ make veryclean
+	@ rm -rf cdb/* lib/* pdf/*
 	@ (cd tests/semantic; make pristine)
 	@ for file in $(TARGETS) summary collection sqrt-detg; \
 	  do \
@@ -153,6 +155,20 @@ pristine:
 		  rm -rf $${file}.json $${file}*.c; \
 		  rm -rf $${file}.cdbtex $${file}*.cdbcopy; \
 		  rm -rf $${file}.pytex; \
+		  rm -rf $${file}.export; \
+	  done
+#-------------------------------------------------------------------------------
+github-clean:
+	@ make rm-dot
+	@ make rm-output
+	@ make veryclean
+	@ for file in $(TARGETS) summary collection sqrt-detg; \
+	  do \
+		  if [[ -e $${file}.cdbtex ]];  then rm -f $${file}.cdbtex; fi ; \
+		  if [[ -e $${file}.json ]];    then mv -f $${file}.json    lib/.; fi ; \
+		  if [[ -e $${file}.c ]];       then mv -f $${file}.c       lib/.; fi ; \
+		  if [[ -e $${file}.cdbcopy ]]; then mv -f $${file}.cdbcopy lib/.; fi ; \
+		  if [[ -e $${file}.export ]];  then mv -f $${file}.export  lib/.; fi ; \
 	  done
 #-------------------------------------------------------------------------------
 # prepare files for github
@@ -160,18 +176,4 @@ github:
 	@ make pristine
 	@ make all
 	@ make expected
-	@ make rm-tests-output
-	@ make rm-dot
-	@ make veryclean
-	@ rm -rf summary.pdf
-	@ rm -rf collection.pdf
-	@ for file in $(TARGETS); \
-	  do \
-		  if [[ -e $${file}.json ]];    then mv -f $${file}.json    lib/.; fi ; \
-		  if [[ -e $${file}.cdbtex ]];  then mv -f $${file}.cdbtex  lib/.; fi ; \
-		  if [[ -e $${file}.c ]];       then mv -f $${file}.c       lib/.; fi ; \
-		  if [[ -e $${file}.cdbcopy ]]; then mv -f $${file}.cdbcopy lib/.; fi ; \
-		  if [[ -e $${file}.export ]];  then mv -f $${file}.export  lib/.; fi ; \
-	  done
-	@ cp -rf pdf/summary.pdf ../../pdf/.
-	@ cp -rf pdf/collection.pdf ../../pdf/.
+	@ make github-clean

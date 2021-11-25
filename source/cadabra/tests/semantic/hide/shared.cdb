@@ -1,3 +1,4 @@
+import cadabra2
 from cadabra2_defaults import *
 __cdbkernel__ = cadabra2.__cdbkernel__
 

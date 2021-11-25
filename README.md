@@ -20,18 +20,37 @@ Installation is required only if you wish to run or modify any of the Cadabra so
 
 Full details on how to install Cadabra can be found on the [Cadabra repository][6].
 
-You can run the Cadabra code's without installing the Hybrid-Latex tools but you will not gain
-the benefit of the integration with LaTeX. The raw Cadabra codes (stripped from their LaTeX hosts) can be found in `source/cadabra/cdb`.
-
 If you chose not to use the Hybrid-Latex tools then there is no installation required (apart from Cadabra).
 
-If you do choose to use the Hybrid-LaTeX tools you will need to copy a few files into appropriate places. The tools include Bash and Python shell scripts (`hybrid-latex/scripts`), Python libraries (`hybrid-latex/python`) and LaTeX style files (`hybrid-latex/latex`). Each file can be copied to wherever their respective program expects to find them. For example, the shell scripts could be sudo copied to `/usr/local/bin` (for access by all users) or to `~/bin` (for your personal access). The Python libraries should be copied to a place that can be found in `PYTHONPATH` while the LaTeX style files should be copied to wherever they will be visible to LaTeX. If you place the files in non-standard locations you may need to adjust your `PATH`, `PYTHONPATH` and `TEXINPUT` environment variables accordingly.
+The simplest way to install the hybrid latex files is to run the command
+
+    $ source SETPATHS; make install
+
+from the top directory. This will copy the files to newly created directories while also adjusting the various paths to make these files visible to LaTeX and Cadabra. The files, the new directories and their associated paths are as given in the following table.
+
+|  Directory  | Content | Path variable |
+|:------------:|:--------|:-------------|
+| `$HOME/local/rnc/bin/` | Python and Shell scripts | `$PATH` |
+| `$HOME/local/rnc/lib/` | Python libraries | `$PYTHONPATH` |
+| `$HOME/local/rnc/tex/` | LaTeX files | `$TEXINPUTS` |
+
+The command `source SETPATHS` will __prepend__ the directories to the appropriate paths while the command `make install` copies the files to their destinations. If you need to recover the original paths, just run `source OLDPATHS`.
+
+If you prefer to install the hybrid latex files in some other directory then you can run the command
+
+    $ source SETPATHS /full/path/to/dir/; make install
+
+where /full/path/to/dir/ is the full path to your prefered directory. The `bin`, `lib` and `tex` directories will be ceated underneath this directory.
+
+## Uninstall
+
+The hybrid latex tools can be uninstalled by deleting the directory `$HOME/local/rnc/` (or the approrpriate directory if you chose a non-default installation).
 
 ## Running the codes
 
 To build everything from scratch just run
 
-    $ build.sh
+    $ make
 
 form the top directory. This will run Cadabra and LaTeX on each of the sources in `source/cadabra/` and `source/tex/`. Some of the Cadabra codes will take a few minutes to run (see `source/cadabra/TIME.txt` for a list of approximate times).
 
@@ -82,9 +101,21 @@ If all goes well then you should see a few lines like
 
 There will be more lines (from the other examples). The key thing to observe is that each `diff` command produces no output (apart from a few lines that record execution times as these may vary slightly from one run to the next). There are also some tests that do not use the `diff` command. These tests are run by Cadabra. It reads in the expected results and compares them with the actual results printing out any differences (this allows for non-important differences in expressions to be ignored, for example reordering a sum). The results of those (semantic) tests are recorded in `source/cadabra/tests/semantic/summary.pdf`.
 
+## Dependencies
+
+You will need the Cadabra/Python/SymPy software.
+
+### Cadabra
+
+Cadabra is easy to compile and install. Full details can be found on the [Cadabra repository][6].
+
+### Python/SymPy
+
+The codes have been tested with both Python2 and Python3. Since Python2 is deprecated it would be wise to use Python3. A popular distribution of Python3 can be found at the [Anaconda website][7].
+
 ## License
 
-All files in this collection are distributed under the [MIT][7] license. See the file LICENSE.txt for the full details.
+All files in this collection are distributed under the [MIT][8] license. See the file LICENSE.txt for the full details.
 
   [1]: https://arxiv.org/abs/0903.2087
   [2]: https://iopscience.iop.org/article/10.1088/0264-9381/26/17/175017
@@ -92,4 +123,5 @@ All files in this collection are distributed under the [MIT][7] license. See the
   [4]: https://github.com/leo-brewin/cadabra-tutorial
   [5]: https://github.com/leo-brewin/hybrid-latex
   [6]: https://github.com/kpeeters/cadabra2
-  [7]: https://opensource.org/licenses/MIT
+  [7]: https://www.anaconda.com/products/individual
+  [8]: https://opensource.org/licenses/MIT

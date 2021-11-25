@@ -27,7 +27,7 @@ all:
 	@ touch .$*
 #-------------------------------------------------------------------------------
 shared:
-	@ cadabra2python cdb/shared.cdb shared.py
+	@ cadabra2python hide/shared.cdb shared.py
 #-------------------------------------------------------------------------------
 summary:
 	@ make .summary
@@ -72,9 +72,30 @@ pristine:
 	@ make rm-output
 	@ make rm-expected
 	@ make veryclean
+	@ rm -rf shared.py
+	@ rm -rf __pycache__
 	@ for file in $(TARGETS) summary; \
 	  do \
 	     rm -rf $${file}.pdf; \
 		  rm -rf $${file}.json $${file}*.c; \
 		  rm -rf $${file}.cdbtex $${file}*.cdbcopy; \
 	  done
+#-------------------------------------------------------------------------------
+github-clean:
+	@ make rm-dot
+	@ make rm-output
+	@ make veryclean
+	@ rm -rf shared.py
+	@ rm -rf __pycache__
+	@ for file in $(TARGETS) summary; \
+	  do \
+	     rm -rf $${file}.pdf; \
+		  rm -rf $${file}.json $${file}*.c; \
+		  rm -rf $${file}.cdbtex $${file}*.cdbcopy; \
+	  done
+#-------------------------------------------------------------------------------
+github:
+	@ make pristine
+	@ make all
+	@ make expected
+	@ make github-clean

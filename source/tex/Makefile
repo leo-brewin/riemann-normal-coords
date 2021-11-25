@@ -1,12 +1,11 @@
 #-------------------------------------------------------------------------------
 SHELL = /bin/bash
 #-------------------------------------------------------------------------------
-.PHONY: all
+.PHONY: all version
 #-------------------------------------------------------------------------------
 TARGETS = $(patsubst %.tex,%,$(wildcard paper.tex))
 #-------------------------------------------------------------------------------
 all:
-	@ version.sh
 	@ for file in $(TARGETS); \
 	  do \
 	     if ! [[ -e $${file}.aux ]]; then \
@@ -32,6 +31,9 @@ all:
 	@ echo "pdflatex $* ..."
 	@ pdflatex -halt-on-error -interaction=batchmode $* &> $*.tmplog
 	@ touch .$*
+#-------------------------------------------------------------------------------
+version:
+	@ version.sh
 #-------------------------------------------------------------------------------
 rm-dot:
 	@ for file in $(TARGETS); \
@@ -70,5 +72,6 @@ pristine:
 github:
 	@ make pristine
 	@ make all
+	@ make rm-dot
 	@ make veryclean
 	@ cp -rf paper.pdf ../../pdf/.

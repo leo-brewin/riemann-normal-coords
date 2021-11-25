@@ -5,5 +5,5 @@ echo "> diff text files"
 tests-text.sh
 
 echo "---------------------------------------------------------"
-echo "> checkpoint files, results in tests/semantic/summary.pdf"
+echo "> checkpoint files, results in source/cadabra/tests/semantic/summary.pdf"
 tests-semantic.sh

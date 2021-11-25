@@ -13,10 +13,11 @@ all:
 .%:	%.tex
 	@ echo "cdblatex.sh $@ ..."
 	@ cdblatex.sh -T -s -i $@ &> $@.cdblog
-	@ echo " -->"`cputime -i $*.cdblog`
+	@ # echo " -->"`cputime -i $*.cdblog`
 #-------------------------------------------------------------------------------
 rm-dot:
-	@ rm .[a-z]*.lb
+	@ rm -rf .[a-z]*
+	@ rm -rf .[a-z]*.lb
 #-------------------------------------------------------------------------------
 clean:
 	@ for file in $(TARGETS); \
