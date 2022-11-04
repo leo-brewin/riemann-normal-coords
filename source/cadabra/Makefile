@@ -66,8 +66,8 @@ summary:
 	@ echo "pdflatex summary ..."
 	@ pdflatex -halt-on-error -interaction=batchmode summary &> /dev/null
 	@ if [[ -e summary.pdf ]]; then \
-	      cp -f summary.pdf pdf/.; \
-	      cp -f summary.pdf ../../pdf/.; \
+			cp -f summary.pdf pdf/.; \
+			cp -f summary.pdf ../../pdf/.; \
 			touch .summary; \
 	  fi
 .redo-summary:
@@ -79,8 +79,8 @@ collection:
 	@ echo "pdflatex collection ..."
 	@ pdflatex -halt-on-error -interaction=batchmode collection &> /dev/null
 	@ if [[ -e collection.pdf ]]; then \
-	      cp -f collection.pdf pdf/.; \
-	      cp -f collection.pdf ../../pdf/.; \
+			cp -f collection.pdf pdf/.; \
+			cp -f collection.pdf ../../pdf/.; \
 			touch .collection; \
 	  fi
 .redo-collection:
@@ -89,7 +89,7 @@ collection:
 %:
 	@ echo "cdblatex.sh $@ ..."
 	@ cdblatex.sh -T -sx -i $@ &> $@.cdblog
-	@ # echo " -->"`cputime -i $@.cdblog`
+	@ # echo "cdblatex.sh `bash-str -t$@ -f%-17s`"" -->"`cputime -i $@.cdblog`
 	@ pdflatex -halt-on-error -interaction=batchmode $@ &> /dev/null
 	@ pdflatex -halt-on-error -interaction=batchmode $@ &> /dev/null
 	@ cp -f $@.pdf    pdf/.
@@ -111,10 +111,9 @@ tests:
 rm-dot:
 	@ for file in $(TARGETS) summary collection sqrt-detg; \
 	  do \
-	     rm -rf .$${file}; \
+		  rm -rf .$${file}; \
 	  done
 	@ rm -rf .[a-z]*.lb
-	@ rm -rf .merged.tex .tmp.txt
 	@ rm -rf .summary .redo-summary
 	@ rm -rf .collection .redo-collection
 #-------------------------------------------------------------------------------
@@ -129,7 +128,7 @@ rm-expected:
 clean:
 	@ for file in $(TARGETS) summary collection sqrt-detg; \
 	  do \
-	     rm -rf $${file}.aux $${file}.log $${file}.out $${file}.synctex.gz; \
+		  rm -rf $${file}.aux $${file}.log $${file}.out $${file}.synctex.gz; \
 	  done
 #-------------------------------------------------------------------------------
 veryclean:
@@ -137,7 +136,7 @@ veryclean:
 	@ for file in $(TARGETS); \
 	  do \
 		  rm -rf $${file}.pdf; \
-	     rm -rf $${file}.cdb $${file}_.cdb; \
+		  rm -rf $${file}.cdb $${file}_.cdb $${file}_.txt; \
 		  rm -rf $${file}.cdbidx $${file}.cdbtxt $${file}.cdblog; \
 		  rm -rf $${file}.py $${file}.pylog; \
 	  done
@@ -151,7 +150,7 @@ pristine:
 	@ (cd tests/semantic; make pristine)
 	@ for file in $(TARGETS) summary collection sqrt-detg; \
 	  do \
-	     rm -rf $${file}.pdf; \
+		  rm -rf $${file}.pdf; \
 		  rm -rf $${file}.json $${file}*.c; \
 		  rm -rf $${file}.cdbtex $${file}*.cdbcopy; \
 		  rm -rf $${file}.pytex; \

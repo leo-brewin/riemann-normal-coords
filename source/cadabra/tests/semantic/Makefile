@@ -12,8 +12,8 @@ TARGETS = \
 		detg2
 #-------------------------------------------------------------------------------
 all:
-	@ for file in $(TARGETS); do make .$${file}; done;
 	@ make shared
+	@ for file in $(TARGETS); do make .$${file}; done;
 	@ make summary
 	@ make veryclean
 #-------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ all:
 .%:	%.tex output/%.json expected/%.json
 	@ echo "> cdblatex.sh $* ..."
 	@ cdblatex.sh -skx -i $* &> $*.cdblog
-	@ pdflatex -halt-on-error -interaction=batchmode $* &> $*.cdblog
+	@ pdflatex -halt-on-error -interaction=batchmode $* &> /dev/null
 	@ touch .redo-summary
 	@ touch .$*
 #-------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ summary:
 	@ make .summary
 .summary: .redo-summary
 	@ echo "> pdflatex summary ..."
-	@ pdflatex -halt-on-error -interaction=batchmode summary &> summary.log
+	@ pdflatex -halt-on-error -interaction=batchmode summary &> /dev/null
 	@ touch .summary
 #-------------------------------------------------------------------------------
 rm-dot:
@@ -43,7 +43,6 @@ rm-dot:
 	  done
 	@ rm -rf .[a-z]*.lb
 	@ rm -rf .summary .redo-summary
-	@ rm -rf .merged.tex .tmp.txt
 #-------------------------------------------------------------------------------
 rm-output:
 	@ rm -rf output/*
@@ -61,9 +60,9 @@ veryclean:
 	@ make clean
 	@ for file in $(TARGETS) summary; \
 	  do \
-	     rm -f $${file}.cdb $${file}_.cdb; \
-		  rm -f $${file}.cdbidx $${file}.cdbtxt $${file}.cdblog; \
-		  rm -f $${file}.cdbtex $${file}.txt; \
+	     rm -f $${file}.cdb; \
+		  rm -f $${file}_.cdb $${file}_.txt; \
+		  rm -f $${file}.cdbtex $${file}.cdbidx $${file}.cdbtxt $${file}.cdblog; \
 		  rm -f $${file}.py; \
 	  done
 #-------------------------------------------------------------------------------

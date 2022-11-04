@@ -1,6 +1,26 @@
+-- 04 Nov 2022 --------------------------------------------
+
+Cadabra 2.3.9 (build 2829.40f334a67c dated 2022-08-05) (Mac Studio (2022) Apple Silicon)
+
+dGamma              -->        12.2 secs and  94 Mbytes
+dRabcd              --> 5 mins 31.7 secs and 320 Mbytes
+metric              -->        56.8 secs and  99 Mbytes
+metric-inv          -->        58.7 secs and 101 Mbytes
+connection          -->         7.5 secs and  95 Mbytes
+genGamma            --> 4 mins 32.1 secs and 253 Mbytes
+geodesic-bvp        --> 2 mins  1.0 secs and 108 Mbytes
+geodesic-ivp        -->         1.3 secs and  93 Mbytes
+rnc2rnc             -->         9.1 secs and  98 Mbytes
+gen2rnc             --> 4 mins 58.6 secs and 406 Mbytes
+rnc2gen             -->        10.4 secs and 106 Mbytes
+geodesic-lsq        -->        15.3 secs and 102 Mbytes
+geodesic-lsq-midpt  -->        17.8 secs and  98 Mbytes
+detg2               -->         4.6 secs and 100 Mbytes
+export              -->         1.3 secs and  96 Mbytes
+
 -- 08 Nov 2021 --------------------------------------------
 
-Cadabra 2.3.7 (build 2778.b0ba2dbb80 dated 2021-09-27)
+Cadabra 2.3.7 (build 2778.b0ba2dbb80 dated 2021-09-27) (MacPro (2013) Intel)
 
 dGamma              -->         26.7 secs and  50 Mbytes
 dRabcd              --> 12 mins 15.7 secs and 269 Mbytes
@@ -17,45 +37,3 @@ geodesic-lsq        -->         32.4 secs and  60 Mbytes
 geodesic-lsq-midpt  -->         38.1 secs and  58 Mbytes
 detg2               -->          9.0 secs and  61 Mbytes
 export              -->          1.9 secs and  51 Mbytes
-
--- 18 Feb 2020 --------------------------------------------
-
-Cadabra 2.2.7 (build 2268.ba747e0b49 dated 2019-12-01)
-
-dGamma              -->         23.6 secs and  45 Mbytes
-dRabcd              --> 11 mins  7.3 secs and 236 Mbytes
-metric              -->  1 min  49.9 secs and  48 Mbytes
-metric-inv          -->  1 min  56.7 secs and  52 Mbytes
-connection          -->         11.6 secs and  48 Mbytes
-genGamma            -->  7 mins  6.7 secs and 186 Mbytes
-geodesic-bvp        -->  2 mins 36.7 secs and  65 Mbytes
-geodesic-ivp        -->          1.3 secs and  46 Mbytes
-rnc2rnc             -->         11.6 secs and  50 Mbytes
-gen2rnc             -->  7 mins 53.9 secs and 367 Mbytes
-rnc2gen             -->         18.8 secs and  61 Mbytes
-geodesic-lsq        -->         24.2 secs and  52 Mbytes
-geodesic-lsq-midpt  -->         30.9 secs and  51 Mbytes
-detg2               -->          8.2 secs and  49 Mbytes
-export              -->          1.4 secs and  44 Mbytes
-
--- 23 Sep 2019 --------------------------------------------
-
-Cadabra 2.2.7 (build 2166.d9aace25f4 dated 2019-09-21)
-
-dGamma              -->         21.9 secs and  45 Mbytes
-dRabcd              -->  9 mins 57.2 secs and 229 Mbytes
-metric              -->  1 min  44.0 secs and  49 Mbytes
-metric-inv          -->  1 min  48.2 secs and  50 Mbytes
-connection          -->         11.1 secs and  46 Mbytes
-genGamma            -->  6 mins 40.8 secs and 190 Mbytes
-geodesic-bvp        -->  2 mins 30.1 secs and  68 Mbytes
-geodesic-ivp        -->          1.2 secs and  44 Mbytes
-rnc2rnc             -->         11.0 secs and  49 Mbytes
-gen2rnc             -->  7 mins 36.3 secs and 357 Mbytes
-rnc2gen             -->         18.1 secs and  63 Mbytes
-geodesic-lsq        -->         23.6 secs and  55 Mbytes
-geodesic-lsq-midpt  -->         29.8 secs and  53 Mbytes
-detg2               -->          8.0 secs and  53 Mbytes
-sqrt-detg           -->          0.4 secs and  42 Mbytes
-export              -->          1.3 secs and  44 Mbytes
-summary             -->          0.4 secs and  42 Mbytes
