@@ -1,5 +1,25 @@
 -- 04 Nov 2022 --------------------------------------------
 
+Cadabra 2.4.3 (build 2889.b1e0fefe3e dated 2022-12-18) (Mac Studio (2022) Apple Silicon)
+
+dGamma              -->        12.0 secs and  57 Mbytes
+dRabcd              --> 5 mins 35.7 secs and 269 Mbytes
+metric              -->        57.5 secs and  60 Mbytes
+metric-inv          -->        59.6 secs and  62 Mbytes
+connection          -->         7.2 secs and  57 Mbytes
+genGamma            --> 4 mins 34.5 secs and 219 Mbytes
+geodesic-bvp        --> 2 mins  1.0 secs and  74 Mbytes
+geodesic-ivp        -->         0.9 secs and  56 Mbytes
+rnc2rnc             -->         8.8 secs and  61 Mbytes
+gen2rnc             --> 4 mins 56.9 secs and 370 Mbytes
+rnc2gen             -->        10.2 secs and  69 Mbytes
+geodesic-lsq        -->        15.1 secs and  66 Mbytes
+geodesic-lsq-midpt  -->        17.6 secs and  61 Mbytes
+detg2               -->         4.3 secs and  64 Mbytes
+export              -->         0.9 secs and  59 Mbytes
+
+-- 04 Nov 2022 --------------------------------------------
+
 Cadabra 2.3.9 (build 2829.40f334a67c dated 2022-08-05) (Mac Studio (2022) Apple Silicon)
 
 dGamma              -->        12.2 secs and  94 Mbytes

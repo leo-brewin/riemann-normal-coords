@@ -25,14 +25,14 @@
 \def\referencefont{\rmfamily\normalsize}
 \def\maketitle{%
 \noindent
-\At(0,-2){\hbox{\vtop{\referencefont\@thereference}}}%
+\At(0,-1.5){\hbox{\vtop{\referencefont\@thereference}}}%
 \begin{center}%
 \hrule height 0pt depth 0pt%
-\vskip 20pt%
+% \vskip 20pt%
 {\titlefont\@thetitle}%
-\vskip 20pt%
-{\authorfont\@theauthor}%
 \vskip 10pt%
+{\authorfont\@theauthor}%
+\vskip 5pt%
 {\datefont\@thedate}%
 \end{center}}
 %----------------------------------------------------------------------------------------

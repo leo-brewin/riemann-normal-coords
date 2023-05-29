@@ -8,7 +8,7 @@
 % biber will replace LaTeX accented characters like \'{e} with utf-8 characters.
 % The utf-8 characters are written to the .bbl and this causes problems with pdflatex.
 %    First  solution use: biber tutorial and \usepackage[latin1]{inputenc}
-%    Second solution use: biber --decodecharsset=null tutorial
+%    Second solution use: biber --decodecharsset=null file
 \usepackage[style=numeric, sorting=none, sortcites=true]{biblatex}
 \addbibresource{bibdata.bib}
 %
@@ -54,8 +54,10 @@ Australia}
 % \date{09-Jul-2009}% minor grammatical corrections in response to 1st referee
 % \date{12-Aug-2009}% small corrections arising from proofs received from CQG
 \date{12-Aug-2009 (v1)\\
-      10-Dec-2019 (v2)}% major changes to correct errors in 4th and higher order terms,
-                       % all code will be available on github
+      10-Dec-2019 (v2)\\  % major changes to correct errors in 4th and higher order terms,
+                          % all code will be available on github
+       4-Nov-2022 (v3)\\  % corrected typos on lhs of eqtns 11.19a-d,
+       1-Dec-2022 (v4)}   % corrected typo on equation (3.2) in section (3.1)
 \reference{Preprint: arXiv:0903.2087\\[5pt]
            Journal: {\it Class.Quantum.Grav.} {\bf 26} 175017 (2009)}
 
@@ -70,7 +72,9 @@ fifth-order in the curvature and were obtained using the computer algebra packag
 
 \end{abstract}
 
-\BegNote{\bf\large Version 2}
+\bgroup
+\BegNote{\bf Version 2}
+\small%
 The first version of this paper was written in 2009. This second version (written in 2019)
 differs from the first in a number of important ways. First, the discussion on Cadabra has
 been completely rewritten to account for the revised syntax introduced in the latest version
@@ -83,7 +87,24 @@ down the line, to computations built upon the generalised connections (e.g., the
 boundary value problem and the arc-length equations). The Cadabra codes have been corrected
 and thoroughly cross-checked. A number of minor typographical errors have also been
 corrected.
+% \EndNote
+\vskip 2pt
+
+\BegNote{\bf Version 3}
+\small%
+This version corrects the indicies (and sign) of the left hand side of equations 11.19a-d.
+This brings the arXiv version in line with the version on GitHub
+\ \url{https://github.com/leo-brewin/riemann-normal-coords}.
+% \EndNote
+\vskip 2pt
+
+\BegNote{\bf Version 4}
+\small%
+Equation (3.2) in Section 3.1 had a small error -- the coefficient in front of the $\Gamma \Gamma$
+term should be $(n-1)$ rather than $n$. Other instances of equation (3.2) (in section 4 and 7)
+were correct. This was a simple typographical error. All of the Cadabra results are unchanged.
 \EndNote
+\egroup
 
 % ============================================================================================
 \section{Introduction}
@@ -289,9 +310,10 @@ x^a(s) = x^a + s {\Dot x}^a
 where the $\Gamma^{a}{}_{i_1i_2i_3\cdots i_n}$, known as \emph{generalised connections},
 are defined recursively by
 \begin{equation}
-\Gamma^{a}{}_{i_1i_2i_3\cdots i_n} = \Gamma^{a}{}_{(i_1i_2i_3\cdots i_{n-1},i_n)}
-                                 - n \Gamma^{a}{}_{p(i_2i_3\cdots i_{n-1}}
-                                     \Gamma^{p}{}_{i_1i_n)}
+  \Gamma^{a}{}_{i_1i_2i_3\cdots i_n}
+= \Gamma^{a}{}_{(i_1i_2i_3\cdots i_{n-1},i_n)}
+      - (n-1) \Gamma^{a}{}_{p(i_2i_3\cdots i_{n-1}}
+              \Gamma^{p}{}_{i_1i_n)}
 \pglabel{eqn:GenGam}
 \end{equation}
 Note that the use of round brackets $(...)$ denotes total symmetrisation over the included

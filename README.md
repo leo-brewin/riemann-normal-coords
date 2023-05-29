@@ -42,6 +42,8 @@ If you prefer to install the hybrid latex files in some other directory then you
 
 where /full/path/to/dir/ is the full path to your prefered directory. The `bin`, `lib` and `tex` directories will be ceated underneath this directory.
 
+Note that the Python scripts expect to find Python3 at `/usr/local/bin/python3`. You made need to edit these files if your Python3 is located elsewhere.
+
 ## Uninstall
 
 The hybrid latex tools can be uninstalled by deleting the directory `$HOME/local/rnc/` (or the approrpriate directory if you chose a non-default installation).

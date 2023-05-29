@@ -48,6 +48,7 @@ clean:
 	     rm -rf $${file}.out $${file}.toc $${file}.synctex.gz; \
 	     rm -rf $${file}.log $${file}.biblog $${file}.tmplog; \
 		  rm -rf $${file}.bcf $${file}.blg $${file}.run.xml; \
+		  rm -rf $${file}.fls $${file}.fdb_latexmk; \
 	     rm -rf $${file}.errors $${file}.exnum $${file}.itnum $${file}.lstnum; \
 	  done
 #-------------------------------------------------------------------------------
@@ -71,6 +72,7 @@ pristine:
 # prepare files for github
 github:
 	@ make pristine
+	@ make version
 	@ make all
 	@ make rm-dot
 	@ make veryclean
