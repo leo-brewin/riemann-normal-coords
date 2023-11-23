@@ -44,7 +44,7 @@
 % ============================================================================================
 \title{\Title}
 \author{\Author\\[10pt]%
-School of Mathematical Sciences\\%
+School of Mathematics\\%
 Monash University, 3800\\%
 Australia}
 % \date{10-Nov-2008}% 1st version started
@@ -57,7 +57,8 @@ Australia}
       10-Dec-2019 (v2)\\  % major changes to correct errors in 4th and higher order terms,
                           % all code will be available on github
        4-Nov-2022 (v3)\\  % corrected typos on lhs of eqtns 11.19a-d,
-       1-Dec-2022 (v4)}   % corrected typo on equation (3.2) in section (3.1)
+       1-Dec-2022 (v4)\\  % corrected typo on equation (3.2) in section (3.1)
+      21-Nov-2023 (v5)}   % reformatted Cadabra ouput to print \Delta x rather than Dx
 \reference{Preprint: arXiv:0903.2087\\[5pt]
            Journal: {\it Class.Quantum.Grav.} {\bf 26} 175017 (2009)}
 
@@ -82,8 +83,7 @@ of Cadabra (itself updated in 2016)\footnote{The Cadabra results in this paper a
 \CdbVersion}. Second, and more importantly, a significant computational error in the first
 version (of this paper) has been corrected. Though the algorithms given in the first version
 were correct their implementation in Cadabra (by this author) was incorrect. This lead to
-errors first in the quartic and higher order terms in the generalised connections and then,
-down the line, to computations built upon the generalised connections (e.g., the initial and
+errors first in the quartic and higher order terms in the generalised connections and later to computations built upon the generalised connections (e.g., the initial and
 boundary value problem and the arc-length equations). The Cadabra codes have been corrected
 and thoroughly cross-checked. A number of minor typographical errors have also been
 corrected.
@@ -103,6 +103,14 @@ This brings the arXiv version in line with the version on GitHub
 Equation (3.2) in Section 3.1 had a small error -- the coefficient in front of the $\Gamma \Gamma$
 term should be $(n-1)$ rather than $n$. Other instances of equation (3.2) (in section 4 and 7)
 were correct. This was a simple typographical error. All of the Cadabra results are unchanged.
+
+% \EndNote
+\vskip 2pt
+
+\BegNote{\bf Version 5}
+\small%
+Versions 2 to 4 used both $Dx^a$ and $\Delta x^a$ to record the change in cooridnates between
+two nearby points. This version replaces the $Dx^a$ with $\Delta x^a$.
 \EndNote
 \egroup
 
@@ -762,7 +770,7 @@ which, using previous results, leads to
 A simple calculation shows that this result can also be written in the slightly more
 suggestive form
 \[
-L^2_{PQ} = g_{ab}(\bar x) Dx^a Dx^b + \BigO{\eps^4}
+L^2_{PQ} = g_{ab}(\bar x) \Dx^a \Dx^b + \BigO{\eps^4}
 \]
 where ${\bar x}^a = (x^a_P+x^a_Q)/2$ is the \emph{coordinate} mid-point of the geodesic.
 This does raise the question -- Can higher order estimates for $L^2$ (see equation
@@ -930,10 +938,7 @@ this paper.
 
 All of the $\BigO{\eps^6}$ Cadabra programs were not overly demanding on computational
 resources, taking between 0.5 second and 12 minutes to run and requiring
-between 40 and 360 Mbyte of memory (on a Mac Pro (2013) running macOS 10.14.4).
-
-The Cadabra codes and several support scripts are available from the author's GitHub site
-\ \url{https://github.com/leo-brewin/riemann-normal-coords}.
+between 40 and 360 Mbyte of memory (on a Mac Studio M1 running macOS 14.1.1).
 
 Some of the following expansions can be compared directly with results obtained by
 traditional methods. In particular the expansions for the metric and its inverse, equations
@@ -946,6 +951,12 @@ Bianchi identities).
 Note that in the following output any symmetrisation of indices on the right hand side
 should be inferred from the explicit symmetrisation (the round brackets) on the left hand
 side (as per the discussion in section \ref{sec:Notation}).
+
+Note also that in the following equations, $x^a$ denotes the Riemann normal coordinates of
+a typical point, $P$, while those of a nearby point $Q$ are denoted by $x^a + \Delta x^a$.
+The single exception to this rule occurs in equations (11.18) that displays a coordinate
+transformation from generic coordinates, $x^a$, to (non-orthogonal) Riemann normal
+coordinates, $y^a$.
 
 \clearpage
 
@@ -1072,7 +1083,7 @@ $R^{a}{}_{(bc{\Dot d};\ue)}$ are always of the form $\Gamma^{p}{}_{q(r,\us)}$.
 \mysubsection{Geodesic BVP}
 
 \begin{align}
-   x^{a}(s) &= x^{a} + s Dx^{a}
+   x^{a}(s) &= x^{a} + s \Dx^{a}
                      + (s-s^2) x^{a}_2
                      + (s-s^3) x^{a}_3
                      + (s-s^4) x^{a}_4
@@ -1106,11 +1117,8 @@ $R^{a}{}_{(bc{\Dot d};\ue)}$ are always of the form $\Gamma^{p}{}_{q(r,\us)}$.
 
 \begin{equation*}
    \pglabel{eqn:geodesicLSQ}
-   % LCB: which of these is correct?
-   % \left(\Delta s\right)^2 = \nD{0} + \nD{2} + \nD{3} + \nD{4} + \nD{5} + \BigO{\eps^6,Dx^6}
-   % \left(\Delta s\right)^2 = \nD{0} + \nD{2} + \nD{3} + \nD{4} + \nD{5} + \BigO{\eps^6,Dx^7}
-   \left(\Delta s\right)^2 = \nD{0} + \nD{2} + \nD{3} + \nD{4} + \nD{5}
-                           + \BigO{\eps^6}\tag{11.21}
+   L^2_{PQ} = \nD{0} + \nD{2} + \nD{3} + \nD{4} + \nD{5}
+            + \BigO{\eps^6}\tag{11.21}
 \end{equation*}
 
 \begin{dgroup*}[spread=5pt]
@@ -1124,8 +1132,8 @@ $R^{a}{}_{(bc{\Dot d};\ue)}$ are always of the form $\Gamma^{p}{}_{q(r,\us)}$.
 % ============================================================================================
 \section{Source}
 
-All of the Cadabra files used in preparing this paper are available at the GitHub repository
-\ \url{https://github.com/leo-brewin/riemann-normal-coords}
+This paper along with all of the Cadabra files and several support scripts are available on
+the GitHub repository \ \url{https://github.com/leo-brewin/riemann-normal-coords}
 
 % ============================================================================================
 \section{Acknowledgements}
