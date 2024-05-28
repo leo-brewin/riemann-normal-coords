@@ -1,6 +1,7 @@
+\def\Date{19 Jan 2024}
+% \def\FileID{file:}
+
 \documentclass[12pt]{cdblatex}
-\usepackage{fancyhdr}
-\usepackage{footer}
 
 \begin{document}
 
@@ -798,6 +799,61 @@ This is the same as the previous page but with a small change in the format to a
 \clearpage
 
 % =================================================================================================
+% compute the first three generalised Gamms (including \Gamma^{a}_{bc})
+% this is just provide the LaTeX code for the first three \Gamma's in section 7 of the paper
+% these results are never used anywhere else
+
+\begin{cadabra}
+   deriv01:=B^{a}:
+
+   deriv02:=-\Gamma^{a}_{b c} B^{b} B^{c}:                # cdb (deriv02.100,deriv02)
+
+   deriv03:=\nabla{@(deriv02)}.                           # cdb (deriv03.100,deriv03)
+   distribute     (deriv03)
+   product_rule   (deriv03)                               # cdb (deriv03.101,deriv03)
+   substitute     (deriv03,$\nabla{B^{a}}->@(deriv02)$)   # cdb (deriv03.102,deriv03)
+   substitute     (deriv03,$\nabla{\Gamma^{m}_{s t}}->B^{d}\partial_{d}{\Gamma^{m}_{s t}}$)   # cdb (deriv03.103,deriv03)
+   sort_product   (deriv03)                               # cdb (deriv03.104,deriv03)
+   rename_dummies (deriv03)                               # cdb (deriv03.105,deriv03)
+   canonicalise   (deriv03)                               # cdb (deriv03.106,deriv03)
+
+   deriv04:=\nabla{@(deriv03)}.                           # cdb (deriv04.100,deriv04)
+   distribute     (deriv04)
+   product_rule   (deriv04)                               # cdb (deriv04.101,deriv04)
+   substitute     (deriv04,$\nabla{B^{a}}->@(deriv02)$)   # cdb (deriv04.102,deriv04)
+   substitute     (deriv04,$\nabla{\Gamma^{m}_{s t}}->B^{d}\partial_{d}{\Gamma^{m}_{s t}}$)   # cdb (deriv04.103,deriv04)
+   substitute     (deriv04,$\nabla{\partial_{e}{\Gamma^{m}_{s t}}}->B^{d}\partial_{d e}{\Gamma^{m}_{s t}}$)   # cdb (deriv04.104,deriv04)
+   sort_product   (deriv04)                               # cdb (deriv04.105,deriv04)
+   rename_dummies (deriv04)                               # cdb (deriv04.106,deriv04)
+   canonicalise   (deriv04)                               # cdb (deriv04.107,deriv04)
+
+   pderiv02 := -@(deriv02).                # cdb (pderiv02.100,pderiv02)
+   factor_out (pderiv02, $B^{a?}$)         # cdb (pderiv02.101,pderiv02)
+   substitute (pderiv02, $B^{a} -> 1$)     # cdb (pderiv02.102,pderiv02)
+
+   pderiv03 := -@(deriv03).                # cdb (pderiv03.100,pderiv03)
+   factor_out (pderiv03, $B^{a?}$)         # cdb (pderiv03.101,pderiv03)
+   substitute (pderiv03, $B^{a} -> 1$)     # cdb (pderiv03.102,pderiv03)
+
+   pderiv04 := -@(deriv04).                # cdb (pderiv04.100,pderiv04)
+   factor_out (pderiv04, $B^{a?}$)         # cdb (pderiv04.101,pderiv04)
+   substitute (pderiv04, $B^{a} -> 1$)     # cdb (pderiv04.102,pderiv04)
+\end{cadabra}
+
+\clearpage
+
+% =================================================================================================
+\section*{The generalised connection in generic coordinates (for the paper section 7)}
+
+\begin{dgroup*}[spread=5pt]
+   \begin{dmath*} {\Gamma}^{a}_{(bc)}(x) = \Cdb*{pderiv02.102} \end{dmath*}
+   \begin{dmath*} {\Gamma}^{a}_{(bcd)}(x) = \Cdb*{pderiv03.102} \end{dmath*}
+   \begin{dmath*} {\Gamma}^{a}_{(bcde)}(x) = \Cdb*{pderiv04.102} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =================================================================================================
 % export selected objects, these will later be imported into a library
 % these are the objects that will appear in the paper
 
@@ -846,6 +902,11 @@ This is the same as the previous page but with a small change in the format to a
    cdblib.put ('gen_gamma_2_scaled',alt2scaled,'genGamma.export')
    cdblib.put ('gen_gamma_3_scaled',alt3scaled,'genGamma.export')
 
+   # gen gamma in terms of partial derivs of Gamma^{a}_{bc}
+   cdblib.put ('gen_gamma_pderiv0',pderiv02,'genGamma.export')
+   cdblib.put ('gen_gamma_pderiv1',pderiv03,'genGamma.export')
+   cdblib.put ('gen_gamma_pderiv2',pderiv04,'genGamma.export')
+
    checkpoint.append (tmp0)
    checkpoint.append (tmp1)
 
@@ -859,6 +920,9 @@ This is the same as the previous page but with a small change in the format to a
    checkpoint.append (alt2scaled)
    checkpoint.append (alt3scaled)
 
+   checkpoint.append (pderiv02)
+   checkpoint.append (pderiv03)
+   checkpoint.append (pderiv04)
 \end{cadabra}
 
 % =================================================================================================

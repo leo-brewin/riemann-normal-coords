@@ -1,6 +1,7 @@
+\def\Date{19 Jan 2024}
+% \def\FileID{file:}
+
 \documentclass[12pt]{cdblatex}
-\usepackage{fancyhdr}
-\usepackage{footer}
 
 \begin{document}
 
@@ -70,6 +71,11 @@
    tmp = cdblib.get ('gen_gamma_1_scaled','genGamma.export')  # cdb (genGamma1scaled,tmp)
    tmp = cdblib.get ('gen_gamma_2_scaled','genGamma.export')  # cdb (genGamma2scaled,tmp)
    tmp = cdblib.get ('gen_gamma_3_scaled','genGamma.export')  # cdb (genGamma3scaled,tmp)
+
+   # gen gamma in terms of partial derivs of Gamma^{a}_{bc}
+   tmp = cdblib.get ('gen_gamma_pderiv0','genGamma.export')  # cdb (genGammaPderiv0,tmp)
+   tmp = cdblib.get ('gen_gamma_pderiv1','genGamma.export')  # cdb (genGammaPderiv1,tmp)
+   tmp = cdblib.get ('gen_gamma_pderiv2','genGamma.export')  # cdb (genGammaPderiv2,tmp)
 
    # ------------------------------------------------------------------------------------
    # the metric determinent and friends

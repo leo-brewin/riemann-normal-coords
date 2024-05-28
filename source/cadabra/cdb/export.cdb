@@ -3,6 +3,10 @@
 \nabla{#}::Derivative.
 \partial{#}::PartialDerivative.
 
+Dx{#}::LaTeXForm{"{\Dx}"}.
+                            # LCB: But I'm not sure that this is still true.
+                            # LCB: So just to be safe I'll leave all Cadabra sources unchanged.
+                            # LCB: I can use this trick in this file because it doesn't use ::KeepWeight
 import cdblib
 
 # ------------------------------------------------------------------------------------
@@ -59,6 +63,11 @@ tmp = cdblib.get ('gen_gamma_0_scaled','genGamma.export')
 tmp = cdblib.get ('gen_gamma_1_scaled','genGamma.export')
 tmp = cdblib.get ('gen_gamma_2_scaled','genGamma.export')
 tmp = cdblib.get ('gen_gamma_3_scaled','genGamma.export')
+
+# gen gamma in terms of partial derivs of Gamma^{a}_{bc}
+tmp = cdblib.get ('gen_gamma_pderiv0','genGamma.export')
+tmp = cdblib.get ('gen_gamma_pderiv1','genGamma.export')
+tmp = cdblib.get ('gen_gamma_pderiv2','genGamma.export')
 
 # ------------------------------------------------------------------------------------
 # the metric determinent and friends

@@ -436,6 +436,41 @@ scaledGamma2 :=  90 @(genGamma2).
 scaledGamma3 :=   3 @(genGamma3).
 
 
+deriv01:=B^{a}:
+
+deriv02:=-\Gamma^{a}_{b c} B^{b} B^{c}:
+
+deriv03:=\nabla{@(deriv02)}.
+distribute     (deriv03)
+product_rule   (deriv03)
+substitute     (deriv03,$\nabla{B^{a}}->@(deriv02)$)
+substitute     (deriv03,$\nabla{\Gamma^{m}_{s t}}->B^{d}\partial_{d}{\Gamma^{m}_{s t}}$)
+sort_product   (deriv03)
+rename_dummies (deriv03)
+canonicalise   (deriv03)
+
+deriv04:=\nabla{@(deriv03)}.
+distribute     (deriv04)
+product_rule   (deriv04)
+substitute     (deriv04,$\nabla{B^{a}}->@(deriv02)$)
+substitute     (deriv04,$\nabla{\Gamma^{m}_{s t}}->B^{d}\partial_{d}{\Gamma^{m}_{s t}}$)
+substitute     (deriv04,$\nabla{\partial_{e}{\Gamma^{m}_{s t}}}->B^{d}\partial_{d e}{\Gamma^{m}_{s t}}$)
+sort_product   (deriv04)
+rename_dummies (deriv04)
+canonicalise   (deriv04)
+
+pderiv02 := -@(deriv02).
+factor_out (pderiv02, $B^{a?}$)
+substitute (pderiv02, $B^{a} -> 1$)
+
+pderiv03 := -@(deriv03).
+factor_out (pderiv03, $B^{a?}$)
+substitute (pderiv03, $B^{a} -> 1$)
+
+pderiv04 := -@(deriv04).
+factor_out (pderiv04, $B^{a?}$)
+substitute (pderiv04, $B^{a} -> 1$)
+
 tmp0 := @(fooG20) + @(fooG30).
 tmp1 := @(fooG31).
 
@@ -480,6 +515,11 @@ cdblib.put ('gen_gamma_1_scaled',alt1scaled,'genGamma.export')
 cdblib.put ('gen_gamma_2_scaled',alt2scaled,'genGamma.export')
 cdblib.put ('gen_gamma_3_scaled',alt3scaled,'genGamma.export')
 
+# gen gamma in terms of partial derivs of Gamma^{a}_{bc}
+cdblib.put ('gen_gamma_pderiv0',pderiv02,'genGamma.export')
+cdblib.put ('gen_gamma_pderiv1',pderiv03,'genGamma.export')
+cdblib.put ('gen_gamma_pderiv2',pderiv04,'genGamma.export')
+
 checkpoint.append (tmp0)
 checkpoint.append (tmp1)
 
@@ -493,6 +533,9 @@ checkpoint.append (alt1scaled)
 checkpoint.append (alt2scaled)
 checkpoint.append (alt3scaled)
 
+checkpoint.append (pderiv02)
+checkpoint.append (pderiv03)
+checkpoint.append (pderiv04)
 
 for i in range( len(checkpoint) ):
    cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)

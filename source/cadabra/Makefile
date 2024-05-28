@@ -133,7 +133,7 @@ clean:
 #-------------------------------------------------------------------------------
 veryclean:
 	@ make clean
-	@ for file in $(TARGETS); \
+	@ for file in $(TARGETS) sqrt-detg; \
 	  do \
 		  rm -rf $${file}.pdf; \
 		  rm -rf $${file}.cdb $${file}_.cdb $${file}_.txt; \

@@ -613,9 +613,9 @@ x^{c} x^{d} x^{e} x^{f} \left(8g^{g h} R_{a c d g} R_{b e f h}-9\nabla_{c d}{R_{
 x^{c} x^{d} x^{e} x^{f} x^{g} \left(2g^{h i} R_{a c d h} \nabla_{e}{R_{b f g i}}+2g^{h i} R_{b c d h} \nabla_{e}{R_{a f g i}}-\nabla_{c d e}{R_{a f b g}}\right)%
 }
 \cdbtag{timing}{%
-Stage 1:     2.6 secs\hfill\break%
-Stage 2:     0.8 secs\hfill\break%
-Stage 3:    48.9 secs\hfill\break%
-Stage 4:     2.0 secs%
+Stage 1:     2.4 secs\hfill\break%
+Stage 2:     0.7 secs\hfill\break%
+Stage 3:    46.0 secs\hfill\break%
+Stage 4:     1.8 secs%
 }
 \catcode`\#=\thehashcode          % restore original catcode for hash

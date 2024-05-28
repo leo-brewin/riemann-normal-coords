@@ -718,4 +718,79 @@ A^{b} A^{c} A^{d} A^{e} A^{f} x^{g} g^{a h} g^{i j} R_{b g c i} \nabla_{d}{R_{e 
 \cdbtag{scaledGamma3.001}{%
 A^{b} A^{c} A^{d} A^{e} A^{f} x^{g} \left(3g^{a h} g^{i j} R_{b g c i} \nabla_{d}{R_{e h f j}}+3g^{a h} g^{i j} R_{b h c i} \nabla_{d}{R_{e g f j}}+g^{a h} \nabla_{b c d}{R_{e g f h}}\right)%
 }
+\cdbtag{deriv02.100}{%
+-\Gamma^{a}{}_{b c} B^{b} B^{c}%
+}
+\cdbtag{deriv03.100}{%
+-\nabla\left(\Gamma^{a}{}_{b c} B^{b} B^{c}\right)%
+}
+\cdbtag{deriv03.101}{%
+-\nabla{\Gamma^{a}{}_{b c}} B^{b} B^{c}-\Gamma^{a}{}_{b c} \nabla{B^{b}} B^{c}-\Gamma^{a}{}_{b c} B^{b} \nabla{B^{c}}%
+}
+\cdbtag{deriv03.102}{%
+-\nabla{\Gamma^{a}{}_{b c}} B^{b} B^{c}+\Gamma^{a}{}_{b c} \Gamma^{b}{}_{e d} B^{e} B^{d} B^{c}+\Gamma^{a}{}_{b c} B^{b} \Gamma^{c}{}_{d e} B^{d} B^{e}%
+}
+\cdbtag{deriv03.103}{%
+-B^{d} \partial_{d}{\Gamma^{a}{}_{b c}} B^{b} B^{c}+\Gamma^{a}{}_{b c} \Gamma^{b}{}_{e d} B^{e} B^{d} B^{c}+\Gamma^{a}{}_{b c} B^{b} \Gamma^{c}{}_{d e} B^{d} B^{e}%
+}
+\cdbtag{deriv03.104}{%
+-B^{b} B^{c} B^{d} \partial_{d}{\Gamma^{a}{}_{b c}}+B^{c} B^{d} B^{e} \Gamma^{a}{}_{b c} \Gamma^{b}{}_{e d}+B^{b} B^{d} B^{e} \Gamma^{a}{}_{b c} \Gamma^{c}{}_{d e}%
+}
+\cdbtag{deriv03.105}{%
+-B^{b} B^{c} B^{d} \partial_{d}{\Gamma^{a}{}_{b c}}+B^{b} B^{c} B^{d} \Gamma^{a}{}_{e b} \Gamma^{e}{}_{d c}+B^{b} B^{c} B^{d} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}%
+}
+\cdbtag{deriv03.106}{%
+-B^{b} B^{c} B^{d} \partial_{b}{\Gamma^{a}{}_{c d}}+2B^{b} B^{c} B^{d} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}%
+}
+\cdbtag{deriv04.100}{%
+\nabla\left(-B^{b} B^{c} B^{d} \partial_{b}{\Gamma^{a}{}_{c d}}+2B^{b} B^{c} B^{d} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}\right)%
+}
+\cdbtag{deriv04.101}{%
+-\nabla{B^{b}} B^{c} B^{d} \partial_{b}{\Gamma^{a}{}_{c d}}-B^{b} \nabla{B^{c}} B^{d} \partial_{b}{\Gamma^{a}{}_{c d}}-B^{b} B^{c} \nabla{B^{d}} \partial_{b}{\Gamma^{a}{}_{c d}}-B^{b} B^{c} B^{d} \nabla\left(\partial_{b}{\Gamma^{a}{}_{c d}}\right)+2\nabla{B^{b}} B^{c} B^{d} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}+2B^{b} \nabla{B^{c}} B^{d} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}+2B^{b} B^{c} \nabla{B^{d}} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}+2B^{b} B^{c} B^{d} \nabla{\Gamma^{a}{}_{b e}} \Gamma^{e}{}_{c d}+2B^{b} B^{c} B^{d} \Gamma^{a}{}_{b e} \nabla{\Gamma^{e}{}_{c d}}%
+}
+\cdbtag{deriv04.102}{%
+\Gamma^{b}{}_{f e} B^{f} B^{e} B^{c} B^{d} \partial_{b}{\Gamma^{a}{}_{c d}}+B^{b} \Gamma^{c}{}_{e f} B^{e} B^{f} B^{d} \partial_{b}{\Gamma^{a}{}_{c d}}+B^{b} B^{c} \Gamma^{d}{}_{e f} B^{e} B^{f} \partial_{b}{\Gamma^{a}{}_{c d}}-B^{b} B^{c} B^{d} \nabla\left(\partial_{b}{\Gamma^{a}{}_{c d}}\right)-2\Gamma^{b}{}_{g f} B^{g} B^{f} B^{c} B^{d} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}-2B^{b} \Gamma^{c}{}_{f g} B^{f} B^{g} B^{d} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}-2B^{b} B^{c} \Gamma^{d}{}_{f g} B^{f} B^{g} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}+2B^{b} B^{c} B^{d} \nabla{\Gamma^{a}{}_{b e}} \Gamma^{e}{}_{c d}+2B^{b} B^{c} B^{d} \Gamma^{a}{}_{b e} \nabla{\Gamma^{e}{}_{c d}}%
+}
+\cdbtag{deriv04.103}{%
+\Gamma^{b}{}_{f e} B^{f} B^{e} B^{c} B^{d} \partial_{b}{\Gamma^{a}{}_{c d}}+B^{b} \Gamma^{c}{}_{e f} B^{e} B^{f} B^{d} \partial_{b}{\Gamma^{a}{}_{c d}}+B^{b} B^{c} \Gamma^{d}{}_{e f} B^{e} B^{f} \partial_{b}{\Gamma^{a}{}_{c d}}-B^{b} B^{c} B^{d} \nabla\left(\partial_{b}{\Gamma^{a}{}_{c d}}\right)-2\Gamma^{b}{}_{g f} B^{g} B^{f} B^{c} B^{d} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}-2B^{b} \Gamma^{c}{}_{f g} B^{f} B^{g} B^{d} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}-2B^{b} B^{c} \Gamma^{d}{}_{f g} B^{f} B^{g} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}+2B^{b} B^{c} B^{d} B^{f} \partial_{f}{\Gamma^{a}{}_{b e}} \Gamma^{e}{}_{c d}+2B^{b} B^{c} B^{d} \Gamma^{a}{}_{b e} B^{f} \partial_{f}{\Gamma^{e}{}_{c d}}%
+}
+\cdbtag{deriv04.104}{%
+\Gamma^{b}{}_{f e} B^{f} B^{e} B^{c} B^{d} \partial_{b}{\Gamma^{a}{}_{c d}}+B^{b} \Gamma^{c}{}_{e f} B^{e} B^{f} B^{d} \partial_{b}{\Gamma^{a}{}_{c d}}+B^{b} B^{c} \Gamma^{d}{}_{e f} B^{e} B^{f} \partial_{b}{\Gamma^{a}{}_{c d}}-B^{b} B^{c} B^{d} B^{e} \partial_{e b}{\Gamma^{a}{}_{c d}}-2\Gamma^{b}{}_{g f} B^{g} B^{f} B^{c} B^{d} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}-2B^{b} \Gamma^{c}{}_{f g} B^{f} B^{g} B^{d} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}-2B^{b} B^{c} \Gamma^{d}{}_{f g} B^{f} B^{g} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}+2B^{b} B^{c} B^{d} B^{f} \partial_{f}{\Gamma^{a}{}_{b e}} \Gamma^{e}{}_{c d}+2B^{b} B^{c} B^{d} \Gamma^{a}{}_{b e} B^{f} \partial_{f}{\Gamma^{e}{}_{c d}}%
+}
+\cdbtag{deriv04.105}{%
+B^{c} B^{d} B^{e} B^{f} \Gamma^{b}{}_{f e} \partial_{b}{\Gamma^{a}{}_{c d}}+B^{b} B^{d} B^{e} B^{f} \Gamma^{c}{}_{e f} \partial_{b}{\Gamma^{a}{}_{c d}}+B^{b} B^{c} B^{e} B^{f} \Gamma^{d}{}_{e f} \partial_{b}{\Gamma^{a}{}_{c d}}-B^{b} B^{c} B^{d} B^{e} \partial_{e b}{\Gamma^{a}{}_{c d}}-2B^{c} B^{d} B^{f} B^{g} \Gamma^{a}{}_{b e} \Gamma^{b}{}_{g f} \Gamma^{e}{}_{c d}-2B^{b} B^{d} B^{f} B^{g} \Gamma^{a}{}_{b e} \Gamma^{c}{}_{f g} \Gamma^{e}{}_{c d}-2B^{b} B^{c} B^{f} B^{g} \Gamma^{a}{}_{b e} \Gamma^{d}{}_{f g} \Gamma^{e}{}_{c d}+2B^{b} B^{c} B^{d} B^{f} \Gamma^{e}{}_{c d} \partial_{f}{\Gamma^{a}{}_{b e}}+2B^{b} B^{c} B^{d} B^{f} \Gamma^{a}{}_{b e} \partial_{f}{\Gamma^{e}{}_{c d}}%
+}
+\cdbtag{deriv04.106}{%
+B^{b} B^{c} B^{d} B^{e} \Gamma^{f}{}_{e d} \partial_{f}{\Gamma^{a}{}_{b c}}+B^{b} B^{c} B^{d} B^{e} \Gamma^{f}{}_{d e} \partial_{b}{\Gamma^{a}{}_{f c}}+B^{b} B^{c} B^{d} B^{e} \Gamma^{f}{}_{d e} \partial_{b}{\Gamma^{a}{}_{c f}}-B^{b} B^{c} B^{d} B^{e} \partial_{e b}{\Gamma^{a}{}_{c d}}-2B^{b} B^{c} B^{d} B^{e} \Gamma^{a}{}_{f g} \Gamma^{f}{}_{e d} \Gamma^{g}{}_{b c}-2B^{b} B^{c} B^{d} B^{e} \Gamma^{a}{}_{b f} \Gamma^{g}{}_{d e} \Gamma^{f}{}_{g c}-2B^{b} B^{c} B^{d} B^{e} \Gamma^{a}{}_{b f} \Gamma^{g}{}_{d e} \Gamma^{f}{}_{c g}+2B^{b} B^{c} B^{d} B^{e} \Gamma^{f}{}_{c d} \partial_{e}{\Gamma^{a}{}_{b f}}+2B^{b} B^{c} B^{d} B^{e} \Gamma^{a}{}_{b f} \partial_{e}{\Gamma^{f}{}_{c d}}%
+}
+\cdbtag{deriv04.107}{%
+B^{b} B^{c} B^{d} B^{e} \Gamma^{f}{}_{b c} \partial_{f}{\Gamma^{a}{}_{d e}}+4B^{b} B^{c} B^{d} B^{e} \Gamma^{f}{}_{b c} \partial_{d}{\Gamma^{a}{}_{e f}}-B^{b} B^{c} B^{d} B^{e} \partial_{b c}{\Gamma^{a}{}_{d e}}-2B^{b} B^{c} B^{d} B^{e} \Gamma^{a}{}_{f g} \Gamma^{f}{}_{b c} \Gamma^{g}{}_{d e}-4B^{b} B^{c} B^{d} B^{e} \Gamma^{a}{}_{b f} \Gamma^{f}{}_{c g} \Gamma^{g}{}_{d e}+2B^{b} B^{c} B^{d} B^{e} \Gamma^{a}{}_{b f} \partial_{c}{\Gamma^{f}{}_{d e}}%
+}
+\cdbtag{pderiv02.100}{%
+\Gamma^{a}{}_{b c} B^{b} B^{c}%
+}
+\cdbtag{pderiv02.101}{%
+\Gamma^{a}{}_{b c} B^{b} B^{c}%
+}
+\cdbtag{pderiv02.102}{%
+\Gamma^{a}{}_{b c}%
+}
+\cdbtag{pderiv03.100}{%
+B^{b} B^{c} B^{d} \partial_{b}{\Gamma^{a}{}_{c d}}-2B^{b} B^{c} B^{d} \Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}%
+}
+\cdbtag{pderiv03.101}{%
+B^{b} B^{c} B^{d} \left(\partial_{b}{\Gamma^{a}{}_{c d}}-2\Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}\right)%
+}
+\cdbtag{pderiv03.102}{%
+\partial_{b}{\Gamma^{a}{}_{c d}}-2\Gamma^{a}{}_{b e} \Gamma^{e}{}_{c d}%
+}
+\cdbtag{pderiv04.100}{%
+-B^{b} B^{c} B^{d} B^{e} \Gamma^{f}{}_{b c} \partial_{f}{\Gamma^{a}{}_{d e}}-4B^{b} B^{c} B^{d} B^{e} \Gamma^{f}{}_{b c} \partial_{d}{\Gamma^{a}{}_{e f}}+B^{b} B^{c} B^{d} B^{e} \partial_{b c}{\Gamma^{a}{}_{d e}}+2B^{b} B^{c} B^{d} B^{e} \Gamma^{a}{}_{f g} \Gamma^{f}{}_{b c} \Gamma^{g}{}_{d e}+4B^{b} B^{c} B^{d} B^{e} \Gamma^{a}{}_{b f} \Gamma^{f}{}_{c g} \Gamma^{g}{}_{d e}-2B^{b} B^{c} B^{d} B^{e} \Gamma^{a}{}_{b f} \partial_{c}{\Gamma^{f}{}_{d e}}%
+}
+\cdbtag{pderiv04.101}{%
+B^{b} B^{c} B^{d} B^{e} \left(-\Gamma^{f}{}_{b c} \partial_{f}{\Gamma^{a}{}_{d e}}-4\Gamma^{f}{}_{b c} \partial_{d}{\Gamma^{a}{}_{e f}}+\partial_{b c}{\Gamma^{a}{}_{d e}}+2\Gamma^{a}{}_{f g} \Gamma^{f}{}_{b c} \Gamma^{g}{}_{d e}+4\Gamma^{a}{}_{b f} \Gamma^{f}{}_{c g} \Gamma^{g}{}_{d e}-2\Gamma^{a}{}_{b f} \partial_{c}{\Gamma^{f}{}_{d e}}\right)%
+}
+\cdbtag{pderiv04.102}{%
+-\Gamma^{f}{}_{b c} \partial_{f}{\Gamma^{a}{}_{d e}}-4\Gamma^{f}{}_{b c} \partial_{d}{\Gamma^{a}{}_{e f}}+\partial_{b c}{\Gamma^{a}{}_{d e}}+2\Gamma^{a}{}_{f g} \Gamma^{f}{}_{b c} \Gamma^{g}{}_{d e}+4\Gamma^{a}{}_{b f} \Gamma^{f}{}_{c g} \Gamma^{g}{}_{d e}-2\Gamma^{a}{}_{b f} \partial_{c}{\Gamma^{f}{}_{d e}}%
+}
 \catcode`\#=\thehashcode          % restore original catcode for hash

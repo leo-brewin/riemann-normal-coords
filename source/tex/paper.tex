@@ -76,18 +76,20 @@ fifth-order in the curvature and were obtained using the computer algebra packag
 \bgroup
 \BegNote{\bf Version 2}
 \small%
-The first version of this paper was written in 2009. This second version (written in 2019)
-differs from the first in a number of important ways. First, the discussion on Cadabra has
-been completely rewritten to account for the revised syntax introduced in the latest version
-of Cadabra (itself updated in 2016)\footnote{The Cadabra results in this paper are based on
-\CdbVersion}. Second, and more importantly, a significant computational error in the first
-version (of this paper) has been corrected. Though the algorithms given in the first version
-were correct their implementation in Cadabra (by this author) was incorrect. This lead to
-errors first in the quartic and higher order terms in the generalised connections and later to computations built upon the generalised connections (e.g., the initial and
-boundary value problem and the arc-length equations). The Cadabra codes have been corrected
-and thoroughly cross-checked. A number of minor typographical errors have also been
-corrected.
+The first version of this paper was written in 2009. This second version (written in
+2019) differs from the first in a number of important ways. First, the discussion on
+Cadabra has been completely rewritten to account for the revised syntax introduced in the
+latest version of Cadabra (itself updated in 2016)\footnote{The Cadabra results in this
+paper are based on \CdbVersion}. Second, and more importantly, a significant
+computational error in the first version (of this paper) has been corrected. Though the
+algorithms given in the first version were correct their implementation in Cadabra (by
+this author) was incorrect. This lead to errors first in the quartic and higher order
+terms in the generalised connections and later to computations built upon the generalised
+connections (e.g., the initial and boundary value problem and the arc-length equations).
+The Cadabra codes have been corrected and thoroughly cross-checked. A number of minor
+typographical errors have also been corrected.
 % \EndNote
+
 \vskip 2pt
 
 \BegNote{\bf Version 3}
@@ -96,22 +98,33 @@ This version corrects the indicies (and sign) of the left hand side of equations
 This brings the arXiv version in line with the version on GitHub
 \ \url{https://github.com/leo-brewin/riemann-normal-coords}.
 % \EndNote
+
 \vskip 2pt
 
 \BegNote{\bf Version 4}
 \small%
-Equation (3.2) in Section 3.1 had a small error -- the coefficient in front of the $\Gamma \Gamma$
-term should be $(n-1)$ rather than $n$. Other instances of equation (3.2) (in section 4 and 7)
-were correct. This was a simple typographical error. All of the Cadabra results are unchanged.
+Equation (3.2) in Section 3.1 had a small error -- the coefficient in front of the
+$\Gamma \Gamma$ term should be $(n-1)$ rather than $n$. Other instances of equation (3.2)
+(in section 4 and 7) were correct. This was a simple typographical error. All of the
+Cadabra results are unchanged.
 
 % \EndNote
 \vskip 2pt
 
 \BegNote{\bf Version 5}
 \small%
-Versions 2 to 4 used both $Dx^a$ and $\Delta x^a$ to record the change in cooridnates between
-two nearby points. This version replaces the $Dx^a$ with $\Delta x^a$.
-\EndNote
+Versions 2 to 4 used both $Dx^a$ and $\Delta x^a$ to record the change in cooridnates
+between two nearby points. This version replaces the $Dx^a$ with $\Delta x^a$.
+
+% \EndNote
+\vskip 2pt
+
+\BegNote{\bf Version 6}
+\small%
+Added back, in section 7, expressions for the generalised connections in terms of the
+partial derivatives of the metric connection. These are the same expressions that
+appeared in version 1 but were dropped in versions 2-4.
+% \EndNote
 \egroup
 
 % ============================================================================================
@@ -686,7 +699,7 @@ computed recursively using
 \]
 where the index list $\uc$ contains $n>0$ indices.
 
-Here are the first three generalised connections
+Here are the first three generalised connections in generic coordinates
 %
 %-------------------------------------------------------------------------------
 \def\genGammaA{{\Gamma^{a}_{(bc)}(x)}}%
@@ -694,6 +707,15 @@ Here are the first three generalised connections
 \def\genGammaC{{\Gamma^{a}_{(bcde)}(x)}}%
 \def\genGammaD{{\Gamma^{a}_{(bcdef)}(x)}}%
 %-------------------------------------------------------------------------------
+%
+\begin{dgroup*}[compact]
+\begin{dmath*}\genGammaA = \cdb{genGammaPderiv0}\end{dmath*}%
+\begin{dmath*}\genGammaB = \cdb{genGammaPderiv1}\end{dmath*}%
+\begin{dmath*}\genGammaC = \cdb{genGammaPderiv2}\end{dmath*}%
+\end{dgroup*}
+%-------------------------------------------------------------------------------
+%
+and when the Riemman normal conditions are applied
 %
 \begin{dgroup*}[compact,spread={3pt}]
 \begin{dmath*}\genGammaA = \cdb{genGamma04}+\BigO{\eps^4}\end{dmath*}%

@@ -47,12 +47,6 @@
       \verb{eprint}
       \verb arXiv:0903.2085
       \endverb
-      \verb{urlraw}
-      \verb http://users.monash.edu.au/~leo/research/papers/files/lcb09-02.html
-      \endverb
-      \verb{url}
-      \verb http://users.monash.edu.au/~leo/research/papers/files/lcb09-02.html
-      \endverb
       \keyw{lcb,cadabra}
     \endentry
     \entry{peeters:2007-02}{article}{}
@@ -455,7 +449,7 @@
       \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{title}{{A tutorial on Cadabra}}
+      \field{title}{{Using Cadabra for tensor computations in General Relativity}}
       \field{urlyear}{2019}
       \field{urldateera}{ce}
       \verb{urlraw}
