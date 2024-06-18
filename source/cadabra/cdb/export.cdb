@@ -3,7 +3,7 @@
 \nabla{#}::Derivative.
 \partial{#}::PartialDerivative.
 
-Dx{#}::LaTeXForm{"{\Dx}"}.
+Dx{#}::LaTeXForm("{\Dx}").
                             # LCB: But I'm not sure that this is still true.
                             # LCB: So just to be safe I'll leave all Cadabra sources unchanged.
                             # LCB: I can use this trick in this file because it doesn't use ::KeepWeight

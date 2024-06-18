@@ -35,17 +35,17 @@ R^{a}_{b c d}::Depends(\partial{#}).
 R_{a b c d}::Depends(\nabla{#}).
 R^{a}_{b c d}::Depends(\nabla{#}).
 
-g0{#}::LaTeXForm ("\ngab{0}").
-g2{#}::LaTeXForm ("\ngab{2}").
-g3{#}::LaTeXForm ("\ngab{3}").
-g4{#}::LaTeXForm ("\ngab{4}").
-g5{#}::LaTeXForm ("\ngab{5}").
+g0{#}::LaTeXForm("\ngab{0}").
+g2{#}::LaTeXForm("\ngab{2}").
+g3{#}::LaTeXForm("\ngab{3}").
+g4{#}::LaTeXForm("\ngab{4}").
+g5{#}::LaTeXForm("\ngab{5}").
 
-y0{#}::LaTeXForm ("\ny{0}").
-y2{#}::LaTeXForm ("\ny{2}").
-y3{#}::LaTeXForm ("\ny{3}").
-y4{#}::LaTeXForm ("\ny{4}").
-y5{#}::LaTeXForm ("\ny{5}").
+y0{#}::LaTeXForm("\ny{0}").
+y2{#}::LaTeXForm("\ny{2}").
+y3{#}::LaTeXForm("\ny{3}").
+y4{#}::LaTeXForm("\ny{4}").
+y5{#}::LaTeXForm("\ny{5}").
 
 
 g0_{a b}::Symmetric.

@@ -6,6 +6,7 @@ SHELL = /bin/bash
 TARGETS = $(patsubst %.tex,%,$(wildcard paper.tex))
 #-------------------------------------------------------------------------------
 all:
+	@ make version
 	@ for file in $(TARGETS); \
 	  do \
 	     if ! [[ -e $${file}.aux ]]; then \
@@ -34,6 +35,7 @@ all:
 #-------------------------------------------------------------------------------
 version:
 	@ version.sh
+	@ rm -rf .paper
 #-------------------------------------------------------------------------------
 rm-dot:
 	@ for file in $(TARGETS); \

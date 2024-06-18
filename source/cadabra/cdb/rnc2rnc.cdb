@@ -13,7 +13,7 @@ g^{a b}::InverseMetric.
 R_{a b c d}::RiemannTensor.
 R^{a}_{b c d}::RiemannTensor.
 
-# Dx{#}::LaTeXForm{"{\Dx}"}.
+# Dx{#}::LaTeXForm("{\Dx}").
 
 import cdblib
 
