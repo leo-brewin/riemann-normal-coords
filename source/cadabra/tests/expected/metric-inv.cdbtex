@@ -672,7 +672,7 @@ x^{c} x^{d} x^{e} x^{f} x^{g} \left(3g^{a h} g^{b i} g^{j k} R_{c h d j} \nabla_
 \cdbtag{timing}{%
 Stage 1:     2.4 secs\hfill\break%
 Stage 2:     3.6 secs\hfill\break%
-Stage 3:    55.3 secs\hfill\break%
+Stage 3:    54.9 secs\hfill\break%
 Stage 4:     3.8 secs%
 }
 \catcode`\#=\thehashcode          % restore original catcode for hash

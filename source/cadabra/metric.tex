@@ -1,4 +1,4 @@
-\def\Date{19 Jan 2024}
+\def\Date{30 Jul 2024}
 % \def\FileID{file:}
 
 \documentclass[12pt]{cdblatex}
@@ -690,6 +690,18 @@ We also make the trivial change $A\rightarrow x$. Then we do some trivial reform
 
    metric4:=@(term0) + @(term1) + @(term2) + @(term3).  # cdb(metric4.501,metric4)
 
+   # these versions of "metric" are created just to add to the metric.json library
+   # note: term1 = 0, I could have used this fact above but ...
+
+   metric2:=@(term0) + @(term2).
+   metric3:=@(term0) + @(term2) + @(term3).
+   metric4:=@(term0) + @(term2) + @(term3) + @(term4).
+   metric5:=@(term0) + @(term2) + @(term3) + @(term4) + @(term5).
+
+   cdblib.put ('g_ab2',metric2,'metric.json')
+   cdblib.put ('g_ab3',metric3,'metric.json')
+   cdblib.put ('g_ab4',metric4,'metric.json')
+   cdblib.put ('g_ab5',metric5,'metric.json')
 \end{cadabra}
 
 \clearpage

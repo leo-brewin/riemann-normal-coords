@@ -488,6 +488,18 @@ cdblib.put ('g^ab_5',term5,'metric-inv.json')
 
 metric4:=@(term0) + @(term1) + @(term2) + @(term3).
 
+# these versions of "metric" are created just to add to the metric.json library
+# note: term1 = 0, I could have used this fact above but ...
+
+metric2:=@(term0) + @(term2).
+metric3:=@(term0) + @(term2) + @(term3).
+metric4:=@(term0) + @(term2) + @(term3) + @(term4).
+metric5:=@(term0) + @(term2) + @(term3) + @(term4) + @(term5).
+
+cdblib.put ('g^ab2',metric2,'metric-inv.json')
+cdblib.put ('g^ab3',metric3,'metric-inv.json')
+cdblib.put ('g^ab4',metric4,'metric-inv.json')
+cdblib.put ('g^ab5',metric5,'metric-inv.json')
 
 Rterm0 := @(term0).
 Rterm1 := @(term1).

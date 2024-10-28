@@ -28,6 +28,64 @@ sterm42 = flip_sign (cdblib.get ('genGamma22','genGamma.json'))
 
 sterm51 = flip_sign (cdblib.get ('genGamma31','genGamma.json'))
 
+# note: the various ivp21, ivp31  etc. are the pieces of the Taylor series
+#       for the ivp but *without* the leading 1/n! of the Taylor series
+
+ivp21 := @(sterm21).
+
+ivp31 := @(sterm21) + @(sterm22).
+ivp32 := @(sterm31).
+
+ivp41 := @(sterm21) + @(sterm22) + @(sterm23).
+ivp42 := @(sterm31) + @(sterm32).
+ivp43 := @(sterm41).
+
+ivp51 := @(sterm21) + @(sterm22) + @(sterm23) + @(sterm24).
+ivp52 := @(sterm31) + @(sterm32) + @(sterm33).
+ivp53 := @(sterm41) + @(sterm42).
+ivp54 := @(sterm51).
+
+factor_out (ivp21,$A^{a?}$)
+
+factor_out (ivp31,$A^{a?}$)
+factor_out (ivp32,$A^{a?}$)
+
+factor_out (ivp41,$A^{a?}$)
+factor_out (ivp42,$A^{a?}$)
+factor_out (ivp43,$A^{a?}$)
+
+factor_out (ivp51,$A^{a?}$)
+factor_out (ivp52,$A^{a?}$)
+factor_out (ivp53,$A^{a?}$)
+factor_out (ivp54,$A^{a?}$)
+
+v{#}::LaTeXForm("\dot{x}").
+
+substitute (ivp21, $A^{a} -> v^{a}$)
+
+substitute (ivp31, $A^{a} -> v^{a}$)
+substitute (ivp32, $A^{a} -> v^{a}$)
+
+substitute (ivp41, $A^{a} -> v^{a}$)
+substitute (ivp42, $A^{a} -> v^{a}$)
+substitute (ivp43, $A^{a} -> v^{a}$)
+
+substitute (ivp51, $A^{a} -> v^{a}$)
+substitute (ivp52, $A^{a} -> v^{a}$)
+substitute (ivp53, $A^{a} -> v^{a}$)
+substitute (ivp54, $A^{a} -> v^{a}$)
+
+# build the Taylor series
+# note the inclusion of the 1/n! factors
+
+ivp2 := x^{a} + s v^{a} + (1/2) (s**2) @(ivp21).
+ivp3 := x^{a} + s v^{a} + (1/2) (s**2) @(ivp31) + (1/6) (s**3) @(ivp32).
+ivp4 := x^{a} + s v^{a} + (1/2) (s**2) @(ivp41) + (1/6) (s**3) @(ivp42) + (1/24) (s**4) @(ivp43).
+ivp5 := x^{a} + s v^{a} + (1/2) (s**2) @(ivp51) + (1/6) (s**3) @(ivp52) + (1/24) (s**4) @(ivp53) + (1/120) (s**5) @(ivp54).
+
+
+# now construct the scaled terms for ivp5
+
 sterm2 := @(sterm21) + @(sterm22) + @(sterm23) + @(sterm24).
 sterm3 := @(sterm31) + @(sterm32) + @(sterm33).
 sterm4 := @(sterm41) + @(sterm42).
@@ -76,6 +134,27 @@ checkpoint.append (sterm2)
 checkpoint.append (sterm3)
 checkpoint.append (sterm4)
 checkpoint.append (sterm5)
+
+cdblib.create ('geodesic-ivp.json')
+
+cdblib.put ('ivp21',ivp21,'geodesic-ivp.json')
+
+cdblib.put ('ivp31',ivp31,'geodesic-ivp.json')
+cdblib.put ('ivp32',ivp32,'geodesic-ivp.json')
+
+cdblib.put ('ivp41',ivp41,'geodesic-ivp.json')
+cdblib.put ('ivp42',ivp42,'geodesic-ivp.json')
+cdblib.put ('ivp43',ivp43,'geodesic-ivp.json')
+
+cdblib.put ('ivp51',ivp51,'geodesic-ivp.json')
+cdblib.put ('ivp52',ivp52,'geodesic-ivp.json')
+cdblib.put ('ivp53',ivp53,'geodesic-ivp.json')
+cdblib.put ('ivp54',ivp54,'geodesic-ivp.json')
+
+cdblib.put ('ivp2',ivp2,'geodesic-ivp.json')
+cdblib.put ('ivp3',ivp3,'geodesic-ivp.json')
+cdblib.put ('ivp4',ivp4,'geodesic-ivp.json')
+cdblib.put ('ivp5',ivp5,'geodesic-ivp.json')
 
 for i in range( len(checkpoint) ):
    cdblib.put ('check{:03d}'.format(i),checkpoint[i],checkpoint_file)
