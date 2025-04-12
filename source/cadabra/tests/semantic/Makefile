@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 SHELL = /bin/bash
 #-------------------------------------------------------------------------------
-.PHONY: all shared clean veryclean
+.PHONY: all clean veryclean
 #-------------------------------------------------------------------------------
 TARGETS = \
 		dGamma dRabcd\
@@ -12,7 +12,7 @@ TARGETS = \
 		detg2
 #-------------------------------------------------------------------------------
 all:
-	@ make shared
+	@ touch shared.cdb # force an update on the cached version of shared (only need for pre version 2.5.12 of Cadabra)
 	@ for file in $(TARGETS); do make .$${file}; done;
 	@ make summary
 	@ make veryclean
@@ -25,9 +25,6 @@ all:
 	@ pdflatex -halt-on-error -interaction=batchmode $* &> /dev/null
 	@ touch .redo-summary
 	@ touch .$*
-#-------------------------------------------------------------------------------
-shared:
-	@ cadabra2python hide/shared.cdb shared.py
 #-------------------------------------------------------------------------------
 summary:
 	@ make .summary
@@ -71,7 +68,6 @@ pristine:
 	@ make rm-output
 	@ make rm-expected
 	@ make veryclean
-	@ rm -rf shared.py
 	@ rm -rf __pycache__
 	@ for file in $(TARGETS) summary; \
 	  do \
@@ -84,7 +80,6 @@ github-clean:
 	@ make rm-dot
 	@ make rm-output
 	@ make veryclean
-	@ rm -rf shared.py
 	@ rm -rf __pycache__
 	@ for file in $(TARGETS) summary; \
 	  do \

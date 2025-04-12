@@ -16,7 +16,7 @@ TARGETS = \
 all:
 	@ mkdir -p cdb pdf lib tests/output tests/expected tests/semantic/output tests/semantic/expected
 	@ for file in $(TARGETS); do make .$${file}; done;
-	@ # make sqrt-detg # requires pylatex.sh and friends from https://github.com/leo-brewin/hybrid-latex
+	@ make sqrt-detg # requires pylatex.sh and friends from https://github.com/leo-brewin/hybrid-latex
 	@ make summary
 	@ make collection
 #-------------------------------------------------------------------------------
@@ -133,7 +133,7 @@ clean:
 #-------------------------------------------------------------------------------
 veryclean:
 	@ make clean
-	@ for file in $(TARGETS) sqrt-detg; \
+	@ for file in $(TARGETS); \
 	  do \
 		  rm -rf $${file}.pdf; \
 		  rm -rf $${file}.cdb $${file}_.cdb $${file}_.txt; \

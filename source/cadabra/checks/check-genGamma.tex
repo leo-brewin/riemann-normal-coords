@@ -1,6 +1,7 @@
+\def\Date{18 May 2024}
+% \def\FileID{file:}
+
 \documentclass[12pt]{cdblatex}
-\usepackage{fancyhdr}
-\usepackage{footer}
 
 \begin{document}
 
@@ -15,9 +16,18 @@ compute
 given an explict expression for the RNC connection $\Gamma^{a}{}_{bc}$.
 
 This code was written as a check for the {\tt genGamma.tex} code. I had a discrepency between my
-newly created Cadabra v2.0 codes and my old Cadabra v1.0 codes (which were the basis of my lcb09-03 paper).
-I found that my new codes agreed with this code and thus my old codes were wrong. I found the errors
-in the old code (see the updated codes in v1.0/rnc-new/gen-gamma.cdbp, see also the file v1.0/rnc-new/NOTES.txt).
+newly created Cadabra v2.0 codes and my old Cadabra v1.0 codes (which were the basis of my
+lcb09-03 paper). I found that my new v2.0 codes agreed with this code and thus my old v1.0 codes
+were wrong. I found the errors in the old code but it seems that (at some time) I deletd the
+details of those errors. I have no idea why I did that -- clearly another mistake on my part.
+What I do recall is that there were two errors, 1) I had declared {\tt
+\nabla{#}::PartialDerivative} and 2) In some crucial part of the generalised gamma computation
+the Cadabra {\tt asym} algorithm did not correctly do the full anti-symmetrisation. The first
+mistake is really a stupid mistake on my part -- it forces $\nabla_{ab} = \nabla_{ba}$. So all
+second and higher order derivatives of $R_{abcd}$ are wrong. This means that the expressions (in
+my v1.0 results) that depend upon the generalised gammas (e.g., the geodesic bvp, ivp and Lsq's)
+are wrong (from the second oder terms and above, yikes). The seond problem, to do with incomplete
+and incorrect anti-symmetrisations, was a Cadabra problem. The new v2.0 codes fixes these problem.
 
 The head-on approach shown in this code works for this simple compuation but for the higher
 generalised connections it's almost certainly going to be way too slow to be use. So this code is

@@ -1,16 +1,14 @@
 #!/bin/bash
 
-export CADABRA_NO_UNICODE=1
-export PYTHONWARNINGS="ignore"
-
 file="<none>"
 silent="no"
 keep="no"
 skiplatex="no"
 Timer=""
-CDB=/usr/local/bin/
+Python="python"
 sty=""
 nowarn=""
+mixed=""
 reformat="yes"
 
 # -----------------------------------------------------------------------------------------
@@ -18,35 +16,37 @@ reformat="yes"
 
 OPTIND=1
 
-while getopts 'i:I:P:sktTxhNX' option
+while getopts 'i:I:P:sktTxhNM' option
 do
    case "$option" in
    "i")  file="$OPTARG"           ;;
    "I")  sty="-I$OPTARG"          ;;
-   "P")  CDB="$OPTARG"            ;;
+   "P")  Python="$OPTARG"         ;;
    "s")  silent="yes"             ;;
    "k")  keep="yes"               ;;
    "t")  Timer="/usr/bin/time"    ;;
    "T")  Timer="/usr/bin/time -l" ;;
    "x")  skiplatex="yes"          ;;
    "N")  nowarn="-N"              ;;
+   "M")  mixed="-M"               ;;
    "X")  reformat="no"            ;;
-   "h")  echo "usage : cdblatex.sh -i file [-P<path to Cadabra bin dir>]"
-         echo "                            [-I<path to cdbmacros.sty>] [-sktTxNXh]"
+   "h")  echo "usage : pylatex.sh -i file [-P<path to python>]"
+         echo "                           [-I<path to pymacros.sty>] [-sktTxNMh]"
          echo "options :  -i file : source file (with or without .tex extension)"
-         echo "           -I file : full path to cdbmacros.sty file"
-         echo "           -P file : path to Cadabra bin directory"
+         echo "           -I file : full path to pymacros.sty file"
+         echo "           -P path : full path to the Python binary"
          echo "           -s : silent, don't open the pdf file"
          echo "           -k : keep all temporary files"
          echo "           -t : report brief cpu time"
          echo "           -T : report detailed cpu time plus memory usage"
          echo "           -x : don't call latex"
          echo "           -N : don't warn if errors found in the output for some tags"
-         echo "           -X : do not reformat the .cdbtex output"
+         echo "           -M : source contains mixed sympy/symengine code"
+         echo "           -X : do not reformat the .pytex output"
          echo "           -h : this help message"
-         echo "example : cdblatex.sh -i file"
+         echo "example : pylatex.sh -i file -P/usr/local/bin/python"
          exit                ;;
-   ?)    echo "cdblatex.sh : Unknown option specified."
+   ?)    echo "pylatex.sh : Unknown option specified."
          exit                ;;
    esac
 done
@@ -56,7 +56,7 @@ file=$(basename -s ".tex" "$file")
 name=$file
 
 if [[ $file = "<none>" ]]; then
-   echo "> no source file given, use cdblatex.sh -i file"
+   echo "> no source file given, use pylatex.sh -i file"
    exit 1;
 fi;
 
@@ -70,26 +70,24 @@ num=$(egrep -c -e'^\s*(\\|\@|\$)Input\{' "$file".tex)
 
 # yes, now merge source files
 if ! [[ $num = 0 ]]; then
-   merge-src.py -i $file.tex -o $file"_.tex"
-   name=$file"_"
+   merge-src.py -i $file.tex -o .merged.tex
+   name=".merged"
 fi
 
-touch $file.cdbtxt
+touch $file.pytxt
 
-cdbpreproc.py -i $file -m $name            || exit 1
+pypreproc.py -i $file -m $name $mixed    || exit 1
 
-$Timer $CDB/cadabra2 $file"_.cdb" > $file"_.txt"   || exit 3
+$Timer $Python $file"_.py" > $file.pytxt || exit 3
 
-iconv -c -f UTF-8 -t ASCII//translit $file"_.txt" > $file.cdbtxt
-
-cdbpostproc.py $nowarn -i $file $sty       || exit 5
+pypostproc.py $nowarn -i $file $sty      || exit 5
 
 # ----------------------------------------------------------
-# optional: use SED to reformat the .cdbtex file
+# optional: use SED to reformat the .pytex file
 #
 if [[ $reformat = "yes" ]]; then
 
-   if [[ -e ${file}.cdbtex ]]; then
+   if [[ -e ${file}.pytex ]]; then
 
       # path to this script
 
@@ -109,22 +107,22 @@ if [[ $reformat = "yes" ]]; then
       SED=/opt/homebrew/bin/gsed    # prefer a sed that understands extended regular expressions
       # SED=/usr/local/bin/sed        # this also works
 
-      rm -rf ${file}.fail-reformat-cdbtex  # .fail-reformat exists only when an error occured
+      rm -rf ${file}.fail-reformat-pytex  # .fail-reformat exists only when an error occured
 
-      cdbtex=${file}.cdbtex
+      pytex=${file}.pytex
 
-      if [[ -e ${cdbtex} ]]; then
+      if [[ -e ${pytex} ]]; then
 
          rm -rf tmpA.del tmpB.del
-         cp ${cdbtex} tmpA.del
+         cp ${pytex} tmpA.del
 
          ${SED} -r -f ${SEDtext} tmpA.del > tmpB.del
 
          if ! [[ $? = 0 ]]; then
-            touch ${file}.fail-reformat-cdbtex
+            touch ${file}.fail-reformat-pytex
             exit 9
          else
-            mv tmpB.del ${cdbtex}
+            mv tmpB.del ${pytex}
             rm -rf tmpA.del tmpB.del
          fi
 
@@ -150,6 +148,6 @@ if [[ $silent = "no" ]]; then
 fi
 
 if [[ $keep = "no" ]]; then
-   rm -rf $file"_.tex" $file"_.txt" $file"_.cdb"
-   rm -rf $file.log $file.out $file.py $file.cdbidx $file.cdbtxt
+   rm -rf .merged.tex .tmp.txt
+   rm -rf $file.log $file.out $file.py $file"_.py" $file.pyidx $file.pytxt
 fi

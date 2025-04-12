@@ -1,16 +1,11 @@
 SHELL = /bin/bash
 #-------------------------------------------------------------------------------
-.PHONY:	cadabra install pdf expected tests
+.PHONY:	cadabra pdf expected tests
 #-------------------------------------------------------------------------------
 all:
-	@ make install
 	@ make cadabra
 	@ make pdf
 	@ make veryclean
-#-------------------------------------------------------------------------------
-install:
-	@ echo "> make intsall ..."
-	@ (cd hybrid-latex; INSTALL.sh)
 #-------------------------------------------------------------------------------
 cadabra:
 	@ echo "> make cadabra ..."
@@ -50,6 +45,5 @@ pristine:
 #-------------------------------------------------------------------------------
 github:
 	@ rm -rf pdf/*
-	@ (cd hybrid-latex;             INSTALL.sh)
 	@ (cd source/cadabra;           make github)
 	@ (cd source/tex;               make github)

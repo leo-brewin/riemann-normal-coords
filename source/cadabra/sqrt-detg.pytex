@@ -1,0 +1,39 @@
+\chardef\thehashcode=\catcode`\#	 % save catcode of hash (probably 6)
+\catcode`\#=11			             % set catcode for hash to be a letter (11)
+\pytag{ans.001}{%
+\sqrt{\epsilon^{5} d + \epsilon^{4} c + \epsilon^{3} b + \epsilon^{2} a + 1}%
+}
+\pytag{ans.002}{%
+1 + \frac{a}{2} \epsilon^{2} + \frac{b}{2} \epsilon^{3} + \epsilon^{4} \left(- \frac{a^{2}}{8} + \frac{c}{2}\right) + \epsilon^{5} \left(- \frac{a}{4} b + \frac{d}{2}\right) + O\left(\epsilon^{6}\right)%
+}
+\pytag{ans.003}{%
+1 + \frac{a}{2} \epsilon^{2} + \frac{b}{2} \epsilon^{3} + \frac{\epsilon^{4}}{8} \left(- a^{2} + 4 c\right) + \frac{\epsilon^{5}}{4} \left(- a b + 2 d\right) + O\left(\epsilon^{6}\right)%
+}
+\pytag{det.001}{%
+\epsilon^{5} d + \epsilon^{4} c + \epsilon^{3} b + \epsilon^{2} a + 1%
+}
+\pytag{foo.001}{%
+- \frac{a}{4} \epsilon^{5} b + \frac{d}{2} \epsilon^{5} - \frac{\epsilon^{4}}{8} a^{2} + \frac{c}{2} \epsilon^{4} + \frac{b}{2} \epsilon^{3} + \frac{a}{2} \epsilon^{2} + 1%
+}
+\pytag{err.001}{%
+O\left(\epsilon^{6}\right)%
+}
+\pytag{ans.101}{%
+\log{\left(\epsilon^{5} d + \epsilon^{4} c + \epsilon^{3} b + \epsilon^{2} a + 1 \right)}%
+}
+\pytag{ans.102}{%
+\epsilon^{2} a + \epsilon^{3} b + \epsilon^{4} \left(- \frac{a^{2}}{2} + c\right) + \epsilon^{5} \left(- a b + d\right) + O\left(\epsilon^{6}\right)%
+}
+\pytag{ans.103}{%
+\epsilon^{2} a + \epsilon^{3} b + \epsilon^{4} \left(- \frac{a^{2}}{2} + c\right) + \epsilon^{5} \left(- a b + d\right) + O\left(\epsilon^{6}\right)%
+}
+\pytag{det.001}{%
+\epsilon^{5} d + \epsilon^{4} c + \epsilon^{3} b + \epsilon^{2} a + 1%
+}
+\pytag{foo.002}{%
+- \epsilon^{5} a b + \epsilon^{5} d - \frac{\epsilon^{4}}{2} a^{2} + \epsilon^{4} c + \epsilon^{3} b + \epsilon^{2} a%
+}
+\pytag{err.002}{%
+O\left(\epsilon^{6}\right)%
+}
+\catcode`\#=\thehashcode          % restore original catcode for hash

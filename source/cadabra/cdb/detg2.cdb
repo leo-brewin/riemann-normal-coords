@@ -64,7 +64,7 @@ substitute     (Ndetg,$\nabla_{a}{R_{b c d e}} g^{b d}  -> \nabla_{a}{R_{c e}}$,
 substitute     (Ndetg,$\nabla_{a b}{R_{c d e f}} g^{c e}  -> \nabla_{a b}{R_{d f}}$,repeat=True)
 substitute     (Ndetg,$\nabla_{a b c}{R_{d e f g}} g^{d f}  -> \nabla_{a b c}{R_{e g}}$,repeat=True)
 
-# the following are based on sqrt-Ndetg.tex
+# the following are based on sqrt-detg.tex
 
 sqrtNdetg := 1/2 + (1/2) @(Ndetg)
             - (1/8) (1/9) R_{a b} R_{c d} x^{a} x^{b} x^{c} x^{d}

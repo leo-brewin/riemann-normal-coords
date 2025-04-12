@@ -1,17 +1,41 @@
+\def\Date{19 Jan 2024}
+% \def\FileID{file:}
+
 \documentclass[12pt]{pylatex}
+\usepackage{config}
 
 \begin{document}
 
-Expand $\sqrt{g}$ in powers of $R,\nabla R$ etc.
+% =================================================================================================
+\section*{Side calculations for detg2.tex}
+
+This is a short computation for the expansions of $\sqrt{-\det g(x)}$ and $\log\left(-\det g(x)\right)$
+in powers of $R$ and its derivatives. The results wil be used in {\tts detg2.tex}.
+
+The starting point is to write $\det g(x)$ in the form
+\begin{dgroup*}
+   \begin{dmath*} -g(x) = 1 + a \epsilon^2 + b \epsilon^3 + c \epsilon^4 + d \epsilon^5 + \BigO{\epsilon^6} \end{dmath*}
+\end{dgroup*}
+where $\eps$ is introduced as an expansion parameter and where $a,b,c$ and $d$
+are simple expressions in $R$ and its derivatives. These can be read off directly
+from the expansion for $\det g(x)$ given in {\tts detg2.tex}.
+
+\clearpage
 
 \begin{python}
    from sympy import *
 
    eps, a, b, c, d = symbols('\epsilon a b c d')
 
+
    ans = sqrt(1+a*eps**2+b*eps**3+c*eps**4+d*eps**5)   # py (ans.001,ans)
    ans = ans.series(eps, 0, 6)                         # py (ans.002,ans)
    ans = simplify(ans)                                 # py (ans.003,ans)
+
+   det = 1 + eps**2*a + eps**3*b + eps**4*c + eps**5*d   # py (det.001,det)
+   # this foo will be used in detg2.tex
+   foo = Rational(1,2) + det/2 - (eps**4*a**2)/8 - (eps**5*a*b)/4   # py (foo.001,foo)
+   err = simplify (ans-foo)   # py (err.001,err)
 
 \end{python}
 
@@ -20,6 +44,14 @@ Expand $\sqrt{g}$ in powers of $R,\nabla R$ etc.
    \begin{dmath*} \py*{ans.002} \end{dmath*}
    \begin{dmath*} \py*{ans.003} \end{dmath*}
 \end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \py*{det.001} \end{dmath*}
+   \begin{dmath*} \py*{foo.001} \end{dmath*}
+   \begin{dmath*} \py*{err.001} \end{dmath*}
+\end{dgroup*}
+
+\clearpage
 
 And while we're here, let's also expand $\log(g)$ in powers of $R,\nabla R$ etc.
 
@@ -32,12 +64,22 @@ And while we're here, let's also expand $\log(g)$ in powers of $R,\nabla R$ etc.
    ans = ans.series(eps, 0, 6)                         # py (ans.102,ans)
    ans = simplify(ans)                                 # py (ans.103,ans)
 
+   det = 1 + eps**2*a + eps**3*b + eps**4*c + eps**5*d   # py (det.001,det)
+   # this foo will be used in detg2.tex
+   foo = -1 + det - (eps**4*a**2)/2 - (eps**5*a*b)       # py (foo.002,foo)
+   err = simplify (ans-foo)   # py (err.002,err)
 \end{python}
 
 \begin{dgroup*}
    \begin{dmath*} \py*{ans.101} \end{dmath*}
    \begin{dmath*} \py*{ans.102} \end{dmath*}
    \begin{dmath*} \py*{ans.103} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \py*{det.001} \end{dmath*}
+   \begin{dmath*} \py*{foo.002} \end{dmath*}
+   \begin{dmath*} \py*{err.002} \end{dmath*}
 \end{dgroup*}
 
 \end{document}
