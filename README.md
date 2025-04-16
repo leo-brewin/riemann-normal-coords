@@ -83,13 +83,33 @@ You will need the Cadabra/Python/SymPy software.
 
 ### Cadabra
 
-Cadabra is easy to compile and install. Full details can be found on the [Cadabra repository][6].
+Ready to run binraries are available for many popular operating systems. These can be found on the [Cadabra binaries][11] page.
+
+Cadabra can also be easily compiled from source. Full details can be found at the [Cadabra repository][6].
 
 ### Python/SymPy
 
-A popular distribution of Python3 can be found at the [Anaconda website][7].
+Most of the popular operating system have Python3 already installed. You can check your version by running
 
-If you are not using the latest Anaconda distribution you may need to check that your version of SymPy is at least 1.7 (this is required only during the Ada code generation). You can install the latest version of SymPy in Anaconda using `conda install sympy`.
+```sh
+$ python --version
+```
+
+If that does not report version 3 or later, then you will need to manually install python. Most operating system provide native package managers (HomeBrew on macOs, apt/dnf/yum on Linux) that you can use to do the job. Otherwise, you can install Python3 using [Conda miniforge][7].
+
+You will also need version 1.7 or later of sympy. That may already be part of your python environment. You can check which version you have (if any) by running
+
+```sh
+$ pip list | grep sympy
+```
+
+You can upgrade sympy to the latest version using
+
+```sh
+$ pip install --upgrade sympy
+```
+
+If you need to install sympy, then it is best to do so using a python virtual environment. This ensures that you leave the operating system's version of python intact. See the official [Python docs][9] on creating, using and managing virtual environments. Another very useful introduction to virtual environments can be found in this [primer][10].
 
 ## Uninstall
 
@@ -105,5 +125,8 @@ All files in this collection are distributed under the [MIT][8] license. See the
   [4]: https://github.com/leo-brewin/cadabra-tutorial
   [5]: https://github.com/leo-brewin/hybrid-latex
   [6]: https://github.com/kpeeters/cadabra2
-  [7]: https://www.anaconda.com/products/individual
+  [7]: https://github.com/conda-forge/miniforge
   [8]: https://opensource.org/licenses/MIT
+  [9]: https://docs.python.org/3/tutorial/venv.html
+ [10]: https://realpython.com/python-virtual-environments-a-primer/
+ [11]: https://cadabra.science/download.html
